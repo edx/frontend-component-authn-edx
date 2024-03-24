@@ -1,0 +1,5 @@
+coverage
+dist
+example
+node_modules
+jest.config.js
