@@ -7,11 +7,14 @@ import { AppProvider } from '@edx/frontend-platform/react';
 import { initialize, subscribe, APP_READY } from '@edx/frontend-platform';
 
 import './index.scss';
+import BaseContainer from '../src/base-container'
 
 subscribe(APP_READY, () => {
   ReactDOM.render(
     <AppProvider>
-      <div>Load the forms here</div>
+      <BaseContainer open isPrivacyPolicy onClose={() => {}}>
+        <div>Login Form</div>
+      </BaseContainer> 
     </AppProvider>,
     document.getElementById('root'),
   );
