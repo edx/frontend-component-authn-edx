@@ -8,4 +8,9 @@ module.exports = createConfig('webpack-dev', {
     path: path.resolve(__dirname, 'example/dist'),
     publicPath: '/',
   },
+  resolve: {
+    alias: {
+      '@edx/frontend-component-authn-edx': path.resolve(__dirname, 'src'),
+    },
+  },
 });
