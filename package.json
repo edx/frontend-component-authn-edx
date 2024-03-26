@@ -54,7 +54,7 @@
     "@edx/browserslist-config": "^1.1.1",
     "@edx/frontend-platform": "7.1.2",
     "@edx/reactifex": "^2.1.1",
-    "@openedx/frontend-build": "13.0.28",
+    "@edx/frontend-build": "13.0.0",
     "glob": "7.2.3",
     "husky": "7.0.4",
     "jest": "29.7.0",
