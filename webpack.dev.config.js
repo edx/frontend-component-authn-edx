@@ -1,5 +1,6 @@
 const path = require('path');
-const { createConfig } = require('@openedx/frontend-build');
+
+const { createConfig } = require('@edx/frontend-build');
 
 module.exports = createConfig('webpack-dev', {
   entry: path.resolve(__dirname, 'example'),
