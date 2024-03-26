@@ -1,22 +1,18 @@
+@import "@edx/brand/paragon/variables";
+
 .modal-body-container .pgn__modal-body-content {
     height: 100%;
 }
 
-.modal-body-container .modal-body-content-layout {
-    display: flex;
-    width: 100%;
-    height: 100%;
-}
-
+// This class is related to close button of modal
 .pgn__modal-close-container {
-    background: white;
+    background: $white;
     border-radius: 50%;
+    border: 2px solid $light-500;
 }
 
-.modal-footer-content {
-    padding: 0 !important;
+.pgn__modal-close-container .btn-icon__icon-container {
+    color: $light-700;
 }
 
-.privacy-policy-content {
-    margin-bottom: 0px;
-}
+
