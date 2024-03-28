@@ -1,0 +1,18 @@
+@import "@edx/brand/paragon/variables";
+
+.modal-body-container .pgn__modal-body-content {
+    height: 100%;
+}
+
+// This class is related to close button of modal
+.pgn__modal-close-container {
+    background: $white;
+    border-radius: 50%;
+    border: 2px solid $light-500;
+}
+
+.pgn__modal-close-container .btn-icon__icon-container {
+    color: $light-700;
+}
+
+
