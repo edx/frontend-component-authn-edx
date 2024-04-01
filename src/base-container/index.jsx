@@ -39,7 +39,7 @@ const BaseContainer = ({
     </ModalDialog.Body>
     {footerText && (
       <ModalDialog.Footer className="bg-dark-500 p-4.5">
-        <p className="mb-0 text-white">{footerText}</p>
+        <p className="mb-0 text-white m-auto">{footerText}</p>
       </ModalDialog.Footer>
     )}
   </ModalDialog>
