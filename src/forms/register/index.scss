@@ -1,0 +1,13 @@
+@import "~@edx/brand/paragon/variables";
+
+.registration-form {
+  padding: 3.5rem 2.5rem;
+}
+.separator {
+  border: 0;
+  border-top: 0.075rem solid $light-500
+}
+.pgn__form-control-floating-label-text:after {
+  content:"*";
+  color: $danger-500;
+}
