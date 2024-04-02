@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import BaseContainer from '../base-container';
+import { LoginForm } from '../forms';
 
 /**
  * Main component that holds the logic for conditionally rendering login or registration form.
@@ -17,7 +18,7 @@ const AuthnComponent = ({
   open, setOpen,
 }) => (
   <BaseContainer open={open} setOpen={setOpen}>
-    <div>Login form</div>
+    <LoginForm />
   </BaseContainer>
 );
 
