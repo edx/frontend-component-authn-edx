@@ -41,5 +41,11 @@ module.exports = createConfig('eslint', {
         },
       },
     ],
+    'no-param-reassign': ['error', {
+      props: true,
+      ignorePropertyModificationsFor: [
+        'state',
+      ],
+    }],
   },
 });
