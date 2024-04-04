@@ -1,11 +1,12 @@
 import React from 'react';
 
 import { useIntl } from '@edx/frontend-platform/i18n';
+import { AppProvider } from '@edx/frontend-platform/react';
 import PropTypes from 'prop-types';
 
 import messages from './messages';
 import BaseContainer from '../base-container';
-import { LoginForm } from '../forms';
+import configureStore from '../data/configureStore';
 import RegistrationForm from '../forms/registration-popup';
 
 /**
@@ -16,14 +17,12 @@ import RegistrationForm from '../forms/registration-popup';
  *
  * @returns {JSX.Element} The rendered BaseContainer component containing either login or registration form.
  */
-
 const AuthnComponent = ({ open, setOpen }) => {
   const { formatMessage } = useIntl();
   const registrationFooterText = formatMessage(messages.footerText);
 
   return (
     <BaseContainer open={open} setOpen={setOpen} footerText={registrationFooterText}>
-      <LoginForm />
       <RegistrationForm />
     </BaseContainer>
   );
@@ -34,4 +33,13 @@ AuthnComponent.propTypes = {
   setOpen: PropTypes.func.isRequired,
 };
 
-export default AuthnComponent;
+/**
+ * Higher Order Component that wraps AuthnComponent with AppProvider.
+ */
+const AuthnComponentWithProvider = (props) => (
+  <AppProvider store={configureStore()}>
+    <AuthnComponent {...props} />
+  </AppProvider>
+);
+
+export default AuthnComponentWithProvider;
