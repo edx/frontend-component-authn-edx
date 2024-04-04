@@ -1,9 +1,15 @@
 import { combineReducers } from 'redux';
 
-import { registerReducer, registerStoreName } from '../forms';
+import {
+  loginReducer,
+  loginStoreName,
+  registerReducer,
+  registerStoreName,
+} from '../forms';
 
 const createRootReducer = () => combineReducers({
   [registerStoreName]: registerReducer,
+  [loginStoreName]: loginReducer,
 });
 
 export default createRootReducer;

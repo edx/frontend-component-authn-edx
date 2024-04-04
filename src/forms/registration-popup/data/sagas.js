@@ -2,11 +2,11 @@ import { camelCaseObject } from '@edx/frontend-platform';
 import { logError, logInfo } from '@edx/frontend-platform/logging';
 import { call, put, takeEvery } from 'redux-saga/effects';
 
-import { INTERNAL_SERVER_ERROR } from './constants';
 import {
   registerUser, registerUserFailed, registerUserSuccess,
 } from './reducers';
 import registerRequest from './service';
+import { INTERNAL_SERVER_ERROR } from '../../../data/constants';
 
 /**
  * Saga function for handling new user registration.
