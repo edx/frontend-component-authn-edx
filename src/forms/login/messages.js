@@ -27,17 +27,17 @@ const messages = defineMessages({
     description: 'Text that appears on the registration button',
   },
   loginFormEmailFieldLabel: {
-    id: 'login.form.email.field.text',
+    id: 'login.form.email.field.label',
     defaultMessage: 'Email',
     description: 'Email field label',
   },
   loginFormPasswordFieldLabel: {
-    id: 'login.form.password.field.text',
+    id: 'login.form.password.field.label',
     defaultMessage: 'Password',
     description: 'Password field label',
   },
   loginFormHeading2: {
-    id: 'login.form.or.message',
+    id: 'login.form.heading.2',
     defaultMessage: 'or',
     description: 'Heading that appears between social auth and basic login form',
   },
