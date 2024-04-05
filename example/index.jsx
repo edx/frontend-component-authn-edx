@@ -3,16 +3,14 @@ import 'regenerator-runtime/runtime';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { AppProvider } from '@edx/frontend-platform/react';
 import { initialize, subscribe, APP_READY } from '@edx/frontend-platform';
 
 import './index.scss';
+import AuthnComponent from "../src/authn-component";
 
 subscribe(APP_READY, () => {
   ReactDOM.render(
-    <AppProvider>
-      <div>Load the forms here</div>
-    </AppProvider>,
+    <AuthnComponent setOpen={()=>{}} open={true} />,
     document.getElementById('root'),
   );
 });

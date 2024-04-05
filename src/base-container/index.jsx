@@ -15,7 +15,6 @@ import './index.scss';
  *
  * @returns {JSX.Element} The rendered login or registration form modal.
  */
-
 const BaseContainer = ({
   children, footerText, open, setOpen,
 }) => (
@@ -24,6 +23,7 @@ const BaseContainer = ({
     onClose={setOpen}
     size="fullscreen"
     variant="default"
+    title="authn-component"
     className="bg-light-400"
     hasCloseButton
   >

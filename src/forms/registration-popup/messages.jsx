@@ -11,26 +11,6 @@ const messages = defineMessages({
     defaultMessage: 'or',
     description: 'Heading that appears between social auth and basic registration form',
   },
-  registrationFormEmailFieldLabel: {
-    id: 'registration.form.email.label',
-    defaultMessage: 'Email',
-    description: 'Label for email input field',
-  },
-  registrationFormFullNameFieldLabel: {
-    id: 'registration.form.full.name.label',
-    defaultMessage: 'Full Name',
-    description: 'Label for full name input field',
-  },
-  registrationFormPasswordFieldLabel: {
-    id: 'registration.form.password.label',
-    defaultMessage: 'Password',
-    description: 'Label for password input field',
-  },
-  registrationFormOptOutLabel: {
-    id: 'registration.Form.opt.out.label',
-    defaultMessage: 'I don’t want to receive marketing messages from edX',
-    description: 'Label marketing email opt out option on registration form',
-  },
   registrationFormCreateAccountButton: {
     id: 'registration.form.continue.button',
     defaultMessage: 'Create an account for free',

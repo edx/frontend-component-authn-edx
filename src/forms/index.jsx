@@ -1,4 +1,6 @@
-// TODO: This will be removed when register form will be exported
-/* eslint-disable import/prefer-default-export */
+export { default as RegistrationForm } from './registration-popup';
+export { default as registerReducer } from './registration-popup/data/reducers';
+export { default as registerSaga } from './registration-popup/data/sagas';
+export { storeName as registerStoreName } from './registration-popup/data/reducers';
 
 export { default as LoginForm } from './login';

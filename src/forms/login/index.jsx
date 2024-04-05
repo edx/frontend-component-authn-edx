@@ -43,7 +43,7 @@ const LoginForm = () => {
           </Form.Group>
         </Form.Row>
         <Form.Row>
-          <Hyperlink className="hyper-link">
+          <Hyperlink className="hyper-link" destination="#">
             {formatMessage(messages.loginFormForgotPasswordButton)}
           </Hyperlink>
         </Form.Row>
@@ -54,7 +54,7 @@ const LoginForm = () => {
           <span>
             {formatMessage(messages.loginFormRegistrationHelpText)}&nbsp;
           </span>
-          <Hyperlink className="hyper-link">
+          <Hyperlink className="hyper-link" destination="#">
             {formatMessage(messages.loginFormRegistrationLink)}
           </Hyperlink>
         </Form.Row>
