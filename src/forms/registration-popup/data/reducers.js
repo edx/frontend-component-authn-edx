@@ -6,7 +6,7 @@
 
 import { createSlice } from '@reduxjs/toolkit';
 
-import { COMPLETE_STATE, DEFAULT_STATE, PENDING_STATE } from './constants';
+import { COMPLETE_STATE, DEFAULT_STATE, PENDING_STATE } from '../../../data/constants';
 
 export const storeName = 'register';
 export const REGISTER_SLICE_NAME = 'register';
