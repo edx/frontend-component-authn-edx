@@ -21,19 +21,16 @@ const BaseContainer = ({
   <ModalDialog
     isOpen={open}
     onClose={setOpen}
-    size="fullscreen"
+    size="lg"
     variant="default"
     title="authn-component"
-    className="bg-light-400"
+    className="bg-light-200"
     hasCloseButton
   >
     <ModalDialog.Body className="modal-body-container overflow-hidden">
       <div className="d-flex w-100 h-100">
-        <div className="w-50 d-flex">
+        <div className="w-100 d-flex">
           {children}
-        </div>
-        <div className="w-50 d-flex">
-          <div className="w-100 h-100 bg-dark-500" />
         </div>
       </div>
     </ModalDialog.Body>

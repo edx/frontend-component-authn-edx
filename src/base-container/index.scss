@@ -5,14 +5,12 @@
 }
 
 // This class is related to close button of modal
-.pgn__modal-close-container {
+.pgn__modal-close-container .pgn__modal-close-button {
     background: $white;
     border-radius: 50%;
+    color: $light-700;
     border: 2px solid $light-500;
 }
 
-.pgn__modal-close-container .btn-icon__icon-container {
-    color: $light-700;
-}
 
 
