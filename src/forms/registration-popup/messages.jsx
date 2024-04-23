@@ -56,6 +56,16 @@ const messages = defineMessages({
     defaultMessage: 'Fill out the fields below to create your account',
     description: 'Heading that appear on the second step',
   },
+  registrationFormPasswordFieldLabel: {
+    id: 'registration.form.password.label',
+    defaultMessage: 'Password',
+    description: 'Label for password input field',
+  },
+  registrationFormEmailFieldLabel: {
+    id: 'registration.form.email.label',
+    defaultMessage: 'Enter your email',
+    description: 'Label for email input field',
+  },
 });
 
 export default messages;

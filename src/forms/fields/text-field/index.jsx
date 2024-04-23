@@ -31,6 +31,7 @@ const TextField = (props) => {
       <Form.Control
         as="input"
         type="text"
+        className="mr-0"
         name={name}
         value={value}
         onChange={handleChange}

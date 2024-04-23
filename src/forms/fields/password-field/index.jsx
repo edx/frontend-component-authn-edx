@@ -29,6 +29,7 @@ const PasswordField = (props) => {
     value,
     handleChange,
     handleFocus,
+    floatingLabel,
   } = props;
 
   const [isPasswordHidden, setHiddenTrue, setHiddenFalse] = useToggle(true);
@@ -76,23 +77,24 @@ const PasswordField = (props) => {
         {props.value.length >= 8
           ? <Icon className="text-success mr-1" src={Check} />
           : <Icon className="mr-1 text-light-700" src={Remove} />}
-        {formatMessage(messages.eightCharcters)}
+        {formatMessage(messages.eightCharacters)}
       </span>
     </Tooltip>
   );
 
   return (
     <Form.Group controlId="password" className="w-100 mb-4">
-      <OverlayTrigger key="tooltip" placement={placement} overlay={tooltip} show>
+      <OverlayTrigger key="tooltip" placement={placement} overlay={tooltip} hide>
         <Form.Control
           as="input"
+          className="mr-0"
           type={isPasswordHidden ? 'password' : 'text'}
           name={name}
           value={value}
           onChange={handleChange}
           onFocus={handleFocus}
           trailingElement={isPasswordHidden ? ShowButton : HideButton}
-          floatingLabel={formatMessage(messages.registrationFormPasswordFieldLabel)}
+          floatingLabel={floatingLabel}
         />
       </OverlayTrigger>
       {errorMessage !== '' && (
@@ -111,11 +113,16 @@ const PasswordField = (props) => {
 };
 
 PasswordField.propTypes = {
-  errorMessage: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
   handleChange: PropTypes.func.isRequired,
   handleFocus: PropTypes.func.isRequired,
+  errorMessage: PropTypes.string,
+  floatingLabel: PropTypes.string.isRequired,
+};
+
+PasswordField.defaultProps = {
+  errorMessage: '',
 };
 
 export default PasswordField;

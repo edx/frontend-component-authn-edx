@@ -5,7 +5,7 @@
   padding: 1.75rem 1rem;
 }
 
-.authn__popup-container > .pgn__form-control-floating-label-text:after {
+.authn__popup-container  .pgn__form-control-floating-label-text:after {
   content:"*";
   color: $danger-500;
 }
