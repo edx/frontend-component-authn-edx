@@ -12,22 +12,26 @@ import './index.scss';
 /**
  * A reusable button component for social authentication providers (Facebook, Google, etc.).
  *
+ * @param {boolean} firstAuthButton - Whether the first button is rendered among all social buttons.
  * @param {boolean} inverseTextColor - Whether to use inverted text color (white for dark backgrounds).
  * @param {string} providerName - Required. The name of the social authentication provider
  * @param {boolean} showSigninText - Whether to display a sign-in or sign-up text based on the login page context.
  *
  * @returns {JSX.Element} The rendered SocialAuthButton component.
  */
-const SocialAuthButton = ({ inverseTextColor, providerName, showSigninText }) => {
+const SocialAuthButton = ({
+  firstAuthButton, inverseTextColor, providerName, showSigninText,
+}) => {
   const { formatMessage } = useIntl();
 
   return (
     <Button
       className={classNames(
-        `social-auth-button_${providerName.toLowerCase()} d-flex justify-content-start mt-2 mb-2`,
+        `social-auth-button_${providerName.toLowerCase()} d-flex justify-content-start mb-2`,
         {
           'text-white': inverseTextColor,
           'text-black-50': !inverseTextColor,
+          'mt-2': !firstAuthButton,
         },
       )}
       variant="tertiary"
@@ -45,12 +49,14 @@ const SocialAuthButton = ({ inverseTextColor, providerName, showSigninText }) =>
 };
 
 SocialAuthButton.propTypes = {
+  firstAuthButton: PropTypes.bool,
   inverseTextColor: PropTypes.bool,
   providerName: PropTypes.string.isRequired,
   showSigninText: PropTypes.bool,
 };
 
 SocialAuthButton.defaultProps = {
+  firstAuthButton: false,
   inverseTextColor: false,
   showSigninText: true,
 };
@@ -64,7 +70,7 @@ SocialAuthButton.defaultProps = {
  */
 const SocialAuthProviders = ({ isLoginPage }) => (
   <div className="d-flex flex-column">
-    <SocialAuthButton showSigninText={isLoginPage} providerName="Google" />
+    <SocialAuthButton showSigninText={isLoginPage} providerName="Google" firstAuthButton />
     <SocialAuthButton showSigninText={isLoginPage} providerName="Apple" inverseTextColor />
     <SocialAuthButton showSigninText={isLoginPage} providerName="Facebook" inverseTextColor />
     <SocialAuthButton showSigninText={isLoginPage} providerName="Microsoft" />

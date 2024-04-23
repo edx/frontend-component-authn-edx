@@ -2,12 +2,15 @@ import React from 'react';
 
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
-  Form, Icon, IconButton, useToggle,
+  Form, Icon, IconButton, OverlayTrigger, Tooltip, useToggle,
 } from '@openedx/paragon';
-import { Visibility, VisibilityOff } from '@openedx/paragon/icons';
+import {
+  Check, Remove, Visibility, VisibilityOff,
+} from '@openedx/paragon/icons';
 import PropTypes from 'prop-types';
 
 import messages from './messages';
+import { LETTER_REGEX, NUMBER_REGEX } from '../../registration-popup/data/constants';
 
 /**
  * Password field component. It accepts following handler(s)
@@ -46,16 +49,36 @@ const PasswordField = (props) => {
     />
   );
 
+  const placement = 'bottom';
+  const tooltip = (
+    <Tooltip id={`password-requirement-${placement}`}>
+      <span id="letter-check" className="d-flex align-items-center">
+        {LETTER_REGEX.test(props.value) ? <Icon className="text-success mr-1" src={Check} /> : <Icon className="mr-1 text-light-700" src={Remove} />}
+        {formatMessage(messages.oneLetter)}
+      </span>
+      <span id="number-check" className="d-flex align-items-center">
+        {NUMBER_REGEX.test(props.value) ? <Icon className="text-success mr-1" src={Check} /> : <Icon className="mr-1 text-light-700" src={Remove} />}
+        {formatMessage(messages.oneNumber)}
+      </span>
+      <span id="characters-check" className="d-flex align-items-center">
+        {props.value.length >= 8 ? <Icon className="text-success mr-1" src={Check} /> : <Icon className="mr-1 text-light-700" src={Remove} />}
+        {formatMessage(messages.eightCharcters)}
+      </span>
+    </Tooltip>
+  );
+
   return (
     <Form.Group controlId="password" className="w-100 mb-4">
-      <Form.Control
-        type={isPasswordHidden ? 'password' : 'text'}
-        name={name}
-        value={value}
-        onChange={handleChange}
-        trailingElement={isPasswordHidden ? ShowButton : HideButton}
-        floatingLabel={formatMessage(messages.registrationFormPasswordFieldLabel)}
-      />
+      <OverlayTrigger key="tooltip" placement={placement} overlay={tooltip} show>
+        <Form.Control
+          type={isPasswordHidden ? 'password' : 'text'}
+          name={name}
+          value={value}
+          onChange={handleChange}
+          trailingElement={isPasswordHidden ? ShowButton : HideButton}
+          floatingLabel={formatMessage(messages.registrationFormPasswordFieldLabel)}
+        />
+      </OverlayTrigger>
     </Form.Group>
   );
 };

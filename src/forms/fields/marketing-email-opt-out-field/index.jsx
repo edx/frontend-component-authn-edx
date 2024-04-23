@@ -18,7 +18,7 @@ const MarketingEmailOptOutCheckbox = (props) => {
   const { name, value, handleChange } = props;
 
   return (
-    <Form.Group controlId="marketingEmailOptIn">
+    <Form.Group controlId="marketingEmailOptIn" className="mb-4">
       <Form.Checkbox
         name={name}
         className="text-gray-800"
