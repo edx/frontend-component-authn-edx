@@ -64,9 +64,9 @@ SocialAuthButton.defaultProps = {
  */
 const SocialAuthProviders = ({ isLoginPage }) => (
   <div className="d-flex flex-column">
-    <SocialAuthButton showSigninText={isLoginPage} providerName="Facebook" inverseTextColor />
     <SocialAuthButton showSigninText={isLoginPage} providerName="Google" />
     <SocialAuthButton showSigninText={isLoginPage} providerName="Apple" inverseTextColor />
+    <SocialAuthButton showSigninText={isLoginPage} providerName="Facebook" inverseTextColor />
     <SocialAuthButton showSigninText={isLoginPage} providerName="Microsoft" />
   </div>
 );
