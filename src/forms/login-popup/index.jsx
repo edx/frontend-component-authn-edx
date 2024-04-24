@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { snakeCaseObject } from '@edx/frontend-platform';
 import { useIntl } from '@edx/frontend-platform/i18n';
@@ -8,8 +8,12 @@ import {
 } from '@openedx/paragon';
 
 import { loginUser } from './data/reducers';
+import LoginFailureAlert from './LoginFailureAlert';
 import messages from './messages';
 import { InlineLink, SocialAuthButtons } from '../../common-ui';
+import { INVALID_FORM } from '../../data/constants';
+import PasswordField from '../fields/password-field';
+import EmailOrUsernameField from '../fields/text-field';
 
 /**
  * Login form component that holds the login form functionality.
@@ -20,18 +24,64 @@ const LoginForm = () => {
   const { formatMessage } = useIntl();
   const dispatch = useDispatch();
 
+  const loginErrorCode = useSelector(state => state.login.loginError?.errorCode);
+  const loginErrorContext = useSelector(state => state.login.loginError?.errorContext);
+
   const [formFields, setFormFields] = useState({
     emailOrUsername: '',
     password: '',
   });
+  const [formErrors, setFormErrors] = useState({
+    emailOrUsername: '',
+    password: '',
+  });
+  const [errorCode, setErrorCode] = useState({ type: '', context: {} });
+
+  useEffect(() => {
+    if (loginErrorCode) {
+      setErrorCode({
+        type: loginErrorCode,
+        context: { ...loginErrorContext },
+      });
+    }
+  }, [loginErrorCode, loginErrorContext]);
+
+  const validateFormFields = (payload) => {
+    const { emailOrUsername, password } = payload;
+    const fieldErrors = { ...formErrors };
+
+    if (emailOrUsername === '') {
+      fieldErrors.emailOrUsername = formatMessage(messages.usernameOrEmailValidationMessage);
+    } else if (emailOrUsername.length < 2) {
+      fieldErrors.emailOrUsername = formatMessage(messages.usernameOrEmailLessCharValidationMessage);
+    }
+    if (password === '') {
+      fieldErrors.password = formatMessage(messages.passwordValidationMessage);
+    }
+
+    return { ...fieldErrors };
+  };
 
   const handleOnChange = (event) => {
     const { name, value } = event.target;
     setFormFields(prevState => ({ ...prevState, [name]: value }));
   };
 
+  const handleOnFocus = (event) => {
+    const { name } = event.target;
+    setFormErrors(prevErrors => ({ ...prevErrors, [name]: '' }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const validationErrors = validateFormFields(formFields);
+
+    if (validationErrors.emailOrUsername || validationErrors.password) {
+      setFormErrors({ ...validationErrors });
+      setErrorCode({ type: INVALID_FORM, context: {} });
+      return;
+    }
 
     const payload = snakeCaseObject(formFields);
     dispatch(loginUser(payload));
@@ -45,27 +95,26 @@ const LoginForm = () => {
       <div className="text-center mb-4 mt-3">
         {formatMessage(messages.loginFormHeading2)}
       </div>
+      <LoginFailureAlert
+        errorCode={errorCode.type}
+        context={errorCode.context}
+      />
       <Form id="login-form" name="login-form">
-        <Form.Group controlId="email" className="w-100 mb-4">
-          <Form.Control
-            as="input"
-            type="email"
-            name="emailOrUsername"
-            value={formFields.emailOrUsername}
-            onChange={handleOnChange}
-            floatingLabel={formatMessage(messages.loginFormEmailFieldLabel)}
-          />
-        </Form.Group>
-        <Form.Group controlId="password" className="w-100 mb-2">
-          <Form.Control
-            as="input"
-            type="password"
-            name="password"
-            value={formFields.password}
-            onChange={handleOnChange}
-            floatingLabel={formatMessage(messages.loginFormPasswordFieldLabel)}
-          />
-        </Form.Group>
+        <EmailOrUsernameField
+          label="Username or email"
+          name="emailOrUsername"
+          value={formFields.emailOrUsername}
+          errorMessage={formErrors.emailOrUsername}
+          handleChange={handleOnChange}
+          handleFocus={handleOnFocus}
+        />
+        <PasswordField
+          name="password"
+          value={formFields.password}
+          errorMessage={formErrors.password}
+          handleChange={handleOnChange}
+          handleFocus={handleOnFocus}
+        />
         {/* TODO: this destination will be replaced with actual links */}
         <Hyperlink className="hyper-link" destination="#" isInline>
           {formatMessage(messages.loginFormForgotPasswordButton)}

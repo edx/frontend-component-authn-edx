@@ -6,10 +6,9 @@ import { fireEvent, render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import configureStore from 'redux-mock-store';
 
-import { loginUser } from './data/reducers';
-import { DEFAULT_STATE } from '../../data/constants';
-
-import LoginForm from './index';
+import { DEFAULT_STATE } from '../../../data/constants';
+import { loginUser } from '../data/reducers';
+import LoginForm from '../index';
 
 const IntlLoginForm = injectIntl(LoginForm);
 const mockStore = configureStore();
@@ -44,7 +43,7 @@ describe('LoginForm Test', () => {
 
     const { container } = render(reduxWrapper(<IntlLoginForm />));
 
-    const usernameInput = container.querySelector('#email');
+    const usernameInput = container.querySelector('#emailOrUsername');
     const passwordInput = container.querySelector('#password');
     const loginButton = container.querySelector('#login-user');
 

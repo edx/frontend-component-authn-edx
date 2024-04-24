@@ -15,14 +15,14 @@ import { InlineLink, SocialAuthButtons } from '../../common-ui';
 import './index.scss';
 import EmailField from '../fields/email-field';
 import MarketingEmailOptInCheckbox from '../fields/marketing-email-opt-out-field';
-import NameField from '../fields/name-field';
 import PasswordField from '../fields/password-field';
-
+import NameField from '../fields/text-field';
 /**
  * RegisterForm component for handling user registration.
  * This component provides a form for users to register with their name, email, password,
  * and a checkbox for opting out of marketing emails.
  */
+
 const RegistrationForm = () => {
   const { formatMessage } = useIntl();
   const dispatch = useDispatch();
@@ -121,14 +121,19 @@ const RegistrationForm = () => {
           </Stepper.Step>
           <Stepper.Step title="" eventKey={`step${STEP2}`}>
             <NameField
+              label="Full Name"
               name="name"
               value={formFields.name}
+              errorMessage=""
               handleChange={handleOnChange}
+              handleFocus={() => { }}
             />
             <PasswordField
               name="password"
               value={formFields.password}
+              errorMessage=""
               handleChange={handleOnChange}
+              handleFocus={() => { }}
             />
           </Stepper.Step>
           <div className="d-flex flex-column my-4">

@@ -57,7 +57,7 @@ describe('RegistrationForm Test', () => {
       fireEvent.click(continueButton);
     });
 
-    const nameInput = container.querySelector('#fullName');
+    const nameInput = container.querySelector('#name');
     const passwordInput = container.querySelector('#password');
     const registerButton = container.querySelector('#register-user');
     fireEvent.change(nameInput, { target: { value: payload.name, name: 'name' } });
