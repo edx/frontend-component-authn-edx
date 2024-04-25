@@ -16,6 +16,21 @@ const messages = defineMessages({
     defaultMessage: 'Hide password',
     description: 'aria label for hide password icon on password field',
   },
+  oneLetter: {
+    id: 'one.letter',
+    defaultMessage: '1 letter',
+    description: 'password requirement to have 1 letter',
+  },
+  oneNumber: {
+    id: 'one.number',
+    defaultMessage: '1 number',
+    description: 'password requirement to have 1 number',
+  },
+  eightCharcters: {
+    id: 'eight.characters',
+    defaultMessage: '8 characters',
+    description: 'password requirement to have a minimum of 8 characters',
+  },
 });
 
 export default messages;

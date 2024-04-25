@@ -18,7 +18,9 @@ import './index.scss';
  *
  * @returns {JSX.Element} The rendered SocialAuthButton component.
  */
-const SocialAuthButton = ({ inverseTextColor, providerName, showSigninText }) => {
+const SocialAuthButton = ({
+  inverseTextColor, providerName, showSigninText,
+}) => {
   const { formatMessage } = useIntl();
 
   return (

@@ -24,7 +24,7 @@ const BaseContainer = ({
     size="lg"
     variant="default"
     title="authn-component"
-    className="bg-light-200"
+    className="bg-light-200 authn-component__modal"
     hasCloseButton
   >
     <ModalDialog.Body className="modal-body-container overflow-hidden">
