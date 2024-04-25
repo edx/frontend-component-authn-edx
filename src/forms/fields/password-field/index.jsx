@@ -49,19 +49,25 @@ const PasswordField = (props) => {
     />
   );
 
-  const placement = 'bottom';
+  const placement = 'bottom-start';
   const tooltip = (
     <Tooltip id={`password-requirement-${placement}`}>
       <span id="letter-check" className="d-flex align-items-center">
-        {LETTER_REGEX.test(props.value) ? <Icon className="text-success mr-1" src={Check} /> : <Icon className="mr-1 text-light-700" src={Remove} />}
+        {LETTER_REGEX.test(props.value)
+          ? <Icon className="text-success mr-1" src={Check} />
+          : <Icon className="mr-1 text-light-700" src={Remove} />}
         {formatMessage(messages.oneLetter)}
       </span>
       <span id="number-check" className="d-flex align-items-center">
-        {NUMBER_REGEX.test(props.value) ? <Icon className="text-success mr-1" src={Check} /> : <Icon className="mr-1 text-light-700" src={Remove} />}
+        {NUMBER_REGEX.test(props.value)
+          ? <Icon className="text-success mr-1" src={Check} />
+          : <Icon className="mr-1 text-light-700" src={Remove} />}
         {formatMessage(messages.oneNumber)}
       </span>
       <span id="characters-check" className="d-flex align-items-center">
-        {props.value.length >= 8 ? <Icon className="text-success mr-1" src={Check} /> : <Icon className="mr-1 text-light-700" src={Remove} />}
+        {props.value.length >= 8
+          ? <Icon className="text-success mr-1" src={Check} />
+          : <Icon className="mr-1 text-light-700" src={Remove} />}
         {formatMessage(messages.eightCharcters)}
       </span>
     </Tooltip>

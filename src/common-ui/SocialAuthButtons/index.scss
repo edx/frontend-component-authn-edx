@@ -12,6 +12,10 @@ $icon-and-text-gap: 15px;
   }
 }
 
+.authn-component__modal .social-auth-button_google {
+  margin-top: 0px !important;
+}
+
 .social-auth-button_apple {
   gap: $icon-and-text-gap;
   background-color: $black;

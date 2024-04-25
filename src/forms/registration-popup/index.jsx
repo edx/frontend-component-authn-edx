@@ -50,13 +50,13 @@ const RegistrationForm = () => {
     dispatch(registerUser(payload));
   };
 
-  const nextStepHandle = () => {
+  const handleNextStep = () => {
     if (currentStep < NUM_OF_STEPS) {
       setCurrentStep(currentStep + 1);
     }
   };
 
-  const backStepHandle = () => {
+  const handleBackStep = () => {
     if (currentStep > STEP1) {
       setCurrentStep(currentStep - 1);
     }
@@ -68,6 +68,9 @@ const RegistrationForm = () => {
       <h2 className="font-italic text-center display-1 mb-4">
         {formatMessage(messages.registrationFormHeading1)}
       </h2>
+      {currentStep > STEP1 && (
+        <p className="text-center">{formatMessage(messages.registrationFormSubHeading)}</p>
+      )}
       <hr className="separator mb-4 mt-4" />
     </>
   );
@@ -97,30 +100,30 @@ const RegistrationForm = () => {
       <Container size="lg" className="registration-form overflow-auto">
         {Header}
 
-        {currentStep === NUM_OF_STEPS && (
-          <div className="back-button-holder">
+        {currentStep > STEP1 && (
+          <div className="back-button-container">
             <IconButton
               key="primary"
               src={ArrowBack}
               iconAs={Icon}
               alt="Back"
-              onClick={backStepHandle}
+              onClick={handleBackStep}
               variant="primary"
               size="inline"
               className="mr-2"
             />
-            {formatMessage(messages.registrarionFormBackButtonLabel)}
+            {formatMessage(messages.registrationFormBackButton)}
           </div>
         )}
 
-        {currentStep !== NUM_OF_STEPS && (
+        {currentStep === STEP1 && (
           <>
             <SocialAuthButtons isLoginPage={false} />
             <div className="text-center mt-3">{formatMessage(messages.registrationFormHeading2)}</div>
           </>
         )}
         <Form id="registration-form" name="registration-form" className="d-flex flex-column my-4">
-          <Stepper.Step title="" eventKey={`step${STEP1}`}>
+          <Stepper.Step eventKey={`step${STEP1}`}>
             <EmailField
               name="email"
               value={formFields.email}
@@ -144,17 +147,17 @@ const RegistrationForm = () => {
               handleChange={handleOnChange}
             />
           </Stepper.Step>
-          {currentStep !== NUM_OF_STEPS && (
+          {currentStep < NUM_OF_STEPS && (
             <Button
               id="register-continue"
               name="register-continue"
               variant="primary"
               type="button"
               className="align-self-end"
-              onClick={nextStepHandle}
+              onClick={handleNextStep}
               onMouseDown={(e) => e.preventDefault()}
             >
-              {formatMessage(messages.registrationFormCreateAccountButtonCont)}
+              {formatMessage(messages.registrationFormContinueButton)}
             </Button>
           )}
           {currentStep === NUM_OF_STEPS && (

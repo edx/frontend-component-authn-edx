@@ -11,7 +11,7 @@ const messages = defineMessages({
     defaultMessage: 'or',
     description: 'Heading that appears between social auth and basic registration form',
   },
-  registrationFormCreateAccountButtonCont: {
+  registrationFormContinueButton: {
     id: 'registration.form.continue.button',
     defaultMessage: 'Continue',
     description: 'Text for submit button for continue registration form',
@@ -41,10 +41,15 @@ const messages = defineMessages({
     defaultMessage: 'Sign in with your credentials',
     description: 'Text for signing in with credentials',
   },
-  registrarionFormBackButtonLabel: {
+  registrationFormBackButton: {
     id: 'registration.form.back.btn.label',
     defaultMessage: 'Back',
     description: 'registration back button text',
+  },
+  registrationFormSubHeading: {
+    id: 'registration.form.sub.heading.text',
+    defaultMessage: 'Fill out the fields below to create your account',
+    description: 'Heading that appear on the second step',
   },
 });
 
