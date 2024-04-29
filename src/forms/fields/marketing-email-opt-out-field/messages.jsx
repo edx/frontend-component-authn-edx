@@ -1,10 +1,10 @@
 import { defineMessages } from '@edx/frontend-platform/i18n';
 
 const messages = defineMessages({
-  registrationFormMarketingOptOutLabel: {
-    id: 'registration.form.marketing.opt.out.label',
-    defaultMessage: 'I don’t want to receive marketing messages from edX',
-    description: 'Text for opt out option on register popup.',
+  registrationFormMarketingOptInLabel: {
+    id: 'registration.form.marketing.opt.in.label',
+    defaultMessage: 'I agree that edX may send me marketing messages',
+    description: 'Label for option to opt in for marketing emails on registration form',
   },
 });
 

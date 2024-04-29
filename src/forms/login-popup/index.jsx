@@ -9,9 +9,7 @@ import {
 
 import { loginUser } from './data/reducers';
 import messages from './messages';
-import SocialAuthButtons from '../../common-ui/SocialAuthButtons';
-
-import './index.scss';
+import { InlineLink, SocialAuthButtons } from '../../common-ui';
 
 /**
  * Login form component that holds the login form functionality.
@@ -40,65 +38,62 @@ const LoginForm = () => {
   };
 
   return (
-    <Container size="lg" className="w-100 h-100 overflow-auto form-layout">
-      <h1 className="display-1 font-italic text-center mb-4">{formatMessage(messages.loginFormHeading1)}</h1>
+    <Container size="lg" className="authn__popup-container overflow-auto">
+      <h1 className="display-1 font-italic text-center mb-0">{formatMessage(messages.loginFormHeading1)}</h1>
+      <hr className="heading-separator mb-4 mt-4" />
       <SocialAuthButtons />
-      <div className="text-center mb-4.5 mt-4.5">
+      <div className="text-center mb-4 mt-3">
         {formatMessage(messages.loginFormHeading2)}
       </div>
-      <Form>
-        <Form.Row className="mb-4">
-          <Form.Group controlId="email" className="w-100 m-0">
-            <Form.Control
-              as="input"
-              type="email"
-              name="emailOrUsername"
-              value={formFields.emailOrUsername}
-              onChange={handleOnChange}
-              floatingLabel={formatMessage(messages.loginFormEmailFieldLabel)}
-            />
-          </Form.Group>
-        </Form.Row>
-        <Form.Row className="mb-3">
-          <Form.Group controlId="password" className="w-100 m-0">
-            <Form.Control
-              as="input"
-              type="password"
-              name="password"
-              value={formFields.password}
-              onChange={handleOnChange}
-              floatingLabel={formatMessage(messages.loginFormPasswordFieldLabel)}
-            />
-          </Form.Group>
-        </Form.Row>
-        <Form.Row>
-          {/* TODO: this destination will be replaced with actual links */}
-          <Hyperlink className="hyper-link" destination="#">
-            {formatMessage(messages.loginFormForgotPasswordButton)}
-          </Hyperlink>
-        </Form.Row>
-        <Form.Row className="mt-6 mb-4.5">
+      <Form id="login-form" name="login-form">
+        <Form.Group controlId="email" className="w-100 mb-4">
+          <Form.Control
+            as="input"
+            type="email"
+            name="emailOrUsername"
+            value={formFields.emailOrUsername}
+            onChange={handleOnChange}
+            floatingLabel={formatMessage(messages.loginFormEmailFieldLabel)}
+          />
+        </Form.Group>
+        <Form.Group controlId="password" className="w-100 mb-2">
+          <Form.Control
+            as="input"
+            type="password"
+            name="password"
+            value={formFields.password}
+            onChange={handleOnChange}
+            floatingLabel={formatMessage(messages.loginFormPasswordFieldLabel)}
+          />
+        </Form.Group>
+        {/* TODO: this destination will be replaced with actual links */}
+        <Hyperlink className="hyper-link" destination="#" isInline>
+          {formatMessage(messages.loginFormForgotPasswordButton)}
+        </Hyperlink>
+        <div className="d-flex flex-column my-4">
           <Button
             id="login-user"
             name="login-user"
             variant="primary"
             type="submit"
-            className="w-100"
+            className="align-self-end"
             onClick={handleSubmit}
             onMouseDown={(e) => e.preventDefault()}
           >
             {formatMessage(messages.loginFormSignInButton)}
           </Button>
-        </Form.Row>
-        <Form.Row>
-          <span>
-            {formatMessage(messages.loginFormRegistrationHelpText)}&nbsp;
-          </span>
-          {/* TODO: this destination will be replaced with actual links */}
-          <Hyperlink className="hyper-link" destination="#">
-            {formatMessage(messages.loginFormRegistrationLink)}
-          </Hyperlink>
-        </Form.Row>
+        </div>
+        <InlineLink
+          className="mb-2"
+          destination="#"
+          linkHelpText={formatMessage(messages.loginFormRegistrationHelpText)}
+          linkText={formatMessage(messages.loginFormRegistrationLink)}
+        />
+        <InlineLink
+          destination="#"
+          linkHelpText={formatMessage(messages.loginFormSchoolAndOrganizationHelpText)}
+          linkText={formatMessage(messages.loginFormSchoolAndOrganizationLink)}
+        />
       </Form>
     </Container>
   );

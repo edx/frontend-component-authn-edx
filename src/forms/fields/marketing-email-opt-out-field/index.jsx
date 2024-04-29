@@ -7,34 +7,34 @@ import PropTypes from 'prop-types';
 import messages from './messages';
 
 /**
- * Marketing email opt out field component. It accepts following handler(s)
+ * Marketing email opt in field component. It accepts following handler(s)
  * - handleChange for setting value change and
  *
  * It is responsible for
  * - setting value on change (true/false)
  */
-const MarketingEmailOptOutCheckbox = (props) => {
+const MarketingEmailOptInCheckbox = (props) => {
   const { formatMessage } = useIntl();
   const { name, value, handleChange } = props;
 
   return (
-    <Form.Group controlId="marketingEmailOptIn" className="mb-4">
+    <Form.Group controlId="marketingEmailOptIn">
       <Form.Checkbox
         name={name}
         className="text-gray-800"
         checked={!!value}
         onChange={handleChange}
       >
-        {formatMessage(messages.registrationFormMarketingOptOutLabel)}
+        {formatMessage(messages.registrationFormMarketingOptInLabel)}
       </Form.Checkbox>
     </Form.Group>
   );
 };
 
-MarketingEmailOptOutCheckbox.propTypes = {
+MarketingEmailOptInCheckbox.propTypes = {
   name: PropTypes.string.isRequired,
   value: PropTypes.bool.isRequired,
   handleChange: PropTypes.func.isRequired,
 };
 
-export default MarketingEmailOptOutCheckbox;
+export default MarketingEmailOptInCheckbox;
