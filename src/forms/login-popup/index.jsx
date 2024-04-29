@@ -1,19 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { snakeCaseObject } from '@edx/frontend-platform';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
-  Button, Container, Form, Hyperlink,
+  Container, Form, Hyperlink, StatefulButton,
 } from '@openedx/paragon';
 
+import LoginFailureAlert from './components/LoginFailureAlert';
+import { TPA_AUTHENTICATION_FAILURE } from './data/constants';
 import { loginUser } from './data/reducers';
-import LoginFailureAlert from './LoginFailureAlert';
 import messages from './messages';
-import { InlineLink, SocialAuthButtons } from '../../common-ui';
+import { InlineLink, SocialAuthProviders } from '../../common-ui';
 import { INVALID_FORM } from '../../data/constants';
+import getAllPossibleQueryParams from '../../data/utils';
+import AuthenticatedRedirection from '../common-components/AuthenticatedRedirection';
+import ThirdPartyAuthAlert from '../common-components/ThirdPartyAuthAlert';
 import PasswordField from '../fields/password-field';
 import EmailOrUsernameField from '../fields/text-field';
+import './index.scss';
 
 /**
  * Login form component that holds the login form functionality.
@@ -23,9 +28,15 @@ import EmailOrUsernameField from '../fields/text-field';
 const LoginForm = () => {
   const { formatMessage } = useIntl();
   const dispatch = useDispatch();
+  const queryParams = useMemo(() => getAllPossibleQueryParams(), []);
 
+  const loginResult = useSelector(state => state.login.loginResult);
   const loginErrorCode = useSelector(state => state.login.loginError?.errorCode);
   const loginErrorContext = useSelector(state => state.login.loginError?.errorContext);
+  const submitState = useSelector(state => state.login.submitState);
+  const currentProvider = useSelector(state => state.commonData.thirdPartyAuthContext.currentProvider);
+  const thirdPartyAuthErrorMessage = useSelector(state => state.commonData.thirdPartyAuthContext.errorMessage);
+  const finishAuthUrl = useSelector(state => state.commonData.thirdPartyAuthContext.finishAuthUrl);
 
   const [formFields, setFormFields] = useState({
     emailOrUsername: '',
@@ -45,6 +56,18 @@ const LoginForm = () => {
       });
     }
   }, [loginErrorCode, loginErrorContext]);
+
+  useEffect(() => {
+    if (thirdPartyAuthErrorMessage) {
+      setErrorCode((prevState) => ({
+        type: TPA_AUTHENTICATION_FAILURE,
+        count: prevState.count + 1,
+        context: {
+          errorMessage: thirdPartyAuthErrorMessage,
+        },
+      }));
+    }
+  }, [thirdPartyAuthErrorMessage]);
 
   const validateFormFields = (payload) => {
     const { emailOrUsername, password } = payload;
@@ -83,21 +106,38 @@ const LoginForm = () => {
       return;
     }
 
-    const payload = snakeCaseObject(formFields);
+    // add query params to the payload
+    const payload = {
+      ...snakeCaseObject(formFields),
+      ...queryParams,
+    };
     dispatch(loginUser(payload));
   };
 
   return (
     <Container size="lg" className="authn__popup-container overflow-auto">
-      <h1 className="display-1 font-italic text-center mb-0">{formatMessage(messages.loginFormHeading1)}</h1>
+      <AuthenticatedRedirection
+        success={loginResult.success}
+        redirectUrl={loginResult.redirectUrl}
+        finishAuthUrl={finishAuthUrl}
+      />
+      <h1
+        className="display-1 font-italic text-center mb-0"
+        data-testid="sign-in-heading"
+      >
+        {formatMessage(messages.loginFormHeading1)}
+      </h1>
       <hr className="heading-separator mb-4 mt-4" />
-      <SocialAuthButtons />
+      <SocialAuthProviders />
       <div className="text-center mb-4 mt-3">
         {formatMessage(messages.loginFormHeading2)}
       </div>
       <LoginFailureAlert
         errorCode={errorCode.type}
         context={errorCode.context}
+      />
+      <ThirdPartyAuthAlert
+        currentProvider={currentProvider}
       />
       <Form id="login-form" name="login-form">
         <EmailOrUsernameField
@@ -114,23 +154,27 @@ const LoginForm = () => {
           errorMessage={formErrors.password}
           handleChange={handleOnChange}
           handleFocus={handleOnFocus}
+          showPasswordTooltip={false}
         />
         {/* TODO: this destination will be replaced with actual links */}
         <Hyperlink className="hyper-link" destination="#" isInline>
           {formatMessage(messages.loginFormForgotPasswordButton)}
         </Hyperlink>
         <div className="d-flex flex-column my-4">
-          <Button
+          <StatefulButton
             id="login-user"
             name="login-user"
-            variant="primary"
             type="submit"
-            className="align-self-end"
+            variant="primary"
+            className="align-self-end login__btn-width"
+            state={submitState}
+            labels={{
+              default: formatMessage(messages.loginFormSignInButton),
+              pending: '',
+            }}
             onClick={handleSubmit}
             onMouseDown={(e) => e.preventDefault()}
-          >
-            {formatMessage(messages.loginFormSignInButton)}
-          </Button>
+          />
         </div>
         <InlineLink
           className="mb-2"

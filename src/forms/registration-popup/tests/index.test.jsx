@@ -7,10 +7,9 @@ import { act } from 'react-dom/test-utils';
 import { MemoryRouter } from 'react-router-dom';
 import configureStore from 'redux-mock-store';
 
-import { registerUser } from './data/reducers';
-import { DEFAULT_STATE } from '../../data/constants';
-
-import RegistrationForm from './index';
+import { DEFAULT_STATE } from '../../../data/constants';
+import { registerUser } from '../data/reducers';
+import RegistrationForm from '../index';
 
 const IntlRegistrationForm = injectIntl(RegistrationForm);
 const mockStore = configureStore();
@@ -31,6 +30,13 @@ describe('RegistrationForm Test', () => {
       submitState: DEFAULT_STATE,
       registrationError: {},
       registrationResult: {},
+    },
+    commonData: {
+      thirdPartyAuthContext: {
+        finishAuthUrl: null,
+        providers: [],
+        errorMessage: null,
+      },
     },
   };
 

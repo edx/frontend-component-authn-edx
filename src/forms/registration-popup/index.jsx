@@ -11,7 +11,7 @@ import { ArrowBack } from '@openedx/paragon/icons';
 import { NUM_OF_STEPS, STEP1, STEP2 } from './data/constants';
 import { registerUser } from './data/reducers';
 import messages from './messages';
-import { InlineLink, SocialAuthButtons } from '../../common-ui';
+import { InlineLink, SocialAuthProviders } from '../../common-ui';
 import './index.scss';
 import EmailField from '../fields/email-field';
 import MarketingEmailOptInCheckbox from '../fields/marketing-email-opt-out-field';
@@ -63,7 +63,10 @@ const RegistrationForm = () => {
   const Header = (
     <>
       {currentStep === STEP1 ? (
-        <h2 className="font-italic text-center display-1 mb-4">
+        <h2
+          className="font-italic text-center display-1 mb-4"
+          data-testid="sign-up-heading"
+        >
           {formatMessage(messages.registrationFormHeading1)}
         </h2>
       ) : (
@@ -100,14 +103,14 @@ const RegistrationForm = () => {
 
         {currentStep === STEP1 && (
           <>
-            <SocialAuthButtons isLoginPage={false} />
+            <SocialAuthProviders isLoginForm={false} />
             <div className="text-center mb-4 mt-3">
               {formatMessage(messages.registrationFormHeading2)}
             </div>
           </>
         )}
-        <Form id="registration-form" name="registration-form">
-          <Stepper.Step eventKey={`step${STEP1}`} title="">
+        <Form id="registration-form" name="registration-form" className="d-flex flex-column my-4">
+          <Stepper.Step title={`step${STEP1}`} eventKey={`step${STEP1}`}>
             <EmailField
               name="email"
               value={formFields.email}
@@ -119,7 +122,7 @@ const RegistrationForm = () => {
               handleChange={handleOnChange}
             />
           </Stepper.Step>
-          <Stepper.Step eventKey={`step${STEP2}`} title="">
+          <Stepper.Step title={`step${STEP2}`} eventKey={`step${STEP2}`}>
             <NameField
               label="Full Name"
               name="name"

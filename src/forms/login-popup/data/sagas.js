@@ -16,10 +16,10 @@ export function* handleUserLogin(action) {
   try {
     const { redirectUrl, success } = yield call(loginRequest, action.payload);
 
-    yield put(loginUserSuccess(
+    yield put(loginUserSuccess({
       redirectUrl,
       success,
-    ));
+    }));
   } catch (e) {
     const statusCodes = [400];
     if (e.response) {

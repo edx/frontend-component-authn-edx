@@ -29,6 +29,7 @@ const PasswordField = (props) => {
     value,
     handleChange,
     handleFocus,
+    showPasswordTooltip,
   } = props;
 
   const [isPasswordHidden, setHiddenTrue, setHiddenFalse] = useToggle(true);
@@ -83,7 +84,7 @@ const PasswordField = (props) => {
 
   return (
     <Form.Group controlId="password" className="w-100 mb-4">
-      <OverlayTrigger key="tooltip" placement={placement} overlay={tooltip} show>
+      <OverlayTrigger key="tooltip" placement={placement} overlay={tooltip} show={showPasswordTooltip}>
         <Form.Control
           as="input"
           type={isPasswordHidden ? 'password' : 'text'}
@@ -116,6 +117,11 @@ PasswordField.propTypes = {
   value: PropTypes.string.isRequired,
   handleChange: PropTypes.func.isRequired,
   handleFocus: PropTypes.func.isRequired,
+  showPasswordTooltip: PropTypes.bool,
+};
+
+PasswordField.defaultProps = {
+  showPasswordTooltip: true,
 };
 
 export default PasswordField;
