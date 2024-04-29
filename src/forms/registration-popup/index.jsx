@@ -60,7 +60,7 @@ const RegistrationForm = () => {
           finishAuthUrl={finishAuthUrl}
         />
         <h2
-          className="font-italic text-center display-1 mb-4"
+          className="font-italic text-center display-1 mb-0"
           data-testid="sign-up-heading"
         >
           {formatMessage(messages.registrationFormHeading1)}

@@ -1,21 +1,40 @@
 @import "@edx/brand/paragon/variables";
 
-authn-component__modal .modal-body-container .pgn__modal-body-content {
+.authn-component__modal .modal-body-container .pgn__modal-body-content {
   height: 100%;
 }
 
 // This class is related to close button of modal
-authn-component__modal .pgn__modal-close-container .pgn__modal-close-button {
+.authn-component__modal .pgn__modal-close-container .pgn__modal-close-button {
   background: $white;
   border-radius: 50%;
   color: $light-700;
   border: 2px solid $light-500;
 }
 
-.authn-component__modal .pgn__modal-body {
-  overflow: auto !important;
-}
-
 .authn-component__modal .pgn__modal-body::after {
   display: none !important;
+  overflow-x: hidden !important;
+  padding: 2.5rem; // We dont have bootstrap class for 40px/2.5rem padding and its not default padding by dialog
+}
+
+.authn-component__modal .pgn__modal-footer {
+  padding: 2.5rem; // We dont have bootstrap class for 40px/2.5rem padding and its not default padding by dialog
+}
+
+@media (max-width: 576px) {
+  .authn-component__modal .pgn__modal-body {
+    padding: 1rem;
+  }
+
+  .authn-component__modal .pgn__modal-footer {
+    padding: 1rem 1.5rem;
+  }
+}
+
+@media (max-width: 350px) {
+  .authn-component__modal .pgn__modal-footer {
+    padding: 1rem;
+  }
+>>>>>>> 1c05928 (feat: make the authn component responsive)
 }

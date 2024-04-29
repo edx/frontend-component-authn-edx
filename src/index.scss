@@ -8,7 +8,7 @@
   }
 }
 
-.authn__popup-container  .pgn__form-control-floating-label-text:after {
+.authn__popup-container > .pgn__form-control-floating-label-text:after {
   content:"*";
   color: $danger-500;
 }

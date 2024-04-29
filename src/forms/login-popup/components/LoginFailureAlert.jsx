@@ -148,7 +148,7 @@ const LoginFailureAlert = (props) => {
   }
 
   return (
-    <Alert id="login-failure-alert" className="mb-5" variant="danger">
+    <Alert id="login-failure-alert" className="mb-4" variant="danger">
       {formatMessage(messages.loginFailureHeaderTitle)} { errorMessage }
     </Alert>
   );
