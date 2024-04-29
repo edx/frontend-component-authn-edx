@@ -10,7 +10,10 @@ import BaseContainer from '../base-container';
 import configureStore from '../data/configureStore';
 import {
   FORGOT_PASSWORD_FORM,
-  LOGIN_FORM, PROGRESSIVE_PROFILING_FORM, REGISTRATION_FORM, VALID_FORMS,
+  LOGIN_FORM,
+  PROGRESSIVE_PROFILING_FORM,
+  REGISTRATION_FORM,
+  VALID_FORMS,
 } from '../data/constants';
 import getAllPossibleQueryParams from '../data/utils';
 import { HonorCodeAndPrivacyPolicyMessage, LoginForm, RegistrationForm } from '../forms';

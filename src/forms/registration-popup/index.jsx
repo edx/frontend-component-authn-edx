@@ -70,7 +70,7 @@ const RegistrationForm = () => {
     <>
       {currentStep === STEP1 ? (
         <h2
-          className="font-italic text-center display-1 mb-4"
+          className="font-italic text-center display-1 mb-0"
           data-testid="sign-up-heading"
         >
           {formatMessage(messages.registrationFormHeading1)}
@@ -83,13 +83,13 @@ const RegistrationForm = () => {
           <p className="text-center mt-4">{formatMessage(messages.registrationFormSubHeading)}</p>
         </>
       )}
-      <hr className="separator mb-4 mt-4" />
+      <hr className="separator my-3 my-sm-4" />
     </>
   );
 
   return (
     <Stepper activeKey={`step${currentStep}`}>
-      <Container size="lg" className="authn__popup-container overflow-auto">
+      <Container size="lg" className="authn__popup-container p-0">
         <AuthenticatedRedirection
           success={registrationResult.success}
           redirectUrl={registrationResult.redirectUrl}
@@ -115,12 +115,12 @@ const RegistrationForm = () => {
         {currentStep === STEP1 && (
           <>
             <SocialAuthProviders isLoginForm={false} />
-            <div className="text-center mb-4 mt-3">
+            <div className="text-center my-3 my-sm-4">
               {formatMessage(messages.registrationFormHeading2)}
             </div>
           </>
         )}
-        <Form id="registration-form" name="registration-form" className="d-flex flex-column my-4">
+        <Form id="registration-form" name="registration-form" className="d-flex flex-column my-3 my-sm-4">
           <Stepper.Step title={`step${STEP1}`} eventKey={`step${STEP1}`}>
             <EmailField
               name="email"
@@ -152,7 +152,7 @@ const RegistrationForm = () => {
               floatingLabel={formatMessage(messages.registrationFormPasswordFieldLabel)}
             />
           </Stepper.Step>
-          <div className="d-flex flex-column my-4">
+          <div className="d-flex flex-column m-0">
             {currentStep < NUM_OF_STEPS && (
               <Button
                 id="register-continue"

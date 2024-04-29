@@ -51,7 +51,7 @@ export const SocialAuthButton = ({ provider, isLoginForm, inverseTextColor }) =>
       data-provider-url={isLoginForm ? loginUrl : registerUrl}
       onClick={handleSubmit}
       className={classNames(
-        `social-auth-button_${providerName.toLowerCase()} d-flex justify-content-start mt-2 mb-2`,
+        `social-auth-button_${providerName.toLowerCase()} d-flex justify-content-start mb-3`,
         {
           'text-white': inverseTextColor,
           'text-black-50': !inverseTextColor,

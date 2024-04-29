@@ -3,7 +3,7 @@
 $facebook-blue: #1877F2;
 $icon-and-text-gap: 15px;
 
-.social-auth-button_facebook {
+.authn-component__modal .social-auth-button_facebook {
   gap: $icon-and-text-gap;
   background-color: $facebook-blue;
 
@@ -13,10 +13,11 @@ $icon-and-text-gap: 15px;
 }
 
 .authn-component__modal .social-auth-button_google {
-  margin-top: 0px !important;
+  gap: $icon-and-text-gap;
+  margin-top: 0 !important;
 }
 
-.social-auth-button_apple {
+.authn-component__modal .social-auth-button_apple {
   gap: $icon-and-text-gap;
   background-color: $black;
 
@@ -25,7 +26,8 @@ $icon-and-text-gap: 15px;
   }
 }
 
-.social-auth-button_google, .social-auth-button_microsoft {
+.authn-component__modal .social-auth-button_microsoft {
+  margin-bottom: 0 !important;
   gap: $icon-and-text-gap;
   background-color: $white;
 

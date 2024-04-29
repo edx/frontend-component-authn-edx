@@ -70,7 +70,7 @@ describe('AuthnComponent Test', () => {
       });
     });
 
-    it('renders registration form when rendering SignUpComponent', () => {
+    it('renders login form when rendering SignInComponent', () => {
       // It also tests that component is rendered only when isOpen is true
       const { getByTestId } = render(reduxWrapper(
         <SignInComponent isOpen close={() => {}} />,
@@ -189,20 +189,20 @@ describe('AuthnComponent Test', () => {
 
       expect(getByTestId('progressive-profiling-heading')).toBeTruthy();
     });
-  });
 
-  it('renders FORGOT_PASSWORD_FORM form if currentForm=FORGOT_PASSWORD_FORM', () => {
-    store = mockStore({
-      ...initialState,
-      commonData: {
-        ...initialState.commonData,
-        currentForm: FORGOT_PASSWORD_FORM,
-      },
+    it('renders FORGOT_PASSWORD_FORM form if currentForm=FORGOT_PASSWORD_FORM', () => {
+      store = mockStore({
+        ...initialState,
+        commonData: {
+          ...initialState.commonData,
+          currentForm: FORGOT_PASSWORD_FORM,
+        },
+      });
+      const { getByTestId } = render(reduxWrapper(
+        <IntlAuthnComponent isOpen close={() => {}} />,
+      ));
+
+      expect(getByTestId('forgot-password-heading')).toBeTruthy();
     });
-    const { getByTestId } = render(reduxWrapper(
-      <IntlAuthnComponent isOpen close={() => {}} />,
-    ));
-
-    expect(getByTestId('forgot-password-heading')).toBeTruthy();
   });
 });

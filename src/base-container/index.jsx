@@ -27,7 +27,7 @@ const BaseContainer = ({
     className="bg-light-200 authn-component__modal"
     hasCloseButton
   >
-    <ModalDialog.Body className="modal-body-container overflow-hidden">
+    <ModalDialog.Body className="modal-body-container">
       <div className="d-flex w-100 h-100">
         <div className="w-100 d-flex">
           {children}
@@ -35,7 +35,7 @@ const BaseContainer = ({
       </div>
     </ModalDialog.Body>
     {footerText && (
-      <ModalDialog.Footer className="bg-dark-500 p-4.5">
+      <ModalDialog.Footer className="bg-dark-500">
         <p className="mb-0 text-white m-auto">{footerText}</p>
       </ModalDialog.Footer>
     )}

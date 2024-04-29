@@ -6,7 +6,8 @@ import commonDataReducer, {
   commonDataInitialState,
   getThirdPartyAuthContext,
   getThirdPartyAuthContextFailed,
-  getThirdPartyAuthContextSuccess, setCurrentOpenedForm,
+  getThirdPartyAuthContextSuccess,
+  setCurrentOpenedForm,
 } from '../reducers';
 
 describe('commonDataSlice reducer', () => {
