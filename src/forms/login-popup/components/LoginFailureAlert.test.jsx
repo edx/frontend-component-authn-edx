@@ -6,6 +6,7 @@ import {
   render, screen,
 } from '@testing-library/react';
 
+import LoginFailureAlert from './LoginFailureAlert';
 import {
   FORBIDDEN_REQUEST,
   INTERNAL_SERVER_ERROR,
@@ -17,14 +18,27 @@ import {
   FAILED_LOGIN_ATTEMPT,
   INACTIVE_USER,
   INCORRECT_EMAIL_PASSWORD,
-  NON_COMPLIANT_PASSWORD_EXCEPTION,
+  NON_COMPLIANT_PASSWORD_EXCEPTION, TPA_AUTHENTICATION_FAILURE,
 } from '../data/constants';
-import LoginFailureAlert from '../LoginFailureAlert';
 
 const IntlLoginFailureAlert = injectIntl(LoginFailureAlert);
 
 describe('LoginFailureAlert', () => {
   let props = {};
+
+  it('should not render error message if errorCode is not available', () => {
+    props = {
+      errorCode: '',
+    };
+
+    const { container } = render(
+      <IntlProvider locale="en">
+        <IntlLoginFailureAlert {...props} />
+      </IntlProvider>,
+    );
+
+    expect(container.querySelector('#login-failure-alert')).toBeFalsy();
+  });
 
   it('should match non compliant password error message', () => {
     props = {
@@ -223,5 +237,31 @@ describe('LoginFailureAlert', () => {
     expect(container.querySelector('#login-failure-alert').textContent).toContain(errorMessage);
 
     expect(screen.getByRole('link', { name: 'Google account' }).getAttribute('href')).toBe(url);
+  });
+
+  it('should show error message if third party authentication failed', () => {
+    const lmsBaseUrl = 'http://example.com';
+    const platformName = 'edX';
+    const errorMsg = 'Error: Third party authenticated failed.';
+
+    mergeConfig({
+      LMS_BASE_URL: lmsBaseUrl,
+      SITE_NAME: platformName,
+    });
+
+    props = {
+      context: {
+        errorMessage: errorMsg,
+      },
+      errorCode: TPA_AUTHENTICATION_FAILURE,
+    };
+
+    const { container } = render(
+      <IntlProvider locale="en">
+        <IntlLoginFailureAlert {...props} />
+      </IntlProvider>,
+    );
+
+    expect(container.querySelector('#login-failure-alert').textContent).toContain(errorMsg);
   });
 });

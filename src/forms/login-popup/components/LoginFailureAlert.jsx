@@ -6,19 +6,20 @@ import { Alert, Hyperlink } from '@openedx/paragon';
 import PropTypes from 'prop-types';
 
 import {
+  FORBIDDEN_REQUEST,
+  INTERNAL_SERVER_ERROR,
+  INVALID_FORM,
+} from '../../../data/constants';
+import {
   ACCOUNT_LOCKED_OUT,
   ALLOWED_DOMAIN_LOGIN_ERROR,
   FAILED_LOGIN_ATTEMPT,
   INACTIVE_USER,
   INCORRECT_EMAIL_PASSWORD,
   NON_COMPLIANT_PASSWORD_EXCEPTION,
-} from './data/constants';
-import messages from './messages';
-import {
-  FORBIDDEN_REQUEST,
-  INTERNAL_SERVER_ERROR,
-  INVALID_FORM,
-} from '../../data/constants';
+  TPA_AUTHENTICATION_FAILURE,
+} from '../data/constants';
+import messages from '../messages';
 
 /**
  * LoginFailureAlert component that is responsible to show error alert based on error code.
@@ -128,6 +129,17 @@ const LoginFailureAlert = (props) => {
           </span>
         );
       }
+      break;
+    case TPA_AUTHENTICATION_FAILURE:
+      errorMessage = (
+        <span>
+          {formatMessage(messages.loginTpaAuthenticationFailure, {
+            platform_name: getConfig().SITE_NAME,
+            lineBreak: <br />,
+            errorMessage: context.errorMessage,
+          })}
+        </span>
+      );
       break;
     case INTERNAL_SERVER_ERROR:
     default:

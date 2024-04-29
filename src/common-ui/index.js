@@ -1,2 +1,2 @@
 export { default as InlineLink } from './InlineLink';
-export { default as SocialAuthButtons } from './SocialAuthButtons';
+export { default as SocialAuthProviders } from './SocialAuthButtons';

@@ -7,10 +7,9 @@ import { act } from 'react-dom/test-utils';
 import { MemoryRouter } from 'react-router-dom';
 import configureStore from 'redux-mock-store';
 
-import { registerUser } from './data/reducers';
-import { DEFAULT_STATE } from '../../data/constants';
-
-import RegistrationForm from './index';
+import { DEFAULT_STATE } from '../../../data/constants';
+import { registerUser } from '../data/reducers';
+import RegistrationForm from '../index';
 
 const IntlRegistrationForm = injectIntl(RegistrationForm);
 const mockStore = configureStore();
@@ -31,6 +30,14 @@ describe('RegistrationForm Test', () => {
       submitState: DEFAULT_STATE,
       registrationError: {},
       registrationResult: {},
+    },
+    commonData: {
+      thirdPartyAuthApiStatus: DEFAULT_STATE,
+      thirdPartyAuthContext: {
+        finishAuthUrl: null,
+        providers: [],
+        errorMessage: null,
+      },
     },
   };
 
@@ -65,5 +72,18 @@ describe('RegistrationForm Test', () => {
     fireEvent.click(registerButton);
 
     expect(store.dispatch).toHaveBeenCalledWith(registerUser(payload));
+  });
+
+  // ******** test registration form elements ********
+  it('should show company and school credentials link', async () => {
+    const { getByText } = render(reduxWrapper(<IntlRegistrationForm />));
+    const schoolAndCompanyLabel = getByText(
+      'Have an account through school or organization?',
+    );
+    const schoolAndCompanyLink = getByText(
+      'Sign in with your credentials',
+    );
+    expect(schoolAndCompanyLabel).toBeTruthy();
+    expect(schoolAndCompanyLink).toBeTruthy();
   });
 });
