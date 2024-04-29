@@ -11,6 +11,11 @@ const messages = defineMessages({
     defaultMessage: 'or',
     description: 'Heading that appears between social auth and basic registration form',
   },
+  registrationFormHeading3: {
+    id: 'registration.form.or.heading.3',
+    defaultMessage: 'Finish creating account',
+    description: 'Heading that appears on the second step of registration form',
+  },
   registrationFormContinueButton: {
     id: 'registration.form.continue.button',
     defaultMessage: 'Continue',

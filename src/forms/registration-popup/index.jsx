@@ -4,17 +4,17 @@ import { useDispatch } from 'react-redux';
 import { snakeCaseObject } from '@edx/frontend-platform';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
-  Button, Container, Form, Hyperlink, Icon, IconButton, Stepper,
+  Button, Container, Form, Icon, IconButton, Stepper,
 } from '@openedx/paragon';
 import { ArrowBack } from '@openedx/paragon/icons';
 
 import { NUM_OF_STEPS, STEP1, STEP2 } from './data/constants';
 import { registerUser } from './data/reducers';
 import messages from './messages';
-import SocialAuthButtons from '../../common-ui/SocialAuthButtons';
+import { InlineLink, SocialAuthButtons } from '../../common-ui';
 import './index.scss';
 import EmailField from '../fields/email-field';
-import MarketingEmailOptOutCheckbox from '../fields/marketing-email-opt-out-field';
+import MarketingEmailOptInCheckbox from '../fields/marketing-email-opt-out-field';
 import NameField from '../fields/name-field';
 import PasswordField from '../fields/password-field';
 
@@ -28,7 +28,7 @@ const RegistrationForm = () => {
   const dispatch = useDispatch();
 
   const [formFields, setFormFields] = useState({
-    name: '', email: '', password: '', marketingEmailOptOut: false,
+    name: '', email: '', password: '', marketingEmailOptIn: true,
   });
   const [currentStep, setCurrentStep] = useState(STEP1);
 
@@ -42,9 +42,6 @@ const RegistrationForm = () => {
     e.preventDefault();
 
     let payload = { ...formFields };
-    payload.marketingEmailOptIn = !payload.marketingEmailOptOut;
-    delete payload.marketingEmailOptOut;
-
     payload = snakeCaseObject(payload);
 
     dispatch(registerUser(payload));
@@ -65,43 +62,28 @@ const RegistrationForm = () => {
   // JSX for header section
   const Header = (
     <>
-      <h2 className="font-italic text-center display-1 mb-4">
-        {formatMessage(messages.registrationFormHeading1)}
-      </h2>
-      {currentStep > STEP1 && (
-        <p className="text-center">{formatMessage(messages.registrationFormSubHeading)}</p>
+      {currentStep === STEP1 ? (
+        <h2 className="font-italic text-center display-1 mb-4">
+          {formatMessage(messages.registrationFormHeading1)}
+        </h2>
+      ) : (
+        <>
+          <h2 className="font-italic text-center display-1 mb-4">
+            {formatMessage(messages.registrationFormHeading3)}
+          </h2>
+          <p className="text-center mt-4">{formatMessage(messages.registrationFormSubHeading)}</p>
+        </>
       )}
       <hr className="separator mb-4 mt-4" />
     </>
   );
 
-  // JSX for sign-in link section
-  const signInLink = (
-    <span className="text-gray-800 mb-2 d-block">
-      {formatMessage(messages.registrationFormAlreadyHaveAccountText)}
-      <Hyperlink isInline className="p-2" destination="#">
-        {formatMessage(messages.registrationFormSignInLink)}
-      </Hyperlink>
-    </span>
-  );
-
-  // JSX for sign-in with credentials link section
-  const signInWithCredentialsLink = (
-    <span className="font-weight-normal d-block">
-      {formatMessage(messages.registrationFormSchoolOrOrganizationLink)}
-      <Hyperlink isInline className="p-2" destination="#">
-        {formatMessage(messages.registrationFormSignInWithCredentialsLink)}
-      </Hyperlink>
-    </span>
-  );
-
   return (
     <Stepper activeKey={`step${currentStep}`}>
-      <Container size="lg" className="registration-form overflow-auto">
+      <Container size="lg" className="authn__popup-container overflow-auto">
         {Header}
-
         {currentStep > STEP1 && (
-          <div className="back-button-container">
+          <div className="back-button-container mb-4">
             <IconButton
               key="primary"
               src={ArrowBack}
@@ -119,19 +101,21 @@ const RegistrationForm = () => {
         {currentStep === STEP1 && (
           <>
             <SocialAuthButtons isLoginPage={false} />
-            <div className="text-center mt-3">{formatMessage(messages.registrationFormHeading2)}</div>
+            <div className="text-center mb-4 mt-3">
+              {formatMessage(messages.registrationFormHeading2)}
+            </div>
           </>
         )}
-        <Form id="registration-form" name="registration-form" className="d-flex flex-column my-4">
+        <Form id="registration-form" name="registration-form">
           <Stepper.Step eventKey={`step${STEP1}`}>
             <EmailField
               name="email"
               value={formFields.email}
               handleChange={handleOnChange}
             />
-            <MarketingEmailOptOutCheckbox
-              name="marketingEmailOptOut"
-              value={formFields.marketingEmailOptOut}
+            <MarketingEmailOptInCheckbox
+              name="marketingEmailOptIn"
+              value={formFields.marketingEmailOptIn}
               handleChange={handleOnChange}
             />
           </Stepper.Step>
@@ -147,36 +131,47 @@ const RegistrationForm = () => {
               handleChange={handleOnChange}
             />
           </Stepper.Step>
-          {currentStep < NUM_OF_STEPS && (
-            <Button
-              id="register-continue"
-              name="register-continue"
-              variant="primary"
-              type="button"
-              className="align-self-end"
-              onClick={handleNextStep}
-              onMouseDown={(e) => e.preventDefault()}
-            >
-              {formatMessage(messages.registrationFormContinueButton)}
-            </Button>
-          )}
-          {currentStep === NUM_OF_STEPS && (
-            <Button
-              id="register-user"
-              name="register-user"
-              variant="primary"
-              type="submit"
-              className="align-self-end"
-              onClick={handleSubmit}
-              onMouseDown={(e) => e.preventDefault()}
-            >
-              {formatMessage(messages.registrationFormCreateAccountButton)}
-            </Button>
-          )}
+          <div className="d-flex flex-column my-4">
+            {currentStep < NUM_OF_STEPS && (
+              <Button
+                id="register-continue"
+                name="register-continue"
+                variant="primary"
+                type="button"
+                className="align-self-end"
+                onClick={handleNextStep}
+                onMouseDown={(e) => e.preventDefault()}
+              >
+                {formatMessage(messages.registrationFormContinueButton)}
+              </Button>
+            )}
+            {currentStep === NUM_OF_STEPS && (
+              <Button
+                id="register-user"
+                name="register-user"
+                variant="primary"
+                type="submit"
+                className="align-self-end"
+                onClick={handleSubmit}
+                onMouseDown={(e) => e.preventDefault()}
+              >
+                {formatMessage(messages.registrationFormCreateAccountButton)}
+              </Button>
+            )}
+          </div>
         </Form>
         <div>
-          {signInLink}
-          {signInWithCredentialsLink}
+          <InlineLink
+            className="mb-2"
+            destination="#"
+            linkHelpText={formatMessage(messages.registrationFormAlreadyHaveAccountText)}
+            linkText={formatMessage(messages.registrationFormSignInLink)}
+          />
+          <InlineLink
+            destination="#"
+            linkHelpText={formatMessage(messages.registrationFormSchoolOrOrganizationLink)}
+            linkText={formatMessage(messages.registrationFormSignInWithCredentialsLink)}
+          />
         </div>
       </Container>
     </Stepper>
