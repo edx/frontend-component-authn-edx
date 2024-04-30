@@ -1,16 +1,19 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { getConfig } from '@edx/frontend-platform';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
-  Button, Container, Form,
+  Button, Container, Form, StatefulButton,
 } from '@openedx/paragon';
 
-import ForgotPasswordEmailSentConfirmation from './ForgotPasswordEmailSentConfirmation';
+import { forgotPassword, forgotPasswordClearStatus } from './data/reducers';
+import getValidationMessage from './data/utils';
+import ForgotPasswordFailureAlert from './ForgotPasswordFailureAlert';
+import ForgotPasswordSuccess from './ForgotPasswordSuccess';
 import { setCurrentOpenedForm } from '../../../authn-component/data/reducers';
 import { InlineLink } from '../../../common-ui';
-import { LOGIN_FORM } from '../../../data/constants';
+import { COMPLETE_STATE, LOGIN_FORM } from '../../../data/constants';
 import EmailField from '../../fields/email-field';
 import messages from '../messages';
 import ResetPasswordHeader from '../ResetPasswordHeader';
@@ -25,6 +28,9 @@ const ForgotPasswordForm = () => {
   const { formatMessage } = useIntl();
   const dispatch = useDispatch();
 
+  const status = useSelector(state => state.forgotPassword?.status);
+
+  const [formErrors, setFormErrors] = useState('');
   const [formFields, setFormFields] = useState({ email: '' });
   const [isSuccess, setIsSuccess] = useState(false);
 
@@ -34,34 +40,60 @@ const ForgotPasswordForm = () => {
     setFormFields(prevState => ({ ...prevState, [name]: value }));
   };
 
+  const backToLogin = (e) => {
+    e.preventDefault();
+    dispatch(forgotPasswordClearStatus());
+    dispatch(setCurrentOpenedForm(LOGIN_FORM));
+  };
+
+  useEffect(() => {
+    if (status === COMPLETE_STATE) {
+      setFormErrors('');
+      setIsSuccess(true);
+    }
+  }, [status]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    setIsSuccess(true);
-    dispatch(setCurrentOpenedForm(LOGIN_FORM));
+    setFormErrors('');
+
+    const error = getValidationMessage(formFields.email, formatMessage);
+    if (error) {
+      setFormErrors(error);
+    } else {
+      dispatch(forgotPassword(formFields.email));
+    }
   };
 
   return (
     <Container size="lg" className="authn__popup-container overflow-auto">
       <ResetPasswordHeader />
+      <ForgotPasswordFailureAlert emailError={formErrors} status={status} />
       {!isSuccess && (
         <Form id="forgot-password-form" name="reset-password-form" className="d-flex flex-column my-4.5">
           <EmailField
             name="email"
             value={formFields.email}
             handleChange={handleOnChange}
+            autoComplete="email"
+            errorMessage={formErrors}
             floatingLabel={formatMessage(messages.forgotPasswordFormEmailFieldLabel)}
           />
-          <Button
+          <StatefulButton
             id="reset-password-user"
             name="reset-password-user"
-            variant="primary"
             type="submit"
+            variant="primary"
             className="align-self-end"
+            state={status}
+            labels={{
+              default: formatMessage(messages.resetPasswordFormSubmitButton),
+              pending: '',
+            }}
             onClick={handleSubmit}
             onMouseDown={(e) => e.preventDefault()}
-          >
-            {formatMessage(messages.resetPasswordFormSubmitButton)}
-          </Button>
+          />
+
           <div>
             <InlineLink
               className="mb-2"
@@ -79,7 +111,7 @@ const ForgotPasswordForm = () => {
         </Form>
       )}
       {isSuccess && (
-        <ForgotPasswordEmailSentConfirmation />
+        <ForgotPasswordSuccess email={formFields.email} />
       )}
       <form className="text-center">
         <Button
@@ -88,7 +120,7 @@ const ForgotPasswordForm = () => {
           variant="tertiary"
           type="submit"
           className="align-self-center back-to-login__button"
-          onClick={handleSubmit}
+          onClick={backToLogin}
           onMouseDown={(e) => e.preventDefault()}
         >
           {formatMessage(messages.resetPasswordBackToLoginButton)}

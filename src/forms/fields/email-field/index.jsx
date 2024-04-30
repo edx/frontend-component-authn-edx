@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
  */
 const EmailField = (props) => {
   const {
-    name, value, handleChange, floatingLabel,
+    name, value, handleChange, floatingLabel, errorMessage,
   } = props;
 
   return (
@@ -25,6 +25,11 @@ const EmailField = (props) => {
         onChange={handleChange}
         floatingLabel={floatingLabel}
       />
+      {errorMessage !== '' && (
+        <Form.Control.Feedback key="error" className="form-text-size" hasIcon={false} feedback-for={props.name} type="invalid">
+          {errorMessage}
+        </Form.Control.Feedback>
+      )}
     </Form.Group>
   );
 };
@@ -34,6 +39,11 @@ EmailField.propTypes = {
   value: PropTypes.string.isRequired,
   handleChange: PropTypes.func.isRequired,
   floatingLabel: PropTypes.string.isRequired,
+  errorMessage: PropTypes.string,
+};
+
+EmailField.defaultProps = {
+  errorMessage: '',
 };
 
 export default EmailField;
