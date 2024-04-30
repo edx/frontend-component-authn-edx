@@ -14,14 +14,22 @@ import { LETTER_REGEX, NUMBER_REGEX } from '../../registration-popup/data/consta
 
 /**
  * Password field component. It accepts following handler(s)
- * - handleChange for setting value change and
+ * - handleChange for setting value change
+ * - handleFocus for clearing the error state
  *
  * It is responsible for
  * - setting value on change
+ * - clearing the error state
  */
 const PasswordField = (props) => {
   const { formatMessage } = useIntl();
-  const { name, value, handleChange } = props;
+  const {
+    errorMessage,
+    name,
+    value,
+    handleChange,
+    handleFocus,
+  } = props;
 
   const [isPasswordHidden, setHiddenTrue, setHiddenFalse] = useToggle(true);
 
@@ -77,22 +85,37 @@ const PasswordField = (props) => {
     <Form.Group controlId="password" className="w-100 mb-4">
       <OverlayTrigger key="tooltip" placement={placement} overlay={tooltip} show>
         <Form.Control
+          as="input"
           type={isPasswordHidden ? 'password' : 'text'}
           name={name}
           value={value}
           onChange={handleChange}
+          onFocus={handleFocus}
           trailingElement={isPasswordHidden ? ShowButton : HideButton}
           floatingLabel={formatMessage(messages.registrationFormPasswordFieldLabel)}
         />
       </OverlayTrigger>
+      {errorMessage !== '' && (
+        <Form.Control.Feedback
+          key="error"
+          className="form-text-size"
+          hasIcon={false}
+          feedback-for={name}
+          type="invalid"
+        >
+          {errorMessage}
+        </Form.Control.Feedback>
+      )}
     </Form.Group>
   );
 };
 
 PasswordField.propTypes = {
+  errorMessage: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
   handleChange: PropTypes.func.isRequired,
+  handleFocus: PropTypes.func.isRequired,
 };
 
 export default PasswordField;

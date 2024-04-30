@@ -35,7 +35,15 @@ export const loginSlice = createSlice({
       state.loginResult = payload;
     },
     loginUserFailed: (state, { payload }) => {
-      state.loginError = payload;
+      const {
+        context,
+        errorCode,
+        email,
+        value,
+      } = payload;
+
+      const errorContext = { ...context, email, errorMessage: value };
+      state.loginError = { errorCode, errorContext };
       state.loginResult = {};
       state.submitState = FAILURE_STATE;
     },
