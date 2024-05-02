@@ -7,30 +7,41 @@ import PropTypes from 'prop-types';
 import messages from './messages';
 import BaseContainer from '../base-container';
 import configureStore from '../data/configureStore';
+import LoginForm from '../forms/login-popup';
 import RegistrationForm from '../forms/registration-popup';
 
 /**
  * Main component that holds the logic for conditionally rendering login or registration form.
  *
- * @param {boolean} open - Required. Whether to open the modal window containing login or registration form.
- * @param {function} setOpen - Required. Is used to toggle the modal window's open flag.
+ * @param {boolean} isOpen - Required. Whether to open the modal window containing login or registration form.
+ * @param {function} close - Required. Is used to toggle the modal window's open flag.
  *
  * @returns {JSX.Element} The rendered BaseContainer component containing either login or registration form.
  */
-const AuthnComponent = ({ open, setOpen }) => {
+const AuthnComponent = ({
+  isOpen, close, isSignUp, isSignIn,
+}) => {
   const { formatMessage } = useIntl();
   const registrationFooterText = formatMessage(messages.footerText);
 
   return (
-    <BaseContainer open={open} setOpen={setOpen} footerText={registrationFooterText}>
-      <RegistrationForm />
+    <BaseContainer isOpen={isOpen} close={close} footerText={registrationFooterText}>
+      {isSignUp && <RegistrationForm /> }
+      {isSignIn && <LoginForm /> }
     </BaseContainer>
   );
 };
 
 AuthnComponent.propTypes = {
-  open: PropTypes.bool.isRequired,
-  setOpen: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  close: PropTypes.func.isRequired,
+  isSignUp: PropTypes.bool,
+  isSignIn: PropTypes.bool,
+};
+
+AuthnComponent.defaultProps = {
+  isSignIn: false,
+  isSignUp: false,
 };
 
 /**
@@ -42,4 +53,8 @@ const AuthnComponentWithProvider = (props) => (
   </AppProvider>
 );
 
-export default AuthnComponentWithProvider;
+export const SignInComponent = (props) => (<AuthnComponentWithProvider {...props} isSignIn />);
+
+const SignUpComponent = (props) => (<AuthnComponentWithProvider {...props} isSignUp />);
+
+export default SignUpComponent;

@@ -107,7 +107,7 @@ const RegistrationForm = () => {
           </>
         )}
         <Form id="registration-form" name="registration-form">
-          <Stepper.Step eventKey={`step${STEP1}`}>
+          <Stepper.Step eventKey={`step${STEP1}`} title="">
             <EmailField
               name="email"
               value={formFields.email}
@@ -119,7 +119,7 @@ const RegistrationForm = () => {
               handleChange={handleOnChange}
             />
           </Stepper.Step>
-          <Stepper.Step title="" eventKey={`step${STEP2}`}>
+          <Stepper.Step eventKey={`step${STEP2}`} title="">
             <NameField
               label="Full Name"
               name="name"

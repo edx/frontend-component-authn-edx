@@ -6,11 +6,11 @@ import ReactDOM from 'react-dom';
 import { initialize, subscribe, APP_READY } from '@edx/frontend-platform';
 
 import './index.scss';
-import AuthnComponent from "../src/authn-component";
+import AuthnExampleContainer from './authn-example'
 
 subscribe(APP_READY, () => {
   ReactDOM.render(
-    <AuthnComponent setOpen={()=>{}} open={true} />,
+    <AuthnExampleContainer />,
     document.getElementById('root'),
   );
 });

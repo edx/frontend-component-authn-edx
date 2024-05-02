@@ -8,19 +8,19 @@ import './index.scss';
 /**
  * Base component for registration or login form modals.
  *
- * @param {boolean} open - Required. Whether to open the modal window.
- * @param {function} setOpen - Required. Is used to toggle the modal window's open flag.
+ * @param {boolean} isOpen - Required. Whether to open the modal window.
+ * @param {function} close - Required. Is used to the modal window.
  * @param {string} footerText - Optional. The text for the modal footer.
  * @param {React.node} children - Required. The login or registration form.
  *
  * @returns {JSX.Element} The rendered login or registration form modal.
  */
 const BaseContainer = ({
-  children, footerText, open, setOpen,
+  children, footerText, isOpen, close,
 }) => (
   <ModalDialog
-    isOpen={open}
-    onClose={setOpen}
+    isOpen={isOpen}
+    onClose={close}
     size="lg"
     variant="default"
     title="authn-component"
@@ -46,8 +46,8 @@ const BaseContainer = ({
 BaseContainer.propTypes = {
   children: PropTypes.node.isRequired,
   footerText: PropTypes.string,
-  open: PropTypes.bool.isRequired,
-  setOpen: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  close: PropTypes.func.isRequired,
 };
 
 BaseContainer.defaultProps = {
