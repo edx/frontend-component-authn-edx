@@ -7,7 +7,7 @@ import {
 import { Language } from '@openedx/paragon/icons';
 
 import './index.scss';
-import optionalFieldData from './data/constants';
+import { optionalFieldsData } from './data/constants';
 import messages from './messages';
 import BaseContainer from '../../base-container';
 
@@ -22,8 +22,15 @@ const ProgressiveProfilingForm = () => {
   const countryList = useMemo(() => getCountryList(getLocale()), []);
 
   const getFieldOptions = (fieldName, fieldData) => fieldData.options.map(option => (
-    <Form.AutosuggestOption id={option.name}>
-      {formatMessage(messages[`${fieldName}.option.${option.label}`])}
+    // The subject list is generated dynamically from the Algolia index. There is a chance
+    // that new subjects are added to the index for which the translation is not available.
+    // The check below ensure that in such cases, untranslated label is shown in the dropdown list
+    <Form.AutosuggestOption id={option.label}>
+      {
+        messages[`${fieldName}.option.${option.label}`]
+          ? formatMessage(messages[`${fieldName}.option.${option.label}`])
+          : option.label
+      }
     </Form.AutosuggestOption>
   ));
 
@@ -73,7 +80,7 @@ const ProgressiveProfilingForm = () => {
               name="subject"
               placeholder={formatMessage(messages.progressiveProfilingSubjectFieldPlaceholder)}
             >
-              {getFieldOptions('subject', optionalFieldData.subject)}
+              {getFieldOptions('subject', optionalFieldsData.subject)}
             </Form.Autosuggest>
           </Form.Group>
           <Form.Group controlId="level-of-education" className="mb-4.5">
@@ -84,7 +91,7 @@ const ProgressiveProfilingForm = () => {
               name="level-of-education"
               placeholder={formatMessage(messages.progressiveProfilingLevelOfEducationFieldPlaceholder)}
             >
-              {getFieldOptions('levelOfEducation', optionalFieldData.levelOfEducation)}
+              {getFieldOptions('levelOfEducation', optionalFieldsData.levelOfEducation)}
             </Form.Autosuggest>
           </Form.Group>
           <Form.Group controlId="work-experience" className="mb-4.5">
@@ -95,7 +102,7 @@ const ProgressiveProfilingForm = () => {
               name="work-experience"
               placeholder={formatMessage(messages.progressiveProfilingWorkExperienceFieldPlaceholder)}
             >
-              {getFieldOptions('workExperience', optionalFieldData.workExperience)}
+              {getFieldOptions('workExperience', optionalFieldsData.workExperience)}
             </Form.Autosuggest>
           </Form.Group>
           <Form.Group controlId="learning-type" className="mb-4.5">
@@ -106,7 +113,7 @@ const ProgressiveProfilingForm = () => {
               name="learning-type"
               placeholder={formatMessage(messages.progressiveProfilingLearningTypeFieldPlaceholder)}
             >
-              {getFieldOptions('learningType', optionalFieldData.learningType)}
+              {getFieldOptions('learningType', optionalFieldsData.learningType)}
             </Form.Autosuggest>
           </Form.Group>
           <Form.Group controlId="gender" className="mb-4.5">
@@ -117,7 +124,7 @@ const ProgressiveProfilingForm = () => {
               name="gender"
               placeholder={formatMessage(messages.progressiveProfilingGenderFieldPlaceholder)}
             >
-              {getFieldOptions('gender', optionalFieldData.gender)}
+              {getFieldOptions('gender', optionalFieldsData.gender)}
             </Form.Autosuggest>
           </Form.Group>
           <div className="d-flex my-4 justify-content-end progressive-profiling__cta-btn-container">
