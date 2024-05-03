@@ -96,6 +96,162 @@ const messages = defineMessages({
     defaultMessage: 'Submit',
     description: 'Text that appears on the button that submits the optional profile data form',
   },
+  // Subject Options
+  'subject.option.Business & Management': {
+    id: 'subject.option.Business & Management',
+    defaultMessage: 'Business & Management',
+    description: 'Option for the subject dropdown field',
+  },
+  'subject.option.Computer Science': {
+    id: 'subject.option.Computer Science',
+    defaultMessage: 'Computer Science',
+    description: 'Option for the subject dropdown field',
+  },
+  'subject.option.Engineering': {
+    id: 'subject.option.Engineering',
+    defaultMessage: 'Engineering',
+    description: 'Option for the subject dropdown field',
+  },
+  'subject.option.Social Sciences': {
+    id: 'subject.option.Social Sciences',
+    defaultMessage: 'Social Sciences',
+    description: 'Option for the subject dropdown field',
+  },
+  'subject.option.Data Analysis & Statistics': {
+    id: 'subject.option.Data Analysis & Statistics',
+    defaultMessage: 'Data Analysis & Statistics',
+    description: 'Option for the subject dropdown field',
+  },
+  'subject.option.Economics & Finance': {
+    id: 'subject.option.Economics & Finance',
+    defaultMessage: 'Economics & Finance',
+    description: 'Option for the subject dropdown field',
+  },
+  'subject.option.Communication': {
+    id: 'subject.option.Communication',
+    defaultMessage: 'Communication',
+    description: 'Option for the subject dropdown field',
+  },
+  'subject.option.Humanities': {
+    id: 'subject.option.Humanities',
+    defaultMessage: 'Humanities',
+    description: 'Option for the subject dropdown field',
+  },
+  'subject.option.Science': {
+    id: 'subject.option.Science',
+    defaultMessage: 'Science',
+    description: 'Option for the subject dropdown field',
+  },
+  'subject.option.Environmental Studies': {
+    id: 'subject.option.Environmental Studies',
+    defaultMessage: 'Environmental Studies',
+    description: 'Option for the subject dropdown field',
+  },
+  'subject.option.Medicine': {
+    id: 'subject.option.Medicine',
+    defaultMessage: 'Medicine',
+    description: 'Option for the subject dropdown field',
+  },
+  'subject.option.Biology & Life Sciences': {
+    id: 'subject.option.Biology & Life Sciences',
+    defaultMessage: 'Biology & Life Sciences',
+    description: 'Option for the subject dropdown field',
+  },
+  'subject.option.Health & Safety': {
+    id: 'subject.option.Health & Safety',
+    defaultMessage: 'Health & Safety',
+    description: 'Option for the subject dropdown field',
+  },
+  'subject.option.Education & Teacher Training': {
+    id: 'subject.option.Education & Teacher Training',
+    defaultMessage: 'Education & Teacher Training',
+    description: 'Option for the subject dropdown field',
+  },
+  'subject.option.Art & Culture': {
+    id: 'subject.option.Art & Culture',
+    defaultMessage: 'Art & Culture',
+    description: 'Option for the subject dropdown field',
+  },
+  'subject.option.Math': {
+    id: 'subject.option.Math',
+    defaultMessage: 'Math',
+    description: 'Option for the subject dropdown field',
+  },
+  'subject.option.History': {
+    id: 'subject.option.History',
+    defaultMessage: 'History',
+    description: 'Option for the subject dropdown field',
+  },
+  'subject.option.Design': {
+    id: 'subject.option.Design',
+    defaultMessage: 'Design',
+    description: 'Option for the subject dropdown field',
+  },
+  'subject.option.Physics': {
+    id: 'subject.option.Physics',
+    defaultMessage: 'Physics',
+    description: 'Option for the subject dropdown field',
+  },
+  'subject.option.Energy & Earth Sciences': {
+    id: 'subject.option.Energy & Earth Sciences',
+    defaultMessage: 'Energy & Earth Sciences',
+    description: 'Option for the subject dropdown field',
+  },
+  'subject.option.Law': {
+    id: 'subject.option.Law',
+    defaultMessage: 'Law',
+    description: 'Option for the subject dropdown field',
+  },
+  'subject.option.Philosophy & Ethics': {
+    id: 'subject.option.Philosophy & Ethics',
+    defaultMessage: 'Philosophy & Ethics',
+    description: 'Option for the subject dropdown field',
+  },
+  'subject.option.Language': {
+    id: 'subject.option.Language',
+    defaultMessage: 'Language',
+    description: 'Option for the subject dropdown field',
+  },
+  'subject.option.Electronics': {
+    id: 'subject.option.Electronics',
+    defaultMessage: 'Electronics',
+    description: 'Option for the subject dropdown field',
+  },
+  'subject.option.Food & Nutrition': {
+    id: 'subject.option.Food & Nutrition',
+    defaultMessage: 'Food & Nutrition',
+    description: 'Option for the subject dropdown field',
+  },
+  'subject.option.Architecture': {
+    id: 'subject.option.Architecture',
+    defaultMessage: 'Architecture',
+    description: 'Option for the subject dropdown field',
+  },
+  'subject.option.Chemistry': {
+    id: 'subject.option.Chemistry',
+    defaultMessage: 'Chemistry',
+    description: 'Option for the subject dropdown field',
+  },
+  'subject.option.Literature': {
+    id: 'subject.option.Literature',
+    defaultMessage: 'Literature',
+    description: 'Option for the subject dropdown field',
+  },
+  'subject.option.Ethics': {
+    id: 'subject.option.Ethics',
+    defaultMessage: 'Ethics',
+    description: 'Option for the subject dropdown field',
+  },
+  'subject.option.Music': {
+    id: 'subject.option.Music',
+    defaultMessage: 'Music',
+    description: 'Option for the subject dropdown field',
+  },
+  'subject.option.Philanthropy': {
+    id: 'subject.option.Philanthropy',
+    defaultMessage: 'Philanthropy',
+    description: 'Option for the subject dropdown field',
+  },
   // Level of Education Options
   'levelOfEducation.option.none': {
     id: 'levelOfEducation.option.none',

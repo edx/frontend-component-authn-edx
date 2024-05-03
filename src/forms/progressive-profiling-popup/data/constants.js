@@ -1,4 +1,4 @@
-const optionalFieldData = {
+export const optionalFieldsData = {
   subject: {
     options: [],
   },
@@ -86,4 +86,98 @@ const optionalFieldData = {
   },
 };
 
-export default optionalFieldData;
+export const defaultSubjectList = [
+  {
+    name: 'Business & Management',
+  },
+  {
+    name: 'Computer Science',
+  },
+  {
+    name: 'Engineering',
+  },
+  {
+    name: 'Social Sciences',
+  },
+  {
+    name: 'Data Analysis & Statistics',
+  },
+  {
+    name: 'Economics & Finance',
+  },
+  {
+    name: 'Communication',
+  },
+  {
+    name: 'Humanities',
+  },
+  {
+    name: 'Science',
+  },
+  {
+    name: 'Environmental Studies',
+  },
+  {
+    name: 'Medicine',
+  },
+  {
+    name: 'Biology & Life Sciences',
+  },
+  {
+    name: 'Health & Safety',
+  },
+  {
+    name: 'Education & Teacher Training',
+  },
+  {
+    name: 'Art & Culture',
+  },
+  {
+    name: 'Math',
+  },
+  {
+    name: 'History',
+  },
+  {
+    name: 'Design',
+  },
+  {
+    name: 'Physics',
+  },
+  {
+    name: 'Energy & Earth Sciences',
+  },
+  {
+    name: 'Law',
+  },
+  {
+    name: 'Philosophy & Ethics',
+  },
+  {
+    name: 'Language',
+  },
+  {
+    name: 'Electronics',
+  },
+  {
+    name: 'Food & Nutrition',
+  },
+  {
+    name: 'Architecture',
+  },
+  {
+    name: 'Chemistry',
+  },
+  {
+    name: 'Literature',
+  },
+  {
+    name: 'Ethics',
+  },
+  {
+    name: 'Music',
+  },
+  {
+    name: 'Philanthropy',
+  },
+];
