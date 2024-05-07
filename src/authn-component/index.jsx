@@ -2,6 +2,7 @@ import React, { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { AppProvider } from '@edx/frontend-platform/react';
+import { Spinner } from '@openedx/paragon';
 import PropTypes from 'prop-types';
 
 import { getThirdPartyAuthContext, setCurrentOpenedForm } from './data/reducers';
@@ -9,11 +10,18 @@ import validateContextData from './data/utils';
 import BaseContainer from '../base-container';
 import configureStore from '../data/configureStore';
 import {
+  ENTERPRISE_LOGIN,
   FORGOT_PASSWORD_FORM,
-  LOGIN_FORM, PROGRESSIVE_PROFILING_FORM, REGISTRATION_FORM, VALID_FORMS,
+  LOGIN_FORM,
+  PENDING_STATE,
+  PROGRESSIVE_PROFILING_FORM,
+  REGISTRATION_FORM,
+  VALID_FORMS,
 } from '../data/constants';
 import getAllPossibleQueryParams from '../data/utils';
 import { HonorCodeAndPrivacyPolicyMessage, LoginForm, RegistrationForm } from '../forms';
+import EnterpriseSSO from '../forms/enterprise-sso-popup';
+import { getTpaHint, getTpaProvider } from '../forms/enterprise-sso-popup/data/utils';
 import ProgressiveProfilingForm from '../forms/progressive-profiling-popup';
 import ForgotPasswordForm from '../forms/reset-password-popup/forgot-password/ForgotPasswordForm';
 
@@ -32,15 +40,25 @@ export const AuthnComponent = ({
 }) => {
   const dispatch = useDispatch();
   const queryParams = useMemo(() => getAllPossibleQueryParams(), []);
-  const currentForm = useSelector(state => state.commonData.currentForm);
 
+  const currentForm = useSelector(state => state.commonData.currentForm);
+  const providers = useSelector(state => state.commonData.thirdPartyAuthContext?.providers);
+  const secondaryProviders = useSelector(state => state.commonData.thirdPartyAuthContext?.secondaryProviders);
+  const thirdPartyAuthApiStatus = useSelector(state => state.commonData.thirdPartyAuthApiStatus);
+
+  const tpaHint = getTpaHint();
+  const { provider: tpaProvider } = getTpaProvider(tpaHint, providers, secondaryProviders);
   const registrationFooterText = currentForm === REGISTRATION_FORM ? <HonorCodeAndPrivacyPolicyMessage /> : null;
+  const pendingState = queryParams?.tpa_hint && thirdPartyAuthApiStatus === PENDING_STATE;
 
   useEffect(() => {
-    if (formToRender) {
+    if (tpaProvider) {
+      dispatch(setCurrentOpenedForm(ENTERPRISE_LOGIN));
+    }
+    if (!tpaProvider && formToRender) {
       dispatch(setCurrentOpenedForm(formToRender));
     }
-  }, [dispatch, formToRender]);
+  }, [dispatch, formToRender, tpaProvider, queryParams]);
 
   useEffect(() => {
     let validatedContext = {};
@@ -51,6 +69,9 @@ export const AuthnComponent = ({
   }, [context, dispatch, queryParams]);
 
   const getForm = () => {
+    if (currentForm === ENTERPRISE_LOGIN) {
+      return <EnterpriseSSO provider={tpaProvider} />;
+    }
     if (currentForm === REGISTRATION_FORM) {
       return <RegistrationForm />;
     }
@@ -66,9 +87,17 @@ export const AuthnComponent = ({
     return <RegistrationForm />;
   };
 
+  const getSpinner = (
+    <div className="w-100 text-center">
+      <Spinner animation="border" variant="primary" />
+    </div>
+  );
+
   return (
     <BaseContainer isOpen={isOpen} close={close} footerText={registrationFooterText}>
-      {getForm()}
+      {pendingState
+        ? getSpinner
+        : getForm()}
     </BaseContainer>
   );
 };
