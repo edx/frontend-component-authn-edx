@@ -8,3 +8,6 @@ export const FAILURE_STATE = 'failure';
 export const INTERNAL_SERVER_ERROR = 'internal-server-error';
 export const FORBIDDEN_REQUEST = 'forbidden-request';
 export const INVALID_FORM = 'invalid-form';
+
+// URL Paths
+export const ENTERPRISE_LOGIN_URL = '/enterprise/login';

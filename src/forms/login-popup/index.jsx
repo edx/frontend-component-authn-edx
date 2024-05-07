@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { snakeCaseObject } from '@edx/frontend-platform';
+import { getConfig, snakeCaseObject } from '@edx/frontend-platform';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
   Button, Container, Form, Hyperlink,
@@ -11,7 +11,7 @@ import { loginUser } from './data/reducers';
 import LoginFailureAlert from './LoginFailureAlert';
 import messages from './messages';
 import { InlineLink, SocialAuthButtons } from '../../common-ui';
-import { INVALID_FORM } from '../../data/constants';
+import { ENTERPRISE_LOGIN_URL, INVALID_FORM } from '../../data/constants';
 import PasswordField from '../fields/password-field';
 import EmailOrUsernameField from '../fields/text-field';
 
@@ -139,7 +139,7 @@ const LoginForm = () => {
           linkText={formatMessage(messages.loginFormRegistrationLink)}
         />
         <InlineLink
-          destination="#"
+          destination={getConfig().LMS_BASE_URL + ENTERPRISE_LOGIN_URL}
           linkHelpText={formatMessage(messages.loginFormSchoolAndOrganizationHelpText)}
           linkText={formatMessage(messages.loginFormSchoolAndOrganizationLink)}
         />
