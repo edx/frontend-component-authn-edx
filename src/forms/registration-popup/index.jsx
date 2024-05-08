@@ -1,22 +1,25 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { snakeCaseObject } from '@edx/frontend-platform';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
-  Button, Container, Form, Icon, IconButton, Stepper,
+  Button, Container, Form, Icon, IconButton, Spinner, Stepper,
 } from '@openedx/paragon';
 import { ArrowBack } from '@openedx/paragon/icons';
 
 import { NUM_OF_STEPS, STEP1, STEP2 } from './data/constants';
-import { registerUser } from './data/reducers';
+import { registerUser, setUserPipelineDataLoaded } from './data/reducers';
 import messages from './messages';
 import { InlineLink, SocialAuthProviders } from '../../common-ui';
 import './index.scss';
+import { COMPLETE_STATE } from '../../data/constants';
+import AuthenticatedRedirection from '../common-components/AuthenticatedRedirection';
 import EmailField from '../fields/email-field';
 import MarketingEmailOptInCheckbox from '../fields/marketing-email-opt-out-field';
 import PasswordField from '../fields/password-field';
 import NameField from '../fields/text-field';
+import { TPA_AUTHENTICATION_FAILURE } from '../login-popup/data/constants';
 /**
  * RegisterForm component for handling user registration.
  * This component provides a form for users to register with their name, email, password,
@@ -31,6 +34,44 @@ const RegistrationForm = () => {
     name: '', email: '', password: '', marketingEmailOptIn: true,
   });
   const [currentStep, setCurrentStep] = useState(STEP1);
+  const [errorCode, setErrorCode] = useState({ type: '', count: 0 });
+
+  const registrationResult = useSelector(state => state.register.registrationResult);
+  const userPipelineDataLoaded = useSelector(state => state.register.userPipelineDataLoaded);
+
+  const thirdPartyAuthApiStatus = useSelector(state => state.commonData.thirdPartyAuthApiStatus);
+  const autoSubmitRegForm = useSelector(state => state.commonData.thirdPartyAuthContext.autoSubmitRegForm);
+  const thirdPartyAuthErrorMessage = useSelector(state => state.commonData.thirdPartyAuthContext.errorMessage);
+  const finishAuthUrl = useSelector(state => state.commonData.thirdPartyAuthContext.finishAuthUrl);
+  const currentProvider = useSelector(state => state.commonData.thirdPartyAuthContext.currentProvider);
+  const providers = useSelector(state => state.commonData.thirdPartyAuthContext.providers);
+  const secondaryProviders = useSelector(state => state.commonData.thirdPartyAuthContext.secondaryProviders);
+  const pipelineUserDetails = useSelector(state => state.commonData.thirdPartyAuthContext.pipelineUserDetails);
+
+  /**
+   * Set the userPipelineDetails data in formFields for only first time
+   */
+  useEffect(() => {
+    if (!userPipelineDataLoaded && thirdPartyAuthApiStatus === COMPLETE_STATE) {
+      if (thirdPartyAuthErrorMessage) {
+        setErrorCode(prevState => ({ type: TPA_AUTHENTICATION_FAILURE, count: prevState.count + 1 }));
+      }
+      if (pipelineUserDetails && Object.keys(pipelineUserDetails).length !== 0) {
+        const {
+          name = '', email = '',
+        } = pipelineUserDetails;
+        setFormFields(prevState => ({
+          ...prevState, name, email,
+        }));
+        dispatch(setUserPipelineDataLoaded(true));
+      }
+    }
+  }, [ // eslint-disable-line react-hooks/exhaustive-deps
+    thirdPartyAuthApiStatus,
+    thirdPartyAuthErrorMessage,
+    pipelineUserDetails,
+    userPipelineDataLoaded,
+  ]);
 
   const handleOnChange = (event) => {
     const { name } = event.target;
@@ -38,14 +79,32 @@ const RegistrationForm = () => {
     setFormFields(prevState => ({ ...prevState, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
+  const handleUserRegistration = () => {
+    console.log('handleUserRegistration', formFields);
     let payload = { ...formFields };
+
+    if (currentProvider) {
+      delete payload.password;
+      payload.social_auth_provider = currentProvider;
+    }
+
     payload = snakeCaseObject(payload);
 
+    console.log('registerUser', { payload });
     dispatch(registerUser(payload));
   };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleUserRegistration();
+  };
+
+  useEffect(() => {
+    console.log({ autoSubmitRegForm, userPipelineDataLoaded });
+    if (autoSubmitRegForm && userPipelineDataLoaded) {
+      handleUserRegistration();
+    }
+  }, [autoSubmitRegForm, userPipelineDataLoaded]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleNextStep = () => {
     if (currentStep < NUM_OF_STEPS) {
@@ -84,103 +143,116 @@ const RegistrationForm = () => {
   return (
     <Stepper activeKey={`step${currentStep}`}>
       <Container size="lg" className="authn__popup-container overflow-auto">
+        <AuthenticatedRedirection
+          success={registrationResult.success}
+          redirectUrl={registrationResult.redirectUrl}
+          finishAuthUrl={finishAuthUrl}
+        />
         {Header}
-        {currentStep > STEP1 && (
-          <div className="back-button-container mb-4">
-            <IconButton
-              key="primary"
-              src={ArrowBack}
-              iconAs={Icon}
-              alt="Back"
-              onClick={handleBackStep}
-              variant="primary"
-              size="inline"
-              className="mr-2"
-            />
-            {formatMessage(messages.registrationFormBackButton)}
+        {autoSubmitRegForm && !errorCode.type ? (
+          <div className="mw-xs mt-5 text-center">
+            <Spinner animation="border" variant="primary" id="tpa-spinner" />
           </div>
-        )}
-
-        {currentStep === STEP1 && (
+        ) : (
           <>
-            <SocialAuthProviders isLoginForm={false} />
-            <div className="text-center mb-4 mt-3">
-              {formatMessage(messages.registrationFormHeading2)}
+            {currentStep > STEP1 && (
+              <div className="back-button-container mb-4">
+                <IconButton
+                  key="primary"
+                  src={ArrowBack}
+                  iconAs={Icon}
+                  alt="Back"
+                  onClick={handleBackStep}
+                  variant="primary"
+                  size="inline"
+                  className="mr-2"
+                />
+                {formatMessage(messages.registrationFormBackButton)}
+              </div>
+            )}
+
+            {currentStep === STEP1 && (
+              <>
+                <SocialAuthProviders isLoginForm={false} />
+                <div className="text-center mb-4 mt-3">
+                  {formatMessage(messages.registrationFormHeading2)}
+                </div>
+              </>
+            )}
+            <Form id="registration-form" name="registration-form" className="d-flex flex-column my-4">
+              <Stepper.Step title={`step${STEP1}`} eventKey={`step${STEP1}`}>
+                <EmailField
+                  name="email"
+                  value={formFields.email}
+                  handleChange={handleOnChange}
+                />
+                <MarketingEmailOptInCheckbox
+                  name="marketingEmailOptIn"
+                  value={formFields.marketingEmailOptIn}
+                  handleChange={handleOnChange}
+                />
+              </Stepper.Step>
+              <Stepper.Step title={`step${STEP2}`} eventKey={`step${STEP2}`}>
+                <NameField
+                  label="Full Name"
+                  name="name"
+                  value={formFields.name}
+                  errorMessage=""
+                  handleChange={handleOnChange}
+                  handleFocus={() => { }}
+                />
+                <PasswordField
+                  name="password"
+                  value={formFields.password}
+                  errorMessage=""
+                  handleChange={handleOnChange}
+                  handleFocus={() => { }}
+                />
+              </Stepper.Step>
+              <div className="d-flex flex-column my-4">
+                {currentStep < NUM_OF_STEPS && (
+                  <Button
+                    id="register-continue"
+                    name="register-continue"
+                    variant="primary"
+                    type="button"
+                    className="align-self-end"
+                    onClick={handleNextStep}
+                    onMouseDown={(e) => e.preventDefault()}
+                  >
+                    {formatMessage(messages.registrationFormContinueButton)}
+                  </Button>
+                )}
+                {currentStep === NUM_OF_STEPS && (
+                  <Button
+                    id="register-user"
+                    name="register-user"
+                    variant="primary"
+                    type="submit"
+                    className="align-self-end"
+                    onClick={handleSubmit}
+                    onMouseDown={(e) => e.preventDefault()}
+                  >
+                    {formatMessage(messages.registrationFormCreateAccountButton)}
+                  </Button>
+                )}
+              </div>
+            </Form>
+            <div>
+              <InlineLink
+                className="mb-2"
+                destination="#"
+                linkHelpText={formatMessage(messages.registrationFormAlreadyHaveAccountText)}
+                linkText={formatMessage(messages.registrationFormSignInLink)}
+              />
+              <InlineLink
+                destination="#"
+                linkHelpText={formatMessage(messages.registrationFormSchoolOrOrganizationLink)}
+                linkText={formatMessage(messages.registrationFormSignInWithCredentialsLink)}
+              />
             </div>
           </>
         )}
-        <Form id="registration-form" name="registration-form" className="d-flex flex-column my-4">
-          <Stepper.Step title={`step${STEP1}`} eventKey={`step${STEP1}`}>
-            <EmailField
-              name="email"
-              value={formFields.email}
-              handleChange={handleOnChange}
-            />
-            <MarketingEmailOptInCheckbox
-              name="marketingEmailOptIn"
-              value={formFields.marketingEmailOptIn}
-              handleChange={handleOnChange}
-            />
-          </Stepper.Step>
-          <Stepper.Step title={`step${STEP2}`} eventKey={`step${STEP2}`}>
-            <NameField
-              label="Full Name"
-              name="name"
-              value={formFields.name}
-              errorMessage=""
-              handleChange={handleOnChange}
-              handleFocus={() => { }}
-            />
-            <PasswordField
-              name="password"
-              value={formFields.password}
-              errorMessage=""
-              handleChange={handleOnChange}
-              handleFocus={() => { }}
-            />
-          </Stepper.Step>
-          <div className="d-flex flex-column my-4">
-            {currentStep < NUM_OF_STEPS && (
-              <Button
-                id="register-continue"
-                name="register-continue"
-                variant="primary"
-                type="button"
-                className="align-self-end"
-                onClick={handleNextStep}
-                onMouseDown={(e) => e.preventDefault()}
-              >
-                {formatMessage(messages.registrationFormContinueButton)}
-              </Button>
-            )}
-            {currentStep === NUM_OF_STEPS && (
-              <Button
-                id="register-user"
-                name="register-user"
-                variant="primary"
-                type="submit"
-                className="align-self-end"
-                onClick={handleSubmit}
-                onMouseDown={(e) => e.preventDefault()}
-              >
-                {formatMessage(messages.registrationFormCreateAccountButton)}
-              </Button>
-            )}
-          </div>
-        </Form>
-        <div>
-          <InlineLink
-            className="mb-2"
-            destination="#"
-            linkHelpText={formatMessage(messages.registrationFormAlreadyHaveAccountText)}
-            linkText={formatMessage(messages.registrationFormSignInLink)}
-          />
-          <InlineLink
-            destination="#"
-            linkHelpText={formatMessage(messages.registrationFormSchoolOrOrganizationLink)}
-            linkText={formatMessage(messages.registrationFormSignInWithCredentialsLink)}
-          />
-        </div>
       </Container>
     </Stepper>
   );
