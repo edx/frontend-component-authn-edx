@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { getConfig } from '@edx/frontend-platform';
 import { useIntl } from '@edx/frontend-platform/i18n';
@@ -7,18 +8,22 @@ import {
 } from '@openedx/paragon';
 
 import ForgotPasswordEmailSentConfirmation from './ForgotPasswordEmailSentConfirmation';
+import { setCurrentOpenedForm } from '../../../authn-component/data/reducers';
 import { InlineLink } from '../../../common-ui';
+import { LOGIN_FORM } from '../../../data/constants';
 import EmailField from '../../fields/email-field';
 import messages from '../messages';
 import ResetPasswordHeader from '../ResetPasswordHeader';
+
 import '../index.scss';
 
 /**
  * ForgotPasswordForm component for handling user password reset.
  * This component provides a form for users to reset their password by entering their email.
  */
-const ForgotPasswordPage = () => {
+const ForgotPasswordForm = () => {
   const { formatMessage } = useIntl();
+  const dispatch = useDispatch();
 
   const [formFields, setFormFields] = useState({ email: '' });
   const [isSuccess, setIsSuccess] = useState(false);
@@ -32,6 +37,7 @@ const ForgotPasswordPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsSuccess(true);
+    dispatch(setCurrentOpenedForm(LOGIN_FORM));
   };
 
   return (
@@ -92,4 +98,4 @@ const ForgotPasswordPage = () => {
   );
 };
 
-export default ForgotPasswordPage;
+export default ForgotPasswordForm;

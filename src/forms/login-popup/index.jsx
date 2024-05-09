@@ -4,15 +4,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getConfig, snakeCaseObject } from '@edx/frontend-platform';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
-  Container, Form, Hyperlink, StatefulButton,
+  Container, Form, StatefulButton,
 } from '@openedx/paragon';
 
 import LoginFailureAlert from './components/LoginFailureAlert';
 import { TPA_AUTHENTICATION_FAILURE } from './data/constants';
 import { loginUser } from './data/reducers';
 import messages from './messages';
+import { setCurrentOpenedForm } from '../../authn-component/data/reducers';
 import { InlineLink, SocialAuthProviders } from '../../common-ui';
-import { ENTERPRISE_LOGIN_URL, INVALID_FORM } from '../../data/constants';
+import {
+  ENTERPRISE_LOGIN_URL, FORGOT_PASSWORD_FORM, INVALID_FORM, REGISTRATION_FORM,
+} from '../../data/constants';
 import getAllPossibleQueryParams from '../../data/utils';
 import AuthenticatedRedirection from '../common-components/AuthenticatedRedirection';
 import ThirdPartyAuthAlert from '../common-components/ThirdPartyAuthAlert';
@@ -157,10 +160,11 @@ const LoginForm = () => {
           floatingLabel={formatMessage(messages.loginFormPasswordFieldLabel)}
           showPasswordTooltip={false}
         />
-        {/* TODO: this destination will be replaced with actual links */}
-        <Hyperlink className="hyper-link" destination="#" isInline>
-          {formatMessage(messages.loginFormForgotPasswordButton)}
-        </Hyperlink>
+        <InlineLink
+          className="hyper-link"
+          onClick={() => dispatch(setCurrentOpenedForm(FORGOT_PASSWORD_FORM))}
+          linkText={formatMessage(messages.loginFormForgotPasswordButton)}
+        />
         <div className="d-flex flex-column my-4">
           <StatefulButton
             id="login-user"
@@ -179,7 +183,7 @@ const LoginForm = () => {
         </div>
         <InlineLink
           className="mb-2"
-          destination="#"
+          onClick={() => dispatch(setCurrentOpenedForm(REGISTRATION_FORM))}
           linkHelpText={formatMessage(messages.loginFormRegistrationHelpText)}
           linkText={formatMessage(messages.loginFormRegistrationLink)}
         />

@@ -7,7 +7,10 @@ import { act } from 'react-dom/test-utils';
 import { MemoryRouter } from 'react-router-dom';
 import configureStore from 'redux-mock-store';
 
-import { DEFAULT_STATE, INTERNAL_SERVER_ERROR } from '../../../data/constants';
+import { setCurrentOpenedForm } from '../../../authn-component/data/reducers';
+import {
+  DEFAULT_STATE, FORGOT_PASSWORD_FORM, INTERNAL_SERVER_ERROR, REGISTRATION_FORM,
+} from '../../../data/constants';
 import getAllPossibleQueryParams from '../../../data/utils';
 import { loginUser } from '../data/reducers';
 import LoginForm from '../index';
@@ -316,5 +319,23 @@ describe('LoginForm Test', () => {
     loginButton.onmousedown = preventDefaultMock;
     fireEvent.mouseDown(loginButton);
     expect(preventDefaultMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('should dispatch setCurrentOpenedForm action on "Create account" link click', () => {
+    store.dispatch = jest.fn(store.dispatch);
+    const { getByText } = render(reduxWrapper(<IntlLoginForm />));
+
+    fireEvent.click(getByText('Create account'));
+
+    expect(store.dispatch).toHaveBeenCalledWith(setCurrentOpenedForm(REGISTRATION_FORM));
+  });
+
+  it('should dispatch setCurrentOpenedForm action on "Forgot Password?" link click', () => {
+    store.dispatch = jest.fn(store.dispatch);
+    const { getByText } = render(reduxWrapper(<IntlLoginForm />));
+
+    fireEvent.click(getByText('Forgot Password?'));
+
+    expect(store.dispatch).toHaveBeenCalledWith(setCurrentOpenedForm(FORGOT_PASSWORD_FORM));
   });
 });

@@ -1,12 +1,12 @@
 import {
-  COMPLETE_STATE, FAILURE_STATE, PENDING_STATE,
+  COMPLETE_STATE, FAILURE_STATE, LOGIN_FORM, PENDING_STATE,
 } from '../../../data/constants';
 import commonDataReducer, {
   clearThirdPartyAuthContextErrorMessage,
   commonDataInitialState,
   getThirdPartyAuthContext,
   getThirdPartyAuthContextFailed,
-  getThirdPartyAuthContextSuccess,
+  getThirdPartyAuthContextSuccess, setCurrentOpenedForm,
 } from '../reducers';
 
 describe('commonDataSlice reducer', () => {
@@ -48,5 +48,11 @@ describe('commonDataSlice reducer', () => {
     const nextState = commonDataReducer(commonDataInitialState, clearThirdPartyAuthContextErrorMessage());
 
     expect(nextState.thirdPartyAuthContext.errorMessage).toBeNull();
+  });
+
+  it('should handle setCurrentOpenedForm action', () => {
+    const nextState = commonDataReducer(commonDataInitialState, setCurrentOpenedForm(LOGIN_FORM));
+
+    expect(nextState.currentForm).toEqual(LOGIN_FORM);
   });
 });

@@ -1,19 +1,23 @@
 import React, { useEffect, useMemo } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { AppProvider } from '@edx/frontend-platform/react';
 import PropTypes from 'prop-types';
 
-import { getThirdPartyAuthContext } from './data/reducers';
+import { getThirdPartyAuthContext, setCurrentOpenedForm } from './data/reducers';
 import validateContextData from './data/utils';
 import messages from './messages';
 import BaseContainer from '../base-container';
 import configureStore from '../data/configureStore';
-import { LOGIN_FORM, REGISTRATION_FORM, VALID_FORMS } from '../data/constants';
+import {
+  FORGOT_PASSWORD_FORM,
+  LOGIN_FORM, PROGRESSIVE_PROFILING_FORM, REGISTRATION_FORM, VALID_FORMS,
+} from '../data/constants';
 import getAllPossibleQueryParams from '../data/utils';
-import LoginForm from '../forms/login-popup';
-import RegistrationForm from '../forms/registration-popup';
+import { LoginForm, RegistrationForm } from '../forms';
+import ProgressiveProfilingForm from '../forms/progressive-profiling-popup';
+import ForgotPasswordForm from '../forms/reset-password-popup/forgot-password/ForgotPasswordForm';
 
 /**
  * Main component that conditionally renders a login or registration form inside a modal window.
@@ -31,14 +35,15 @@ export const AuthnComponent = ({
   const { formatMessage } = useIntl();
   const dispatch = useDispatch();
   const queryParams = useMemo(() => getAllPossibleQueryParams(), []);
-  const registrationFooterText = formatMessage(messages.footerText);
+  const currentForm = useSelector(state => state.commonData.currentForm);
 
-  const getForm = () => {
-    if (formToRender === REGISTRATION_FORM) {
-      return <RegistrationForm />;
+  const registrationFooterText = currentForm === REGISTRATION_FORM ? formatMessage(messages.footerText) : null;
+
+  useEffect(() => {
+    if (formToRender) {
+      dispatch(setCurrentOpenedForm(formToRender));
     }
-    return <LoginForm />;
-  };
+  }, [dispatch, formToRender]);
 
   useEffect(() => {
     let validatedContext = {};
@@ -47,6 +52,22 @@ export const AuthnComponent = ({
     }
     dispatch(getThirdPartyAuthContext({ ...validatedContext, ...queryParams }));
   }, [context, dispatch, queryParams]);
+
+  const getForm = () => {
+    if (currentForm === REGISTRATION_FORM) {
+      return <RegistrationForm />;
+    }
+    if (currentForm === LOGIN_FORM) {
+      return <LoginForm />;
+    }
+    if (currentForm === PROGRESSIVE_PROFILING_FORM) {
+      return <ProgressiveProfilingForm />;
+    }
+    if (currentForm === FORGOT_PASSWORD_FORM) {
+      return <ForgotPasswordForm />;
+    }
+    return <RegistrationForm />;
+  };
 
   return (
     <BaseContainer isOpen={isOpen} close={close} footerText={registrationFooterText}>

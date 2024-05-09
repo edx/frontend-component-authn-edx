@@ -1,6 +1,8 @@
 // Forms
 export const LOGIN_FORM = 'login';
 export const REGISTRATION_FORM = 'registration';
+export const FORGOT_PASSWORD_FORM = 'forgot-password';
+export const PROGRESSIVE_PROFILING_FORM = 'progressive-profiling';
 export const VALID_FORMS = [LOGIN_FORM, REGISTRATION_FORM];
 
 // Common States

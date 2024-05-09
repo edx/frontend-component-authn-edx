@@ -5,13 +5,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import {
-  COMPLETE_STATE, DEFAULT_STATE, FAILURE_STATE, PENDING_STATE,
+  COMPLETE_STATE, DEFAULT_STATE, FAILURE_STATE, PENDING_STATE, REGISTRATION_FORM,
 } from '../../data/constants';
 
 export const commonDataStoreName = 'commonData';
 export const COMMON_DATA_SLICE_NAME = 'commonData';
 
 export const commonDataInitialState = {
+  currentForm: REGISTRATION_FORM,
   thirdPartyAuthApiStatus: DEFAULT_STATE,
   thirdPartyAuthContext: {
     autoSubmitRegForm: false,
@@ -42,6 +43,9 @@ export const commonDataSlice = createSlice({
     clearThirdPartyAuthContextErrorMessage: (state) => {
       state.thirdPartyAuthContext.errorMessage = null;
     },
+    setCurrentOpenedForm: (state, { payload: currentForm }) => {
+      state.currentForm = currentForm;
+    },
   },
 });
 
@@ -50,6 +54,7 @@ export const {
   getThirdPartyAuthContextSuccess,
   getThirdPartyAuthContextFailed,
   clearThirdPartyAuthContextErrorMessage,
+  setCurrentOpenedForm,
 } = commonDataSlice.actions;
 
 export default commonDataSlice.reducer;

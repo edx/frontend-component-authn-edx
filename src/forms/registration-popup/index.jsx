@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { getConfig, snakeCaseObject } from '@edx/frontend-platform';
 import { useIntl } from '@edx/frontend-platform/i18n';
@@ -11,9 +11,11 @@ import { ArrowBack } from '@openedx/paragon/icons';
 import { NUM_OF_STEPS, STEP1, STEP2 } from './data/constants';
 import { registerUser } from './data/reducers';
 import messages from './messages';
+import { setCurrentOpenedForm } from '../../authn-component/data/reducers';
 import { InlineLink, SocialAuthProviders } from '../../common-ui';
-import { ENTERPRISE_LOGIN_URL } from '../../data/constants';
+import { ENTERPRISE_LOGIN_URL, LOGIN_FORM } from '../../data/constants';
 import './index.scss';
+import AuthenticatedRedirection from '../common-components/AuthenticatedRedirection';
 import EmailField from '../fields/email-field';
 import MarketingEmailOptInCheckbox from '../fields/marketing-email-opt-out-field';
 import PasswordField from '../fields/password-field';
@@ -32,6 +34,9 @@ const RegistrationForm = () => {
     name: '', email: '', password: '', marketingEmailOptIn: true,
   });
   const [currentStep, setCurrentStep] = useState(STEP1);
+
+  const registrationResult = useSelector(state => state.register.registrationResult);
+  const finishAuthUrl = useSelector(state => state.commonData.thirdPartyAuthContext.finishAuthUrl);
 
   const handleOnChange = (event) => {
     const { name } = event.target;
@@ -85,6 +90,11 @@ const RegistrationForm = () => {
   return (
     <Stepper activeKey={`step${currentStep}`}>
       <Container size="lg" className="authn__popup-container overflow-auto">
+        <AuthenticatedRedirection
+          success={registrationResult.success}
+          redirectUrl={registrationResult.redirectUrl}
+          finishAuthUrl={finishAuthUrl}
+        />
         {Header}
         {currentStep > STEP1 && (
           <div className="back-button-container mb-4">
@@ -174,7 +184,7 @@ const RegistrationForm = () => {
         <div>
           <InlineLink
             className="mb-2"
-            destination="#"
+            onClick={() => dispatch(setCurrentOpenedForm(LOGIN_FORM))}
             linkHelpText={formatMessage(messages.registrationFormAlreadyHaveAccountText)}
             linkText={formatMessage(messages.registrationFormSignInLink)}
           />
