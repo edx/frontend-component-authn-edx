@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 
 import { injectIntl, IntlProvider } from '@edx/frontend-platform/i18n';
 import { fireEvent, render } from '@testing-library/react';
+import { act } from 'react-dom/test-utils';
 import { MemoryRouter } from 'react-router-dom';
 import configureStore from 'redux-mock-store';
 
@@ -38,7 +39,7 @@ describe('LoginForm Test', () => {
 
   // ******** test login form submission ********
 
-  it('should submit form for valid input', () => {
+  it('should submit form for valid input', async () => {
     store.dispatch = jest.fn(store.dispatch);
 
     const { container } = render(reduxWrapper(<IntlLoginForm />));
@@ -47,10 +48,25 @@ describe('LoginForm Test', () => {
     const passwordInput = container.querySelector('#password');
     const loginButton = container.querySelector('#login-user');
 
-    fireEvent.change(usernameInput, { target: { value: 'test', name: 'emailOrUsername' } });
-    fireEvent.change(passwordInput, { target: { value: 'test-password', name: 'password' } });
+    await act(async () => {
+      fireEvent.change(usernameInput, { target: { value: 'test', name: 'emailOrUsername' } });
+      fireEvent.change(passwordInput, { target: { value: 'test-password', name: 'password' } });
+    });
     fireEvent.click(loginButton);
 
     expect(store.dispatch).toHaveBeenCalledWith(loginUser({ email_or_username: 'test', password: 'test-password' }));
+  });
+
+  // ******** test login form elements ********
+  it('should show company and school credentials link', async () => {
+    const { getByText } = render(reduxWrapper(<IntlLoginForm />));
+    const schoolAndCompanyLabel = getByText(
+      'Have an account through school or organization?',
+    );
+    const schoolAndCompanyLink = getByText(
+      'Sign in with your credentials',
+    );
+    expect(schoolAndCompanyLabel).toBeTruthy();
+    expect(schoolAndCompanyLink).toBeTruthy();
   });
 });

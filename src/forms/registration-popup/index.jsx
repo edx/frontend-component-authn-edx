@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { snakeCaseObject } from '@edx/frontend-platform';
+import { getConfig, snakeCaseObject } from '@edx/frontend-platform';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
   Button, Container, Form, Icon, IconButton, Stepper,
@@ -12,6 +12,7 @@ import { NUM_OF_STEPS, STEP1, STEP2 } from './data/constants';
 import { registerUser } from './data/reducers';
 import messages from './messages';
 import { InlineLink, SocialAuthButtons } from '../../common-ui';
+import { ENTERPRISE_LOGIN_URL } from '../../data/constants';
 import './index.scss';
 import EmailField from '../fields/email-field';
 import MarketingEmailOptInCheckbox from '../fields/marketing-email-opt-out-field';
@@ -173,7 +174,7 @@ const RegistrationForm = () => {
             linkText={formatMessage(messages.registrationFormSignInLink)}
           />
           <InlineLink
-            destination="#"
+            destination={getConfig().LMS_BASE_URL + ENTERPRISE_LOGIN_URL}
             linkHelpText={formatMessage(messages.registrationFormSchoolOrOrganizationLink)}
             linkText={formatMessage(messages.registrationFormSignInWithCredentialsLink)}
           />
