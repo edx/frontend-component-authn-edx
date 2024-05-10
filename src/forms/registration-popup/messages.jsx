@@ -66,6 +66,16 @@ const messages = defineMessages({
     defaultMessage: 'Enter your email',
     description: 'Label for email input field',
   },
+  registrationFormTermsOfServiceAndHonorCodeLabel: {
+    id: 'registration.form.terms.of.service.and.honor.code.label',
+    defaultMessage: 'Terms of Service and Honor Code',
+    description: 'Label for terms of service and honor code link',
+  },
+  registrationFormPrivacyPolicyLabel: {
+    id: 'registration.form.privacy.policy.label',
+    defaultMessage: 'Privacy Policy',
+    description: 'Label for edX privacy policy link',
+  },
 });
 
 export default messages;

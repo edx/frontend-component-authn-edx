@@ -1,4 +1,9 @@
+@import "@edx/brand/paragon/variables";
+
 .registration-form .back-button-container {
   padding: 0.5rem 1.25rem;
 }
 
+.registration-form__tos-and-privacy-policy__link {
+  text-decoration-color: $white !important;
+}

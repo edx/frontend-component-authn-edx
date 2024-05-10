@@ -1,6 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 
+import { getConfig } from '@edx/frontend-platform';
 import { injectIntl, IntlProvider } from '@edx/frontend-platform/i18n';
 import { fireEvent, render } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
@@ -46,7 +47,6 @@ describe('RegistrationForm Test', () => {
   });
 
   // ******** test registration form submission ********
-
   it('should submit form for valid input', async () => {
     store.dispatch = jest.fn(store.dispatch);
     const payload = {
@@ -74,7 +74,7 @@ describe('RegistrationForm Test', () => {
     expect(store.dispatch).toHaveBeenCalledWith(registerUser(payload));
   });
 
-  // ******** test registration form elements ********
+  // ******** School or Organization Login Link Tests ********
   it('should show company and school credentials link', async () => {
     const { getByText } = render(reduxWrapper(<IntlRegistrationForm />));
     const schoolAndCompanyLabel = getByText(
@@ -85,5 +85,14 @@ describe('RegistrationForm Test', () => {
     );
     expect(schoolAndCompanyLabel).toBeTruthy();
     expect(schoolAndCompanyLink).toBeTruthy();
+  });
+
+  it('should have the correct redirect url for school or organization login', async () => {
+    const { getByText } = render(reduxWrapper(<IntlRegistrationForm />));
+    const schoolAndCompanyLink = getByText(
+      'Sign in with your credentials',
+    );
+
+    expect(schoolAndCompanyLink.getAttribute('href')).toBe(`${getConfig().LMS_BASE_URL}/enterprise/login`);
   });
 });
