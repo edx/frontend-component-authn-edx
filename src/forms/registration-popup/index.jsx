@@ -113,6 +113,7 @@ const RegistrationForm = () => {
               name="email"
               value={formFields.email}
               handleChange={handleOnChange}
+              floatingLabel={formatMessage(messages.registrationFormEmailFieldLabel)}
             />
             <MarketingEmailOptInCheckbox
               name="marketingEmailOptIn"
@@ -135,6 +136,7 @@ const RegistrationForm = () => {
               errorMessage=""
               handleChange={handleOnChange}
               handleFocus={() => { }}
+              floatingLabel={formatMessage(messages.registrationFormPasswordFieldLabel)}
             />
           </Stepper.Step>
           <div className="d-flex flex-column my-4">

@@ -114,6 +114,7 @@ const LoginForm = () => {
           errorMessage={formErrors.password}
           handleChange={handleOnChange}
           handleFocus={handleOnFocus}
+          floatingLabel={formatMessage(messages.loginFormPasswordFieldLabel)}
         />
         {/* TODO: this destination will be replaced with actual links */}
         <Hyperlink className="hyper-link" destination="#" isInline>

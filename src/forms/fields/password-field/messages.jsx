@@ -1,11 +1,6 @@
 import { defineMessages } from '@edx/frontend-platform/i18n';
 
 const messages = defineMessages({
-  registrationFormPasswordFieldLabel: {
-    id: 'registration.form.password.label',
-    defaultMessage: 'Password',
-    description: 'Label for password input field',
-  },
   showPasswordAlt: {
     id: 'show.password',
     defaultMessage: 'Show password',
@@ -26,7 +21,7 @@ const messages = defineMessages({
     defaultMessage: '1 number',
     description: 'password requirement to have 1 number',
   },
-  eightCharcters: {
+  eightCharacters: {
     id: 'eight.characters',
     defaultMessage: '8 characters',
     description: 'password requirement to have a minimum of 8 characters',
