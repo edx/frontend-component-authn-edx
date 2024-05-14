@@ -3,10 +3,11 @@ import 'regenerator-runtime/runtime';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { initialize, subscribe, APP_READY } from '@edx/frontend-platform';
+
+import { APP_READY, initialize, subscribe } from '@edx/frontend-platform';
 
 import './index.scss';
-import AuthnExampleContainer from './authn-example'
+import AuthnExampleContainer from './authn-example';
 
 subscribe(APP_READY, () => {
   ReactDOM.render(
@@ -16,5 +17,5 @@ subscribe(APP_READY, () => {
 });
 
 initialize({
-  messages: []
+  messages: [],
 });
