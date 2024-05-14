@@ -62,16 +62,15 @@ const ResetPasswordPage = (props) => {
   };
 
   return (
-    <Container size="lg" className="authn__popup-container p-5 overflow-auto">
+    <Container size="lg" className="authn__popup-container overflow-auto">
       <ResetPasswordHeader />
       <ResetPasswordFailure errorMsg={props.errorMsg} />
 
       <div className="text-gray-800 mb-4">{formatMessage(messages.enterConfirmPasswordMessage)}</div>
-      <Form id="set-reset-password-form" name="set-reset-password-form" className="d-flex flex-column my-4.5">
+      <Form id="set-reset-password-form" name="set-reset-password-form" className="d-flex flex-column mb-4.5">
         <PasswordField
           id="newPassword"
           name="newPassword"
-          className="mb-4"
           value={newPassword}
           handleChange={(e) => setNewPassword(e.target.value)}
           handleFocus={handleOnFocus}
@@ -82,7 +81,6 @@ const ResetPasswordPage = (props) => {
         <PasswordField
           id="confirmPassword"
           name="confirmPassword"
-          className="mb-4"
           value={confirmPassword}
           handleChange={(e) => setConfirmPassword(e.target.value)}
           handleFocus={handleOnFocus}

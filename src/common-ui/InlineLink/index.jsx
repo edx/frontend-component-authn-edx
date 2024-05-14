@@ -28,14 +28,14 @@ const InlineLink = ({
   };
 
   return (
-    <div className={`d-flex popup-container_inline-link_container ${className}`}>
+    <div className={`popup-container_inline-link_container ${className}`}>
       {linkHelpText && (
         <span className="text-gray-800">
           {linkHelpText}
         </span>
       )}
       <Hyperlink
-        className="popup-container_inline-link_hyperlink"
+        className="pl-1 popup-container_inline-link_hyperlink"
         destination={destination}
         onClick={handleClick}
         isInline
