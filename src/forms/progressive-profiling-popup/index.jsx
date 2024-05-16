@@ -43,7 +43,10 @@ const ProgressiveProfilingForm = () => {
   return (
     <BaseContainer open setOpen={() => {}}>
       <Container size="lg" className="authn__popup-container overflow-auto">
-        <h1 className="display-1 font-italic text-center mb-4">
+        <h1
+          className="display-1 font-italic text-center mb-4"
+          data-testid="progressive-profiling-heading"
+        >
           {formatMessage(messages.progressiveProfilingFormHeading)}
         </h1>
         <p className="text-center">
