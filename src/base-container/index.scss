@@ -15,3 +15,7 @@
 .authn-component__modal .pgn__modal-body {
     overflow: auto !important;
 }
+
+.authn-component__modal .pgn__modal-body::after {
+  display: none !important;
+}
