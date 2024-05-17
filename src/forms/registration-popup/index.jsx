@@ -15,10 +15,12 @@ import { InlineLink, SocialAuthProviders } from '../../common-ui';
 import { ENTERPRISE_LOGIN_URL, LOGIN_FORM } from '../../data/constants';
 import './index.scss';
 import AuthenticatedRedirection from '../common-components/AuthenticatedRedirection';
-import EmailField from '../fields/email-field';
-import MarketingEmailOptInCheckbox from '../fields/marketing-email-opt-out-field';
-import PasswordField from '../fields/password-field';
-import NameField from '../fields/text-field';
+import {
+  EmailField,
+  MarketingEmailOptInCheckbox,
+  TextField as NameField,
+  PasswordField,
+} from '../fields';
 
 /**
  * RegisterForm component for handling user registration.
@@ -53,7 +55,7 @@ const RegistrationForm = () => {
 
   return (
     <>
-      <Container size="lg" className="authn__popup-container overflow-auto">
+      <Container size="lg" className="authn__popup-container">
         <AuthenticatedRedirection
           success={registrationResult.success}
           redirectUrl={registrationResult.redirectUrl}
@@ -65,16 +67,16 @@ const RegistrationForm = () => {
         >
           {formatMessage(messages.registrationFormHeading1)}
         </h2>
-        <hr className="separator mb-4 mt-4" />
+        <hr className="separator my-3 my-sm-4" />
 
         <>
           <SocialAuthProviders isLoginForm={false} />
-          <div className="text-center mb-4 mt-3">
+          <div className="text-center my-3 my-sm-4">
             {formatMessage(messages.registrationFormHeading2)}
           </div>
         </>
 
-        <Form id="registration-form" name="registration-form" className="d-flex flex-column my-4">
+        <Form id="registration-form" name="registration-form" className="d-flex flex-column my-3 my-sm-4">
           <EmailField
             name="email"
             value={formFields.email}
@@ -102,7 +104,7 @@ const RegistrationForm = () => {
             value={formFields.marketingEmailOptIn}
             handleChange={handleOnChange}
           />
-          <div className="d-flex flex-column my-4">
+          <div className="d-flex flex-column m-0">
             <Button
               id="register-user"
               name="register-user"

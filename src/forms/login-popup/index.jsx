@@ -21,8 +21,10 @@ import {
 import getAllPossibleQueryParams from '../../data/utils';
 import AuthenticatedRedirection from '../common-components/AuthenticatedRedirection';
 import ThirdPartyAuthAlert from '../common-components/ThirdPartyAuthAlert';
-import PasswordField from '../fields/password-field';
-import EmailOrUsernameField from '../fields/text-field';
+import {
+  TextField as EmailOrUsernameField,
+  PasswordField,
+} from '../fields';
 import './index.scss';
 
 /**
@@ -123,7 +125,7 @@ const LoginForm = () => {
   };
 
   return (
-    <Container size="lg" className="authn__popup-container p-0">
+    <Container size="lg" className="authn__popup-container">
       <AuthenticatedRedirection
         success={loginResult.success}
         redirectUrl={loginResult.redirectUrl}

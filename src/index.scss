@@ -3,19 +3,6 @@
 
 .authn__popup-container {
   padding: 2.5rem;
-  @media (max-width: 767px) {
-    padding: 1rem;
-  }
-}
-
-.authn__popup-container > .pgn__form-control-floating-label-text:after {
-  content:"*";
-  color: $danger-500;
-}
-
-.heading-separator {
-  border: 0;
-  border-top: 0.075rem solid $light-500
 }
 
 .authn-popup__registration-footer {
@@ -23,6 +10,10 @@
 }
 
 @media (max-width: 576px) {
+  .authn__popup-container {
+    padding: 1rem;
+  }
+
   .authn-popup__registration-footer {
     padding: 1rem 1.5rem;
   }
@@ -32,4 +23,14 @@
   .authn-popup__registration-footer {
     padding: 1rem;
   }
+}
+
+.authn__popup-container .pgn__form-control-floating-label-text:after {
+  content:"*";
+  color: $danger-500;
+}
+
+.heading-separator {
+  border: 0;
+  border-top: 0.075rem solid $light-500
 }

@@ -1,6 +1,18 @@
 @import "@edx/brand/paragon/variables";
 
-.authn-component__modal .modal-body-container .pgn__modal-body-content {
+.authn-component__modal {
+  max-height: 98vh !important;
+}
+
+@media (max-width: 375px) {
+  .authn-component__modal {
+    max-height: 100vh !important;
+    margin: 0 !important;
+  }
+}
+
+
+.modal-body-container .pgn__modal-body-content {
   height: 100%;
 }
 
@@ -12,29 +24,11 @@
   border: 2px solid $light-500;
 }
 
+
+.authn-component__modal .pgn__modal-body {
+  overflow-x: hidden !important;
+}
+
 .authn-component__modal .pgn__modal-body::after {
   display: none !important;
-  overflow-x: hidden !important;
-  padding: 2.5rem; // We dont have bootstrap class for 40px/2.5rem padding and its not default padding by dialog
-}
-
-.authn-component__modal .pgn__modal-footer {
-  padding: 2.5rem; // We dont have bootstrap class for 40px/2.5rem padding and its not default padding by dialog
-}
-
-@media (max-width: 576px) {
-  .authn-component__modal .pgn__modal-body {
-    padding: 1rem;
-  }
-
-  .authn-component__modal .pgn__modal-footer {
-    padding: 1rem 1.5rem;
-  }
-}
-
-@media (max-width: 350px) {
-  .authn-component__modal .pgn__modal-footer {
-    padding: 1rem;
-  }
->>>>>>> 1c05928 (feat: make the authn component responsive)
 }
