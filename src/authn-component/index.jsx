@@ -1,13 +1,11 @@
 import React, { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { useIntl } from '@edx/frontend-platform/i18n';
 import { AppProvider } from '@edx/frontend-platform/react';
 import PropTypes from 'prop-types';
 
 import { getThirdPartyAuthContext, setCurrentOpenedForm } from './data/reducers';
 import validateContextData from './data/utils';
-import messages from './messages';
 import BaseContainer from '../base-container';
 import configureStore from '../data/configureStore';
 import {
@@ -15,7 +13,7 @@ import {
   LOGIN_FORM, PROGRESSIVE_PROFILING_FORM, REGISTRATION_FORM, VALID_FORMS,
 } from '../data/constants';
 import getAllPossibleQueryParams from '../data/utils';
-import { LoginForm, RegistrationForm } from '../forms';
+import { HonorCodeAndPrivacyPolicyMessage, LoginForm, RegistrationForm } from '../forms';
 import ProgressiveProfilingForm from '../forms/progressive-profiling-popup';
 import ForgotPasswordForm from '../forms/reset-password-popup/forgot-password/ForgotPasswordForm';
 
@@ -32,12 +30,11 @@ import ForgotPasswordForm from '../forms/reset-password-popup/forgot-password/Fo
 export const AuthnComponent = ({
   isOpen, close, context, formToRender,
 }) => {
-  const { formatMessage } = useIntl();
   const dispatch = useDispatch();
   const queryParams = useMemo(() => getAllPossibleQueryParams(), []);
   const currentForm = useSelector(state => state.commonData.currentForm);
 
-  const registrationFooterText = currentForm === REGISTRATION_FORM ? formatMessage(messages.footerText) : null;
+  const registrationFooterText = currentForm === REGISTRATION_FORM ? <HonorCodeAndPrivacyPolicyMessage /> : null;
 
   useEffect(() => {
     if (formToRender) {

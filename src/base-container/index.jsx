@@ -45,13 +45,13 @@ const BaseContainer = ({
 
 BaseContainer.propTypes = {
   children: PropTypes.node.isRequired,
-  footerText: PropTypes.string,
+  footerText: PropTypes.node,
   isOpen: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
 };
 
 BaseContainer.defaultProps = {
-  footerText: '',
+  footerText: null,
 };
 
 export default BaseContainer;

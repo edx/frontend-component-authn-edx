@@ -1,6 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 
+import { getConfig } from '@edx/frontend-platform';
 import { injectIntl, IntlProvider } from '@edx/frontend-platform/i18n';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
@@ -91,6 +92,15 @@ describe('LoginForm Test', () => {
     );
     expect(schoolAndCompanyLabel).toBeTruthy();
     expect(schoolAndCompanyLink).toBeTruthy();
+  });
+
+  it('should have the correct redirect url for school or organization login', async () => {
+    const { getByText } = render(reduxWrapper(<IntlLoginForm />));
+    const schoolAndCompanyLink = getByText(
+      'Sign in with your credentials',
+    );
+
+    expect(schoolAndCompanyLink.getAttribute('href')).toBe(`${getConfig().LMS_BASE_URL}/enterprise/login`);
   });
 
   it('should submit form with query params', () => {
