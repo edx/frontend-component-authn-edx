@@ -16,10 +16,3 @@ export default function initializeMockLogging() {
 
   return { loggingService };
 }
-
-const location = new URL('https://authn.edx.org');
-location.assign = jest.fn();
-location.replace = jest.fn();
-location.reload = jest.fn();
-delete window.location;
-window.location = location;

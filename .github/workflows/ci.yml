@@ -27,10 +27,17 @@ jobs:
     - name: Lint
       run: npm run lint
     - name: Test
-      run: npm run test
+#      run: mkdir -p coverage && npm run test -- --coverage --coverageReporters json-summary | tee ./coverage/coverage.txt
+      run: npm run test -- --coverage
     - name: Build
       run: npm run build
     - name: i18n_extract
       run: npm run i18n_extract
     - name: Coverage
-      uses: codecov/codecov-action@v3
+      uses: MishaKav/jest-coverage-comment@main
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        title:	Coverage Report
+        summary-title:	Coverage Summary
+        coverage-title: Coverage by files
+        coverage-path: ./coverage/coverage.txt
