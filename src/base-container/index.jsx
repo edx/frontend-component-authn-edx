@@ -16,7 +16,7 @@ import './index.scss';
  * @returns {JSX.Element} The rendered login or registration form modal.
  */
 const BaseContainer = ({
-  children, footerText, isOpen, close,
+  children, isOpen, close,
 }) => (
   <ModalDialog
     isOpen={isOpen}
@@ -27,31 +27,19 @@ const BaseContainer = ({
     className="bg-light-200 authn-component__modal"
     hasCloseButton
   >
-    <ModalDialog.Body className="modal-body-container overflow-hidden">
-      <div className="d-flex w-100 h-100">
-        <div className="w-100 d-flex">
-          {children}
-        </div>
+    <ModalDialog.Body className="modal-body-container p-0">
+      <div className="d-flex w-100 h-100 flex-column overflow-hidden">
+        {children}
       </div>
     </ModalDialog.Body>
-    {footerText && (
-      <ModalDialog.Footer className="bg-dark-500 p-4.5">
-        <p className="mb-0 text-white m-auto">{footerText}</p>
-      </ModalDialog.Footer>
-    )}
   </ModalDialog>
 
 );
 
 BaseContainer.propTypes = {
   children: PropTypes.node.isRequired,
-  footerText: PropTypes.node,
   isOpen: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
-};
-
-BaseContainer.defaultProps = {
-  footerText: null,
 };
 
 export default BaseContainer;

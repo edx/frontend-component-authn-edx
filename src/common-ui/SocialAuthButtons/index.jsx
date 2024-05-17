@@ -100,7 +100,7 @@ const SocialAuthProviders = ({ isLoginForm }) => {
 
   if (thirdPartyAuthApiStatus === PENDING_STATE) {
     return (
-      <Skeleton height={36} count={4} />
+      <Skeleton height={44} count={4} />
     );
   }
   return (

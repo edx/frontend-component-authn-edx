@@ -19,7 +19,7 @@ import {
   VALID_FORMS,
 } from '../data/constants';
 import getAllPossibleQueryParams from '../data/utils';
-import { HonorCodeAndPrivacyPolicyMessage, LoginForm, RegistrationForm } from '../forms';
+import { LoginForm, RegistrationForm } from '../forms';
 import EnterpriseSSO from '../forms/enterprise-sso-popup';
 import { getTpaHint, getTpaProvider } from '../forms/enterprise-sso-popup/data/utils';
 import ProgressiveProfilingForm from '../forms/progressive-profiling-popup';
@@ -48,7 +48,6 @@ export const AuthnComponent = ({
 
   const tpaHint = getTpaHint();
   const { provider: tpaProvider } = getTpaProvider(tpaHint, providers, secondaryProviders);
-  const registrationFooterText = currentForm === REGISTRATION_FORM ? <HonorCodeAndPrivacyPolicyMessage /> : null;
   const pendingState = queryParams?.tpa_hint && thirdPartyAuthApiStatus === PENDING_STATE;
 
   useEffect(() => {
@@ -94,7 +93,7 @@ export const AuthnComponent = ({
   );
 
   return (
-    <BaseContainer isOpen={isOpen} close={close} footerText={registrationFooterText}>
+    <BaseContainer isOpen={isOpen} close={close}>
       {pendingState
         ? getSpinner
         : getForm()}
