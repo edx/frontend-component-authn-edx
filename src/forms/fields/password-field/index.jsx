@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
@@ -28,12 +28,21 @@ const PasswordField = (props) => {
     name,
     value,
     handleChange,
-    handleFocus,
     floatingLabel,
     showPasswordTooltip,
   } = props;
 
   const [isPasswordHidden, setHiddenTrue, setHiddenFalse] = useToggle(true);
+  const [showPasswordRequirements, setShowPasswordRequirements] = useState(false);
+
+  const handleBlur = () => setShowPasswordRequirements(showPasswordTooltip && false);
+
+  const handleFocus = (event) => {
+    if (props.handleFocus) {
+      props.handleFocus(event);
+    }
+    setShowPasswordRequirements(showPasswordTooltip && true);
+  };
 
   const HideButton = (
     <IconButton
@@ -85,7 +94,7 @@ const PasswordField = (props) => {
 
   return (
     <Form.Group controlId="password" className="w-100 mb-4">
-      <OverlayTrigger key="tooltip" placement={placement} overlay={tooltip} show={showPasswordTooltip}>
+      <OverlayTrigger key="tooltip" placement={placement} overlay={tooltip} show={showPasswordRequirements}>
         <Form.Control
           as="input"
           className="mr-0"
@@ -94,6 +103,7 @@ const PasswordField = (props) => {
           value={value}
           onChange={handleChange}
           onFocus={handleFocus}
+          onBlur={handleBlur}
           trailingElement={isPasswordHidden ? ShowButton : HideButton}
           floatingLabel={floatingLabel}
         />
