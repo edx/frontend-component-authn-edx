@@ -7,7 +7,12 @@ import { MemoryRouter } from 'react-router-dom';
 import configureStore from 'redux-mock-store';
 
 import {
-  DEFAULT_STATE, FORGOT_PASSWORD_FORM, LOGIN_FORM, PROGRESSIVE_PROFILING_FORM, REGISTRATION_FORM,
+  DEFAULT_STATE,
+  ENTERPRISE_LOGIN,
+  FORGOT_PASSWORD_FORM,
+  LOGIN_FORM,
+  PROGRESSIVE_PROFILING_FORM,
+  REGISTRATION_FORM,
 } from '../../data/constants';
 import { getThirdPartyAuthContext, setCurrentOpenedForm } from '../data/reducers';
 import SignUpComponent, { AuthnComponent, SignInComponent } from '../index';
@@ -50,6 +55,7 @@ describe('AuthnComponent Test', () => {
       thirdPartyAuthContext: {
         finishAuthUrl: null,
         providers: [],
+        secondaryProviders: [],
         errorMessage: null,
       },
     },
@@ -204,5 +210,32 @@ describe('AuthnComponent Test', () => {
     ));
 
     expect(getByTestId('forgot-password-heading')).toBeTruthy();
+  });
+
+  it('should render EnterpriseSSO button on the base of provided tpa_hint param', () => {
+    const appleProvider = {
+      id: 'oa2-apple-id',
+      name: 'Apple',
+      loginUrl: '/auth/login/apple-id/',
+      registerUrl: '/auth/login/apple-id/',
+    };
+    store = mockStore({
+      ...initialState,
+      commonData: {
+        ...initialState.commonData,
+        thirdPartyAuthApiStatus: 'complete',
+        currentForm: ENTERPRISE_LOGIN,
+        thirdPartyAuthContext: {
+          ...initialState.commonData.thirdPartyAuthContext,
+          providers: [appleProvider],
+        },
+      },
+    });
+
+    delete window.location;
+    window.location = { href: 'localhost:2999/login', search: `?tpa_hint=${appleProvider.id}` };
+    const { getByText } = render(reduxWrapper(<IntlAuthnComponent isOpen close={() => {}} />));
+
+    expect(getByText(`Sign in with ${appleProvider.name}`)).toBeTruthy();
   });
 });
