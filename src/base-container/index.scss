@@ -13,12 +13,16 @@
 }
 
 .authn-component__modal .pgn__modal-body {
-  overflow-x: hidden !important;
-  padding: 2.5rem; // We dont have bootstrap class for 40px/2.5rem padding and its not default padding by dialog
+  overflow: hidden !important;
+  //padding: 2.5rem; // We dont have bootstrap class for 40px/2.5rem padding and its not default padding by dialog
+}
+
+.authn-component__modal .pgn__modal-body::after {
+  display: none !important;
 }
 
 .authn-component__modal .pgn__modal-footer {
-  padding: 2.5rem; // We dont have bootstrap class for 40px/2.5rem padding and its not default padding by dialog
+  //padding: 2.5rem; // We dont have bootstrap class for 40px/2.5rem padding and its not default padding by dialog
 }
 
 @media (max-width: 576px) {
@@ -35,4 +39,9 @@
   .authn-component__modal .pgn__modal-footer {
     padding: 1rem;
   }
+}
+
+
+.authn-component__modal {
+  max-height: max-content !important;
 }

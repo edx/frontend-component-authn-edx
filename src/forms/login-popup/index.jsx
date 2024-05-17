@@ -118,7 +118,7 @@ const LoginForm = () => {
   };
 
   return (
-    <Container size="lg" className="authn__popup-container p-0">
+    <Container size="lg" className="authn__popup-container">
       <AuthenticatedRedirection
         success={loginResult.success}
         redirectUrl={loginResult.redirectUrl}

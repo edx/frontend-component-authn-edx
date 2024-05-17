@@ -27,18 +27,16 @@ const BaseContainer = ({
     className="bg-light-200 authn-component__modal"
     hasCloseButton
   >
-    <ModalDialog.Body className="modal-body-container">
-      <div className="d-flex w-100 h-100">
-        <div className="w-100 d-flex">
+    <ModalDialog.Body className="modal-body-container p-0">
+      <div className="d-flex w-100 h-100 flex-column overflow-hidden">
           {children}
-        </div>
       </div>
     </ModalDialog.Body>
-    {footerText && (
-      <ModalDialog.Footer className="bg-dark-500">
-        <p className="mb-0 text-white m-auto">{footerText}</p>
-      </ModalDialog.Footer>
-    )}
+    {/*{footerText && (*/}
+    {/*  <ModalDialog.Footer className="bg-dark-500">*/}
+    {/*    <p className="mb-0 text-white m-auto">{footerText}</p>*/}
+    {/*  </ModalDialog.Footer>*/}
+    {/*)}*/}
   </ModalDialog>
 
 );
