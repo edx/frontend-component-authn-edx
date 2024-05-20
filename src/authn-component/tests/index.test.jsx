@@ -1,6 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 
+import { mergeConfig } from '@edx/frontend-platform';
 import { getLocale, injectIntl, IntlProvider } from '@edx/frontend-platform/i18n';
 import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
@@ -63,6 +64,11 @@ describe('AuthnComponent Test', () => {
 
   beforeEach(() => {
     store = mockStore(initialState);
+    mergeConfig({
+      AUTHN_TOS_AND_HONOR_CODE_LINK: process.env.AUTHN_TOS_AND_HONOR_CODE_LINK || '',
+      AUTHN_PRIVACY_POLICY_LINK: process.env.AUTHN_PRIVACY_POLICY_LINK || '',
+      INFO_EMAIL: process.env.INFO_EMAIL || '',
+    });
   });
 
   describe('SignInComponent', () => {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 
-import { getConfig } from '@edx/frontend-platform';
+import { getConfig, mergeConfig } from '@edx/frontend-platform';
 import { injectIntl, IntlProvider } from '@edx/frontend-platform/i18n';
 import { fireEvent, render } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
@@ -44,6 +44,10 @@ describe('RegistrationForm Test', () => {
 
   beforeEach(() => {
     store = mockStore(initialState);
+    mergeConfig({
+      AUTHN_TOS_AND_HONOR_CODE_LINK: process.env.AUTHN_TOS_AND_HONOR_CODE_LINK || '',
+      AUTHN_PRIVACY_POLICY_LINK: process.env.AUTHN_PRIVACY_POLICY_LINK || '',
+    });
   });
 
   // ******** test registration form submission ********
