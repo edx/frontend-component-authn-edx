@@ -21,7 +21,7 @@ function composeMiddleware() {
   return compose(applyMiddleware(thunkMiddleware, sagaMiddleware));
 }
 
-export default function configureStore(initialState = {}) {
+function configureStore(initialState = {}) {
   const store = createStore(
     createRootReducer(),
     initialState,
@@ -31,3 +31,5 @@ export default function configureStore(initialState = {}) {
 
   return store;
 }
+
+export default configureStore();
