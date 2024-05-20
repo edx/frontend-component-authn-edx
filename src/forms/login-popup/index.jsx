@@ -146,6 +146,7 @@ const LoginForm = () => {
         <EmailOrUsernameField
           label="Username or email"
           name="emailOrUsername"
+          autoComplete="username"
           value={formFields.emailOrUsername}
           errorMessage={formErrors.emailOrUsername}
           handleChange={handleOnChange}

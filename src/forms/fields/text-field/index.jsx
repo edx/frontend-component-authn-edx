@@ -24,6 +24,7 @@ const TextField = (props) => {
     value,
     handleChange,
     handleFocus,
+    autoComplete,
   } = props;
 
   return (
@@ -36,6 +37,7 @@ const TextField = (props) => {
         value={value}
         onChange={handleChange}
         onFocus={handleFocus}
+        autoComplete={autoComplete}
         floatingLabel={formatMessage(messages.fieldLabel, { label })}
       />
       {errorMessage !== '' && (
@@ -60,6 +62,11 @@ TextField.propTypes = {
   value: PropTypes.string.isRequired,
   handleChange: PropTypes.func.isRequired,
   handleFocus: PropTypes.func.isRequired,
+  autoComplete: PropTypes.string,
+};
+
+TextField.defaultProps = {
+  autoComplete: '',
 };
 
 export default TextField;

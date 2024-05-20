@@ -27,6 +27,7 @@ initialize({
         AUTHN_ALGOLIA_SEARCH_API_KEY: process.env.AUTHN_ALGOLIA_SEARCH_API_KEY || '',
         AUTHN_TOS_AND_HONOR_CODE_LINK: process.env.AUTHN_TOS_AND_HONOR_CODE_LINK || '',
         AUTHN_PRIVACY_POLICY_LINK: process.env.AUTHN_PRIVACY_POLICY_LINK || '',
+        INFO_EMAIL: process.env.INFO_EMAIL || '',
       });
     },
   },
