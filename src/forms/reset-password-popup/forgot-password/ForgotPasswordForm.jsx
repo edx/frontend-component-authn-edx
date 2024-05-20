@@ -41,7 +41,7 @@ const ForgotPasswordForm = () => {
   };
 
   return (
-    <Container size="lg" className="authn__popup-container p-5 overflow-auto">
+    <Container size="lg" className="authn__popup-container overflow-auto">
       <ResetPasswordHeader />
       {!isSuccess && (
         <Form id="forgot-password-form" name="reset-password-form" className="d-flex flex-column my-4.5">

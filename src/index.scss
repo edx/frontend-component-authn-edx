@@ -3,6 +3,9 @@
 
 .authn__popup-container {
   padding: 2.5rem;
+  @media (max-width: 767px) {
+    padding: 1rem;
+  }
 }
 
 .authn__popup-container  .pgn__form-control-floating-label-text:after {

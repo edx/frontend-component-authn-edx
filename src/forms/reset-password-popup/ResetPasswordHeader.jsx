@@ -15,12 +15,12 @@ const ResetPasswordHeader = () => {
   return (
     <>
       <h2
-        className="font-italic text-center display-1 mb-4 text-dark-500"
+        className="font-italic text-center display-1 m-0 text-dark-500 pb-0"
         data-testid="forgot-password-heading"
       >
         {formatMessage(messages.resetPasswordFormHeading)}
       </h2>
-      <hr className="separator mb-3 mt-3" />
+      <hr className="separator my-3 my-sm-4" />
     </>
   );
 };
