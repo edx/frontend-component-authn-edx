@@ -7,6 +7,7 @@ import {
   Container, Form, StatefulButton,
 } from '@openedx/paragon';
 
+import AccountActivationMessage from './components/AccountActivationMessage';
 import LoginFailureAlert from './components/LoginFailureAlert';
 import { TPA_AUTHENTICATION_FAILURE } from './data/constants';
 import { loginUser } from './data/reducers';
@@ -45,6 +46,7 @@ const LoginForm = () => {
     emailOrUsername: '',
     password: '',
   });
+  const [showActivationMessage, setActivationMessage] = useState(null);
   const [formErrors, setFormErrors] = useState({
     emailOrUsername: '',
     password: '',
@@ -71,6 +73,17 @@ const LoginForm = () => {
       }));
     }
   }, [thirdPartyAuthErrorMessage]);
+
+  useEffect(() => {
+    const url = new URL(window.location.href);
+
+    const accountActivationParam = url.searchParams.get('account_activation_status');
+    if (accountActivationParam) {
+      setActivationMessage(accountActivationParam);
+      url.searchParams.delete('account_activation_status');
+      window.history.replaceState(window.history.state, '', url.href);
+    }
+  }, []);
 
   const validateFormFields = (payload) => {
     const { emailOrUsername, password } = payload;
@@ -141,6 +154,9 @@ const LoginForm = () => {
       />
       <ThirdPartyAuthAlert
         currentProvider={currentProvider}
+      />
+      <AccountActivationMessage
+        messageType={showActivationMessage}
       />
       <Form id="login-form" name="login-form">
         <EmailOrUsernameField
