@@ -104,6 +104,7 @@ const PasswordField = (props) => {
           onChange={handleChange}
           onFocus={handleFocus}
           onBlur={handleBlur}
+          autoComplete="current-password"
           trailingElement={isPasswordHidden ? ShowButton : HideButton}
           floatingLabel={floatingLabel}
         />
