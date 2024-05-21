@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import { getThirdPartyAuthContext, setCurrentOpenedForm } from './data/reducers';
 import validateContextData from './data/utils';
 import BaseContainer from '../base-container';
-import configureStore from '../data/configureStore';
+import store from '../data/configureStore';
 import {
   ENTERPRISE_LOGIN,
   FORGOT_PASSWORD_FORM,
@@ -124,7 +124,7 @@ const AuthnComponentWithProvider = (props) => {
   const { isOpen } = props;
   if (isOpen) {
     return (
-      <AppProvider store={configureStore()}>
+      <AppProvider store={store}>
         <AuthnComponent {...props} />
       </AppProvider>
     );

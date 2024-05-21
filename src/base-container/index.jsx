@@ -10,7 +10,6 @@ import './index.scss';
  *
  * @param {boolean} isOpen - Required. Whether to open the modal window.
  * @param {function} close - Required. Is used to the modal window.
- * @param {string} footerText - Optional. The text for the modal footer.
  * @param {React.node} children - Required. The login or registration form.
  *
  * @returns {JSX.Element} The rendered login or registration form modal.
