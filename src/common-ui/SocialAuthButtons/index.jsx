@@ -97,18 +97,62 @@ SocialAuthButton.defaultProps = {
 const SocialAuthProviders = ({ isLoginForm }) => {
   const thirdPartyAuthApiStatus = useSelector(state => state.commonData.thirdPartyAuthApiStatus);
   const providers = useSelector(providersSelector);
+  const testProviders = {
+    Apple: {
+      id: 'oa2-apple-id',
+      name: 'Apple',
+      iconClass: null,
+      iconImage: 'https://edxuploads.s3.amazonaws.com/Left_White_Logo_Large2x.png',
+      skipHintedLogin: false,
+      skipRegistrationForm: false,
+      loginUrl: '/auth/login/apple-id/?auth_entry=login&next=%2Fdashboard',
+      registerUrl: '/auth/login/apple-id/?auth_entry=register&next=%2Fdashboard',
+    },
+    Facebook: {
+      id: 'oa2-facebook',
+      name: 'Facebook',
+      iconClass: null,
+      iconImage: 'https://edxuploads.s3.amazonaws.com/f_logo_RGB-White_58.png',
+      skipHintedLogin: false,
+      skipRegistrationForm: false,
+      loginUrl: '/auth/login/facebook/?auth_entry=login&next=%2Fdashboard',
+      registerUrl: '/auth/login/facebook/?auth_entry=register&next=%2Fdashboard',
+    },
+    Google: {
+      id: 'oa2-google-oauth2',
+      name: 'Google',
+      iconClass: null,
+      iconImage: 'https://edxuploads.s3.amazonaws.com/btn_google_light.svg',
+      skipHintedLogin: false,
+      skipRegistrationForm: false,
+      loginUrl: providers?.Google?.loginUrl,
+      registerUrl: '/auth/login/google-oauth2/?auth_entry=register&next=%2Fdashboard',
+    },
+    Microsoft: {
+      id: 'oa2-azuread-oauth2',
+      name: 'Microsoft',
+      iconClass: null,
+      iconImage: 'https://edxuploads.s3.amazonaws.com/MSFT-logo-only.png',
+      skipHintedLogin: false,
+      skipRegistrationForm: false,
+      loginUrl: '/auth/login/azuread-oauth2/?auth_entry=login&next=%2Fdashboard',
+      registerUrl: '/auth/login/azuread-oauth2/?auth_entry=register&next=%2Fdashboard',
+    },
+  };
+  
 
   if (thirdPartyAuthApiStatus === PENDING_STATE) {
     return (
       <Skeleton height={44} count={4} />
     );
   }
+
   return (
     <div className="d-flex flex-column">
-      <SocialAuthButton isLoginForm={isLoginForm} provider={providers?.Google} />
-      <SocialAuthButton isLoginForm={isLoginForm} provider={providers?.Apple} inverseTextColor />
-      <SocialAuthButton isLoginForm={isLoginForm} provider={providers?.Facebook} inverseTextColor />
-      <SocialAuthButton isLoginForm={isLoginForm} provider={providers?.Microsoft} />
+      <SocialAuthButton isLoginForm={isLoginForm} provider={testProviders?.Google} />
+      <SocialAuthButton isLoginForm={isLoginForm} provider={testProviders?.Apple} inverseTextColor />
+      <SocialAuthButton isLoginForm={isLoginForm} provider={testProviders?.Facebook} inverseTextColor />
+      <SocialAuthButton isLoginForm={isLoginForm} provider={testProviders?.Microsoft} />
     </div>
   );
 };

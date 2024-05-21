@@ -19,3 +19,7 @@ authn-component__modal .pgn__modal-close-container .pgn__modal-close-button {
 .authn-component__modal .pgn__modal-body::after {
   display: none !important;
 }
+
+.authn-component__modal {
+  max-height: max-content !important;
+}

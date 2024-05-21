@@ -24,6 +24,7 @@ import EnterpriseSSO from '../forms/enterprise-sso-popup';
 import { getTpaHint, getTpaProvider } from '../forms/enterprise-sso-popup/data/utils';
 import ProgressiveProfilingForm from '../forms/progressive-profiling-popup';
 import ForgotPasswordForm from '../forms/reset-password-popup/forgot-password/ForgotPasswordForm';
+import ResetPasswordPage from '../forms/reset-password-popup/reset-password/ResetPasswordPage';
 
 /**
  * Main component that conditionally renders a login or registration form inside a modal window.
@@ -81,7 +82,7 @@ export const AuthnComponent = ({
       return <ProgressiveProfilingForm />;
     }
     if (currentForm === FORGOT_PASSWORD_FORM) {
-      return <ForgotPasswordForm />;
+      return <ResetPasswordPage />;
     }
     return <RegistrationForm />;
   };
@@ -94,6 +95,7 @@ export const AuthnComponent = ({
 
   return (
     <BaseContainer isOpen={isOpen} close={close}>
+      {/*{getSpinner}*/}
       {pendingState
         ? getSpinner
         : getForm()}
