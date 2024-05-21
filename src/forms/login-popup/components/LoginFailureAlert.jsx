@@ -9,6 +9,7 @@ import {
   FORBIDDEN_REQUEST,
   INTERNAL_SERVER_ERROR,
   INVALID_FORM,
+  TPA_AUTHENTICATION_FAILURE,
 } from '../../../data/constants';
 import {
   ACCOUNT_LOCKED_OUT,
@@ -17,7 +18,6 @@ import {
   INACTIVE_USER,
   INCORRECT_EMAIL_PASSWORD,
   NON_COMPLIANT_PASSWORD_EXCEPTION,
-  TPA_AUTHENTICATION_FAILURE,
 } from '../data/constants';
 import messages from '../messages';
 
@@ -134,7 +134,6 @@ const LoginFailureAlert = (props) => {
       errorMessage = (
         <span>
           {formatMessage(messages.loginTpaAuthenticationFailure, {
-            platform_name: getConfig().SITE_NAME,
             lineBreak: <br />,
             errorMessage: context.errorMessage,
           })}

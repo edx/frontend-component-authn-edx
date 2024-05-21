@@ -9,14 +9,17 @@ import {
 
 import AccountActivationMessage from './components/AccountActivationMessage';
 import LoginFailureAlert from './components/LoginFailureAlert';
-import { TPA_AUTHENTICATION_FAILURE } from './data/constants';
 import useGetActivationMessage from './data/hooks';
 import { loginUser } from './data/reducers';
 import messages from './messages';
 import { setCurrentOpenedForm } from '../../authn-component/data/reducers';
 import { InlineLink, SocialAuthProviders } from '../../common-ui';
 import {
-  ENTERPRISE_LOGIN_URL, FORGOT_PASSWORD_FORM, INVALID_FORM, REGISTRATION_FORM,
+  ENTERPRISE_LOGIN_URL,
+  FORGOT_PASSWORD_FORM,
+  INVALID_FORM,
+  REGISTRATION_FORM,
+  TPA_AUTHENTICATION_FAILURE,
 } from '../../data/constants';
 import getAllPossibleQueryParams from '../../data/utils';
 import AuthenticatedRedirection from '../common-components/AuthenticatedRedirection';

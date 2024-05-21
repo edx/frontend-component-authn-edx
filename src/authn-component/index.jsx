@@ -95,8 +95,8 @@ export const AuthnComponent = ({
     return <RegistrationForm />;
   };
 
-  const getSpinner = (
-    <div className="w-100 text-center">
+  const getSpinner = () => (
+    <div className="w-100 text-center" data-testid="tpa-spinner">
       <Spinner animation="border" variant="primary" />
     </div>
   );
@@ -109,7 +109,7 @@ export const AuthnComponent = ({
       size={screenSize}
     >
       {pendingState
-        ? getSpinner
+        ? getSpinner()
         : getForm()}
     </BaseContainer>
   );

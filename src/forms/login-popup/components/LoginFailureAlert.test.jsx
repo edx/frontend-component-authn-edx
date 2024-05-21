@@ -11,6 +11,7 @@ import {
   FORBIDDEN_REQUEST,
   INTERNAL_SERVER_ERROR,
   INVALID_FORM,
+  TPA_AUTHENTICATION_FAILURE,
 } from '../../../data/constants';
 import {
   ACCOUNT_LOCKED_OUT,
@@ -18,7 +19,7 @@ import {
   FAILED_LOGIN_ATTEMPT,
   INACTIVE_USER,
   INCORRECT_EMAIL_PASSWORD,
-  NON_COMPLIANT_PASSWORD_EXCEPTION, TPA_AUTHENTICATION_FAILURE,
+  NON_COMPLIANT_PASSWORD_EXCEPTION,
 } from '../data/constants';
 
 const IntlLoginFailureAlert = injectIntl(LoginFailureAlert);

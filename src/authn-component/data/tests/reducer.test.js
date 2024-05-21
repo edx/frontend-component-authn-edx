@@ -2,7 +2,6 @@ import {
   COMPLETE_STATE, FAILURE_STATE, LOGIN_FORM, PENDING_STATE,
 } from '../../../data/constants';
 import commonDataReducer, {
-  clearThirdPartyAuthContextErrorMessage,
   commonDataInitialState,
   getThirdPartyAuthContext,
   getThirdPartyAuthContextFailed,
@@ -42,12 +41,6 @@ describe('commonDataSlice reducer', () => {
     const nextState = commonDataReducer(commonDataInitialState, getThirdPartyAuthContextFailed());
 
     expect(nextState.thirdPartyAuthApiStatus).toEqual(FAILURE_STATE);
-    expect(nextState.thirdPartyAuthContext.errorMessage).toBeNull();
-  });
-
-  it('should handle clearThirdPartyAuthContextErrorMessage action', () => {
-    const nextState = commonDataReducer(commonDataInitialState, clearThirdPartyAuthContextErrorMessage());
-
     expect(nextState.thirdPartyAuthContext.errorMessage).toBeNull();
   });
 

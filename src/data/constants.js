@@ -17,6 +17,8 @@ export const FORBIDDEN_STATE = 'forbidden';
 export const INTERNAL_SERVER_ERROR = 'internal-server-error';
 export const FORBIDDEN_REQUEST = 'forbidden-request';
 export const INVALID_FORM = 'invalid-form';
+export const TPA_AUTHENTICATION_FAILURE = 'tpa-authentication-failure';
+export const TPA_SESSION_EXPIRED = 'tpa-session-expired';
 
 // URL Paths
 export const ENTERPRISE_LOGIN_URL = '/enterprise/login';

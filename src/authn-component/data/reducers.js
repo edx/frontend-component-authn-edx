@@ -40,11 +40,9 @@ export const commonDataSlice = createSlice({
       state.thirdPartyAuthApiStatus = FAILURE_STATE;
       state.thirdPartyAuthContext.errorMessage = null;
     },
-    clearThirdPartyAuthContextErrorMessage: (state) => {
-      state.thirdPartyAuthContext.errorMessage = null;
-    },
     setCurrentOpenedForm: (state, { payload: currentForm }) => {
       state.currentForm = currentForm;
+      state.thirdPartyAuthContext.errorMessage = null;
     },
   },
 });
@@ -53,7 +51,6 @@ export const {
   getThirdPartyAuthContext,
   getThirdPartyAuthContextSuccess,
   getThirdPartyAuthContextFailed,
-  clearThirdPartyAuthContextErrorMessage,
   setCurrentOpenedForm,
 } = commonDataSlice.actions;
 
