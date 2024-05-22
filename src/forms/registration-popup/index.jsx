@@ -54,7 +54,7 @@ const RegistrationForm = () => {
   };
 
   return (
-    <>
+    <div className="flex-column">
       <Container size="lg" className="authn__popup-container">
         <AuthenticatedRedirection
           success={registrationResult.success}
@@ -137,7 +137,7 @@ const RegistrationForm = () => {
           <HonorCodeAndPrivacyPolicyMessage />
         </p>
       </div>
-    </>
+    </div>
   );
 };
 

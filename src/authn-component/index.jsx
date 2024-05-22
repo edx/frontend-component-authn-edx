@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { AppProvider } from '@edx/frontend-platform/react';
@@ -40,6 +40,9 @@ export const AuthnComponent = ({
   const dispatch = useDispatch();
   const queryParams = useMemo(() => getAllPossibleQueryParams(), []);
 
+  const [screenSize, setScreenSize] = useState('lg');
+  const [hasCloseButton, setHasCloseButton] = useState(true);
+
   const currentForm = useSelector(state => state.commonData.currentForm);
   const providers = useSelector(state => state.commonData.thirdPartyAuthContext?.providers);
   const secondaryProviders = useSelector(state => state.commonData.thirdPartyAuthContext?.secondaryProviders);
@@ -48,6 +51,13 @@ export const AuthnComponent = ({
   const tpaHint = getTpaHint();
   const { provider: tpaProvider } = getTpaProvider(tpaHint, providers, secondaryProviders);
   const pendingState = queryParams?.tpa_hint && thirdPartyAuthApiStatus === PENDING_STATE;
+
+  useEffect(() => {
+    if (currentForm === PROGRESSIVE_PROFILING_FORM) {
+      setHasCloseButton(false);
+      setScreenSize('fullscreen');
+    }
+  }, [currentForm]);
 
   useEffect(() => {
     if (tpaProvider) {
@@ -92,7 +102,12 @@ export const AuthnComponent = ({
   );
 
   return (
-    <BaseContainer isOpen={isOpen} close={close}>
+    <BaseContainer
+      isOpen={isOpen}
+      close={close}
+      hasCloseButton={hasCloseButton}
+      size={screenSize}
+    >
       {pendingState
         ? getSpinner
         : getForm()}

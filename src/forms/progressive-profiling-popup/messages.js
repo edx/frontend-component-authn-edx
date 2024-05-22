@@ -368,7 +368,7 @@ const messages = defineMessages({
   },
   'gender.option.o': {
     id: 'gender.option.o',
-    defaultMessage: 'Other/Prefer Not to Say',
+    defaultMessage: 'Other/prefer not to answer',
     description: 'Option for gender field',
   },
 });

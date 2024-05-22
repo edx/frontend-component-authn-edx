@@ -1,3 +1,13 @@
 .progressive-profiling__cta-btn-container {
   gap: 12px;
 }
+
+.authn__popup-progressive-profiling-container {
+  padding: 7.5rem 4rem;
+  @media (max-width: 767px) {
+    padding: 2.5rem 1.5rem;
+  }
+  @media (max-width: 576px) {
+    padding: 2.5rem 1rem;
+  }
+}

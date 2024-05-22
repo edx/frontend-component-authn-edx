@@ -185,8 +185,7 @@ describe('AuthnComponent Test', () => {
       expect(getByTestId('sign-up-heading')).toBeTruthy();
     });
 
-    // TODO: this test will be fixed when progressive profiling form is fixed.
-    it.skip('renders PROGRESSIVE_PROFILING_FORM form if currentForm=PROGRESSIVE_PROFILING_FORM', () => {
+    it('renders PROGRESSIVE_PROFILING_FORM form if currentForm=PROGRESSIVE_PROFILING_FORM', () => {
       getLocale.mockImplementation(() => ('en-us'));
       store = mockStore({
         ...initialState,
@@ -195,10 +194,12 @@ describe('AuthnComponent Test', () => {
           currentForm: PROGRESSIVE_PROFILING_FORM,
         },
       });
-      const { getByTestId } = render(reduxWrapper(
+      const { container, getByTestId } = render(reduxWrapper(
         <IntlAuthnComponent isOpen close={() => {}} />,
       ));
+      const closeButton = container.querySelector('.btn-icon__icon');
 
+      expect(closeButton).toBeFalsy();
       expect(getByTestId('progressive-profiling-heading')).toBeTruthy();
     });
 

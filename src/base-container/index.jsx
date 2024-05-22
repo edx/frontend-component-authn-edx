@@ -15,19 +15,19 @@ import './index.scss';
  * @returns {JSX.Element} The rendered login or registration form modal.
  */
 const BaseContainer = ({
-  children, isOpen, close,
+  children, close, hasCloseButton, isOpen, size,
 }) => (
   <ModalDialog
     isOpen={isOpen}
     onClose={close}
-    size="lg"
+    size={size}
     variant="default"
     title="authn-component"
     className="bg-light-200 authn-component__modal"
-    hasCloseButton
+    hasCloseButton={hasCloseButton}
   >
     <ModalDialog.Body className="modal-body-container p-0">
-      <div className="d-flex w-100 h-100 flex-column overflow-hidden">
+      <div className="d-flex w-100 h-100 justify-content-center overflow-hidden">
         {children}
       </div>
     </ModalDialog.Body>
@@ -38,6 +38,13 @@ BaseContainer.propTypes = {
   children: PropTypes.node.isRequired,
   isOpen: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
+  size: PropTypes.string,
+  hasCloseButton: PropTypes.bool,
+};
+
+BaseContainer.defaultProps = {
+  size: 'lg',
+  hasCloseButton: true,
 };
 
 export default BaseContainer;
