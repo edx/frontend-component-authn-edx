@@ -10,4 +10,5 @@ module.exports = createConfig('jest', {
     'src/setupTest.js',
     'src/i18n',
   ],
+  coverageReporters: [['text', { file: 'coverage.txt' }], 'json-summary', 'clover', 'lcov'],
 });
