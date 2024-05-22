@@ -9,6 +9,13 @@ import PropTypes from 'prop-types';
 import { ACCOUNT_ACTIVATION_MESSAGE } from '../data/constants';
 import messages from '../messages';
 
+/**
+ * Account activation component that holds account activation/confirmation banner logic.
+ *
+ * @param {string} messageType - The type of message either its success, info or error.
+ *
+ * @returns {JSX.Element} The rendered the account activation banner component.
+ */
 const AccountActivationMessage = ({ messageType }) => {
   const { formatMessage } = useIntl();
 
