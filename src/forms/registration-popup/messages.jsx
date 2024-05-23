@@ -11,16 +11,6 @@ const messages = defineMessages({
     defaultMessage: 'or',
     description: 'Heading that appears between social auth and basic registration form',
   },
-  registrationFormHeading3: {
-    id: 'registration.form.or.heading.3',
-    defaultMessage: 'Finish creating account',
-    description: 'Heading that appears on the second step of registration form',
-  },
-  registrationFormContinueButton: {
-    id: 'registration.form.continue.button',
-    defaultMessage: 'Continue',
-    description: 'Text for submit button for continue registration form',
-  },
   registrationFormCreateAccountButton: {
     id: 'registration.form.continue.button',
     defaultMessage: 'Create an account for free',
@@ -46,16 +36,6 @@ const messages = defineMessages({
     defaultMessage: 'Sign in with your credentials',
     description: 'Text for signing in with credentials',
   },
-  registrationFormBackButton: {
-    id: 'registration.form.back.btn.label',
-    defaultMessage: 'Back',
-    description: 'registration back button text',
-  },
-  registrationFormSubHeading: {
-    id: 'registration.form.sub.heading.text',
-    defaultMessage: 'Fill out the fields below to create your account',
-    description: 'Heading that appear on the second step',
-  },
   registrationFormPasswordFieldLabel: {
     id: 'registration.form.password.label',
     defaultMessage: 'Password',
@@ -63,7 +43,7 @@ const messages = defineMessages({
   },
   registrationFormEmailFieldLabel: {
     id: 'registration.form.email.label',
-    defaultMessage: 'Enter your email',
+    defaultMessage: 'Email',
     description: 'Label for email input field',
   },
   registrationFormTermsOfServiceAndHonorCodeLabel: {
