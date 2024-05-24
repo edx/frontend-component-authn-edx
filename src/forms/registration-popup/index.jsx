@@ -109,7 +109,7 @@ const RegistrationForm = () => {
   }, [autoSubmitRegForm, userPipelineDataLoaded]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <>
+    <div className="flex-column">
       <Container size="lg" className="authn__popup-container">
         <AuthenticatedRedirection
           success={registrationResult.success}
@@ -209,7 +209,7 @@ const RegistrationForm = () => {
           <HonorCodeAndPrivacyPolicyMessage />
         </p>
       </div>
-    </>
+    </div>
   );
 };
 

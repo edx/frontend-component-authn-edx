@@ -181,3 +181,5 @@ export const defaultSubjectList = [
     name: 'Philanthropy',
   },
 ];
+
+export const extendedProfileFields = ['subject', 'workExperience', 'learningType'];

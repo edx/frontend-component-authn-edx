@@ -49,7 +49,9 @@ const useSubjectsList = () => {
   }, []);
 
   return {
-    subjectsList,
+    subjectsList: {
+      options: subjectsList,
+    },
     subjectsLoading,
   };
 };

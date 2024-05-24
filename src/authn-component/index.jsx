@@ -21,12 +21,14 @@ import {
 } from '../data/constants';
 import getAllPossibleQueryParams from '../data/utils';
 import {
-  ForgotPasswordForm, LoginForm, RegistrationForm, ResetPasswordForm,
+  ForgotPasswordForm,
+  LoginForm,
+  ProgressiveProfilingForm,
+  RegistrationForm,
+  ResetPasswordForm,
 } from '../forms';
 import EnterpriseSSO from '../forms/enterprise-sso-popup';
 import { getTpaHint, getTpaProvider } from '../forms/enterprise-sso-popup/data/utils';
-import ProgressiveProfilingForm from '../forms/progressive-profiling-popup';
-
 /**
  * Main component that conditionally renders a login or registration form inside a modal window.
  *

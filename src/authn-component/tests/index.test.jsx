@@ -2,6 +2,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 
 import { mergeConfig } from '@edx/frontend-platform';
+import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
 import { getLocale, injectIntl, IntlProvider } from '@edx/frontend-platform/i18n';
 import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
@@ -17,6 +18,7 @@ import {
   PROGRESSIVE_PROFILING_FORM,
   REGISTRATION_FORM,
 } from '../../data/constants';
+import useSubjectList from '../../forms/progressive-profiling-popup/data/hooks/useSubjectList';
 import { getThirdPartyAuthContext, setCurrentOpenedForm } from '../data/reducers';
 import { AuthnComponent, SignInComponent, SignUpComponent } from '../index';
 
@@ -27,10 +29,14 @@ jest.mock('@edx/frontend-platform/react', () => ({
   // eslint-disable-next-line react/prop-types
   AppProvider: ({ children }) => <div>{children}</div>,
 }));
+jest.mock('@edx/frontend-platform/auth', () => ({
+  getAuthenticatedUser: jest.fn(),
+}));
 jest.mock('@edx/frontend-platform/i18n', () => ({
   ...jest.requireActual('@edx/frontend-platform/i18n'),
   getLocale: jest.fn(),
 }));
+jest.mock('../../forms/progressive-profiling-popup/data/hooks/useSubjectList', () => jest.fn());
 
 describe('AuthnComponent Test', () => {
   let store = {};
@@ -189,11 +195,24 @@ describe('AuthnComponent Test', () => {
 
     it('renders PROGRESSIVE_PROFILING_FORM form if currentForm=PROGRESSIVE_PROFILING_FORM', () => {
       getLocale.mockImplementation(() => ('en-us'));
+      getAuthenticatedUser.mockReturnValue({ userId: 3, username: 'abc123', name: 'Test User' });
+      useSubjectList.mockReturnValue({
+        subjectsList: {
+          options: [
+            { label: 'Computer' },
+            { label: 'Science' },
+          ],
+        },
+        subjectsLoading: false,
+      });
       store = mockStore({
         ...initialState,
         commonData: {
           ...initialState.commonData,
           currentForm: PROGRESSIVE_PROFILING_FORM,
+        },
+        progressiveProfiling: {
+          submitState: DEFAULT_STATE,
         },
       });
       const { container, getByTestId } = render(reduxWrapper(

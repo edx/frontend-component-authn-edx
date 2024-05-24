@@ -1,14 +1,23 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { getConfig, snakeCaseObject } from '@edx/frontend-platform';
+import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
 import { getCountryList, getLocale, useIntl } from '@edx/frontend-platform/i18n';
 import {
-  Button, Container, Form, Icon,
+  Container, Form, Icon, StatefulButton,
 } from '@openedx/paragon';
 import { Language } from '@openedx/paragon/icons';
 
-import './index.scss';
-import { optionalFieldsData } from './data/constants';
+import { extendedProfileFields, optionalFieldsData } from './data/constants';
+import useSubjectsList from './data/hooks/useSubjectList';
+import { saveUserProfile } from './data/reducers';
 import messages from './messages';
+import { setCurrentOpenedForm } from '../../authn-component/data/reducers';
+import { COMPLETE_STATE, LOGIN_FORM } from '../../data/constants';
+import AutoSuggestField from '../fields/auto-suggested-field';
+
+import './index.scss';
 
 /**
  * Progressive profiling form component. This component holds the logic to render optional demographic
@@ -18,26 +27,64 @@ import messages from './messages';
  */
 const ProgressiveProfilingForm = () => {
   const { formatMessage } = useIntl();
+  const dispatch = useDispatch();
+
+  const { subjectsList, subjectsLoading } = useSubjectsList();
+  const authenticatedUser = getAuthenticatedUser();
+  const submitState = useSelector(state => state.progressiveProfiling.submitState);
   const countryList = useMemo(() => getCountryList(getLocale()), []);
 
-  const getFieldOptions = (fieldName, fieldData) => fieldData.options.map(option => (
-    // The subject list is generated dynamically from the Algolia index. There is a chance
-    // that new subjects are added to the index for which the translation is not available.
-    // The check below ensure that in such cases, untranslated label is shown in the dropdown list
-    <Form.AutosuggestOption id={option.label}>
-      {
-        messages[`${fieldName}.option.${option.label}`]
-          ? formatMessage(messages[`${fieldName}.option.${option.label}`])
-          : option.label
-      }
-    </Form.AutosuggestOption>
-  ));
+  const [formData, setFormData] = useState({});
 
-  const getCountryFieldOptions = () => countryList.map((country) => (
-    <Form.AutosuggestOption key={country.code}>
-      {country.name}
-    </Form.AutosuggestOption>
-  ));
+  useEffect(() => {
+    if (authenticatedUser === null) {
+      dispatch(setCurrentOpenedForm(LOGIN_FORM));
+    }
+  }, [authenticatedUser, dispatch]);
+
+  useEffect(() => {
+    if (submitState === COMPLETE_STATE) {
+      window.location.href = getConfig().LMS_BASE_URL;
+    }
+  }, [submitState]);
+
+  const handleSelect = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const onChangeHandler = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const extendedProfile = [];
+    if (Object.keys(formData).length > 0) {
+      Object.keys(formData).forEach(fieldName => {
+        if (extendedProfileFields.includes(fieldName)) {
+          extendedProfile.push({ fieldName, fieldValue: formData[fieldName] });
+          delete formData[fieldName];
+        }
+      });
+    }
+    const payload = {
+      username: authenticatedUser?.username,
+      data: {
+        extendedProfile,
+        ...formData,
+      },
+    };
+    dispatch(saveUserProfile(snakeCaseObject(payload)));
+  };
+
+  const handleSkip = (e) => {
+    e.preventDefault();
+
+    window.location.href = getConfig().LMS_BASE_URL;
+  };
 
   return (
     <Container size="lg" className="authn__popup-progressive-profiling-container m-0 overflow-auto">
@@ -59,71 +106,62 @@ const ProgressiveProfilingForm = () => {
           {formatMessage(messages.progressiveProfilingCountryFieldInfoMessage)}
         </p>
         <Form.Group controlId="country" className="mb-4.5">
-          <Form.Autosuggest
+          <AutoSuggestField
             name="country"
-            placeholder={formatMessage(messages.useProfileCountryFieldUndetected)}
             leadingElement={<Icon src={Language} />}
-          >
-            {getCountryFieldOptions()}
-          </Form.Autosuggest>
-          <Form.Control.Feedback>
-            {formatMessage(messages.progressiveProfilingCountryFieldHelpText)}
-          </Form.Control.Feedback>
+            feedBack={formatMessage(messages.progressiveProfilingCountryFieldHelpText)}
+            placeholder={formatMessage(messages.useProfileCountryFieldUndetected)}
+            options={countryList}
+            onChangeHandler={handleSelect}
+          />
         </Form.Group>
         <h3 className="mb-2.5">
           {formatMessage(messages.progressiveProfilingDataCollectionTitle)}
         </h3>
         <Form.Group controlId="subject" className="mb-4">
-          <Form.Label>
-            {formatMessage(messages.progressiveProfilingSubjectFieldLabel)}
-          </Form.Label>
-          <Form.Autosuggest
+          <AutoSuggestField
             name="subject"
             placeholder={formatMessage(messages.progressiveProfilingSubjectFieldPlaceholder)}
-          >
-            {getFieldOptions('subject', optionalFieldsData.subject)}
-          </Form.Autosuggest>
+            label={formatMessage(messages.progressiveProfilingSubjectFieldLabel)}
+            options={subjectsLoading ? [] : subjectsList.options}
+            onChangeHandler={handleSelect}
+          />
         </Form.Group>
-        <Form.Group controlId="level-of-education" className="mb-4">
-          <Form.Label>
-            {formatMessage(messages.progressiveProfilingLevelOfEducationFieldLabel)}
-          </Form.Label>
-          <Form.Autosuggest
-            name="level-of-education"
+        <Form.Group controlId="levelOfEducation" className="mb-4">
+          <AutoSuggestField
+            name="levelOfEducation"
             placeholder={formatMessage(messages.progressiveProfilingLevelOfEducationFieldPlaceholder)}
-          >
-            {getFieldOptions('levelOfEducation', optionalFieldsData.levelOfEducation)}
-          </Form.Autosuggest>
+            label={formatMessage(messages.progressiveProfilingLevelOfEducationFieldLabel)}
+            options={optionalFieldsData.levelOfEducation.options}
+            onChangeHandler={handleSelect}
+          />
         </Form.Group>
-        <Form.Group controlId="work-experience" className="mb-4">
-          <Form.Label>
-            {formatMessage(messages.progressiveProfilingWorkExperienceFieldLabel)}
-          </Form.Label>
-          <Form.Autosuggest
-            name="work-experience"
+        <Form.Group controlId="workExperience" className="mb-4">
+          <AutoSuggestField
+            name="workExperience"
             placeholder={formatMessage(messages.progressiveProfilingWorkExperienceFieldPlaceholder)}
-          >
-            {getFieldOptions('workExperience', optionalFieldsData.workExperience)}
-          </Form.Autosuggest>
+            label={formatMessage(messages.progressiveProfilingWorkExperienceFieldLabel)}
+            options={optionalFieldsData.workExperience.options}
+            onChangeHandler={handleSelect}
+          />
         </Form.Group>
-        <Form.Group controlId="learning-type" className="mb-4">
-          <Form.Label>
-            {formatMessage(messages.progressiveProfilingLearningTypeFieldLabel)}
-          </Form.Label>
-          <Form.Autosuggest
-            name="learning-type"
+        <Form.Group controlId="learningType" className="mb-4">
+          <AutoSuggestField
+            name="learningType"
             placeholder={formatMessage(messages.progressiveProfilingLearningTypeFieldPlaceholder)}
-          >
-            {getFieldOptions('learningType', optionalFieldsData.learningType)}
-          </Form.Autosuggest>
+            label={formatMessage(messages.progressiveProfilingLearningTypeFieldLabel)}
+            options={optionalFieldsData.learningType.options}
+            onChangeHandler={handleSelect}
+          />
         </Form.Group>
-        <Form.Group controlId="gender" className="mb-4">
+        <Form.Group className="mb-4">
           <Form.Label>
             {formatMessage(messages.progressiveProfilingGenderFieldLabel)}
           </Form.Label>
           <Form.RadioSet
+            value={formData.gender}
             name="gender"
-            onChange={() => {}}
+            onChange={onChangeHandler}
             isInline
           >
             {optionalFieldsData.gender.options.map(option => (
@@ -134,25 +172,29 @@ const ProgressiveProfilingForm = () => {
           </Form.RadioSet>
         </Form.Group>
         <div className="d-flex my-4 justify-content-end progressive-profiling__cta-btn-container">
-          <Button
+          <StatefulButton
             id="skip-optional-fields"
             name="skip-optional-fields"
             type="submit"
             variant="outline-dark"
-            onClick={() => {}}
+            labels={{
+              default: formatMessage(messages.progressiveProfilingSkipForNowButtonText),
+            }}
+            onClick={handleSkip}
             onMouseDown={(e) => e.preventDefault()}
-          >
-            {formatMessage(messages.progressiveProfilingSkipForNowButtonText)}
-          </Button>
-          <Button
+          />
+          <StatefulButton
             id="submit-optional-fields"
             name="submit-optional-fields"
             type="submit"
-            onClick={() => {}}
+            state={submitState}
+            labels={{
+              default: formatMessage(messages.progressiveProfilingSubmitButtonText),
+              pending: '',
+            }}
+            onClick={handleSubmit}
             onMouseDown={(e) => e.preventDefault()}
-          >
-            {formatMessage(messages.progressiveProfilingSubmitButtonText)}
-          </Button>
+          />
         </div>
       </Form>
     </Container>
