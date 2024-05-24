@@ -4,7 +4,6 @@ import { Provider } from 'react-redux';
 import { getConfig, mergeConfig } from '@edx/frontend-platform';
 import { injectIntl, IntlProvider } from '@edx/frontend-platform/i18n';
 import { fireEvent, render } from '@testing-library/react';
-import { act } from 'react-dom/test-utils';
 import { MemoryRouter } from 'react-router-dom';
 import configureStore from 'redux-mock-store';
 
@@ -63,10 +62,6 @@ describe('RegistrationForm Test', () => {
 
     const emailInput = container.querySelector('#email');
     fireEvent.change(emailInput, { target: { value: payload.email, name: 'email' } });
-    const continueButton = container.querySelector('#register-continue');
-    await act(async () => {
-      fireEvent.click(continueButton);
-    });
 
     const nameInput = container.querySelector('#name');
     const passwordInput = container.querySelector('#password');
