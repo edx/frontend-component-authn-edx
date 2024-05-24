@@ -7,7 +7,7 @@ import {
 import PropTypes from 'prop-types';
 
 import ResetPasswordFailure from './ResetPasswordFailure';
-import PasswordField from '../../fields/password-field';
+import { PasswordField } from '../../fields';
 import messages from '../messages';
 import ResetPasswordHeader from '../ResetPasswordHeader';
 
@@ -17,8 +17,6 @@ export const NUMBER_REGEX = /\d/;
 /**
  * ResetPasswordForm component for completing user password reset.
  * This component provides a form for users to reset their password.
- * @param {string} newPassword - The new password entered by the user.
- * @param {string} confirmNewPassword - The confirmation of the new password entered by the user.
  * @returns {string} A message indicating the success or failure of the password reset process.
  */
 const ResetPasswordPage = (props) => {

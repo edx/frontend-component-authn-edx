@@ -32,7 +32,6 @@ const BaseContainer = ({
       </div>
     </ModalDialog.Body>
   </ModalDialog>
-
 );
 
 BaseContainer.propTypes = {

@@ -21,8 +21,10 @@ import {
 import getAllPossibleQueryParams from '../../data/utils';
 import AuthenticatedRedirection from '../common-components/AuthenticatedRedirection';
 import ThirdPartyAuthAlert from '../common-components/ThirdPartyAuthAlert';
-import PasswordField from '../fields/password-field';
-import EmailOrUsernameField from '../fields/text-field';
+import {
+  TextField as EmailOrUsernameField,
+  PasswordField,
+} from '../fields';
 import './index.scss';
 
 /**
@@ -123,7 +125,7 @@ const LoginForm = () => {
   };
 
   return (
-    <Container size="lg" className="authn__popup-container overflow-auto">
+    <Container size="lg" className="authn__popup-container">
       <AuthenticatedRedirection
         success={loginResult.success}
         redirectUrl={loginResult.redirectUrl}
@@ -135,9 +137,9 @@ const LoginForm = () => {
       >
         {formatMessage(messages.loginFormHeading1)}
       </h1>
-      <hr className="heading-separator mb-4 mt-4" />
+      <hr className="heading-separator my-3 my-sm-4" />
       <SocialAuthProviders />
-      <div className="text-center mb-4 mt-3">
+      <div className="text-center my-3 my-sm-4">
         {formatMessage(messages.loginFormHeading2)}
       </div>
       <LoginFailureAlert
@@ -150,7 +152,7 @@ const LoginForm = () => {
       <AccountActivationMessage
         messageType={accountActivation}
       />
-      <Form id="login-form" name="login-form">
+      <Form id="login-form" name="login-form" className="my-3 my-sm-4">
         <EmailOrUsernameField
           label="Username or email"
           name="emailOrUsername"
@@ -170,11 +172,11 @@ const LoginForm = () => {
           showPasswordTooltip={false}
         />
         <InlineLink
-          className="hyper-link"
+          className="hyper-link mb-4"
           onClick={() => dispatch(setCurrentOpenedForm(FORGOT_PASSWORD_FORM))}
           linkText={formatMessage(messages.loginFormForgotPasswordButton)}
         />
-        <div className="d-flex flex-column my-4">
+        <div className="d-flex flex-column m-0">
           <StatefulButton
             id="login-user"
             name="login-user"
@@ -190,6 +192,8 @@ const LoginForm = () => {
             onMouseDown={(e) => e.preventDefault()}
           />
         </div>
+      </Form>
+      <div>
         <InlineLink
           className="mb-2"
           onClick={() => dispatch(setCurrentOpenedForm(REGISTRATION_FORM))}
@@ -201,7 +205,7 @@ const LoginForm = () => {
           linkHelpText={formatMessage(messages.loginFormSchoolAndOrganizationHelpText)}
           linkText={formatMessage(messages.loginFormSchoolAndOrganizationLink)}
         />
-      </Form>
+      </div>
     </Container>
   );
 };
