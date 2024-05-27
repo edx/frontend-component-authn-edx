@@ -1,0 +1,35 @@
+@import "@edx/brand/paragon/variables";
+
+.email-suggestion-alert-error  {
+    padding: 0.5rem 1rem;
+  
+    .email-suggestion__close {
+      float: right;
+  
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  
+    .email-suggestion__text {
+      font-size: 0.75rem;
+      line-height: 1.25rem;
+    }
+  
+    .alert-link  {
+      color: $primary !important;
+  
+      &:hover {
+        text-decoration: underline;
+        color: $info-700 !important;
+      }
+    }
+}
+
+.validation-error-margin {
+    margin-top: 10px !important;
+}
+
+.yellow-border {
+  border: 2px solid $accent-b;
+}

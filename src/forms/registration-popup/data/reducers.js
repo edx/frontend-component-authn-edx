@@ -13,9 +13,12 @@ export const REGISTER_SLICE_NAME = 'register';
 
 export const registerInitialState = {
   submitState: DEFAULT_STATE,
+  validationState: DEFAULT_STATE,
   registrationError: {},
   registrationResult: {},
   userPipelineDataLoaded: false,
+  validationApiRateLimited: false,
+  validations: null,
 };
 
 export const registerSlice = createSlice({
@@ -33,10 +36,30 @@ export const registerSlice = createSlice({
     registerUserFailed: (state, { payload }) => {
       state.registrationError = payload;
       state.registrationResult = {};
+      state.validations = null;
       state.submitState = DEFAULT_STATE;
     },
+
     setUserPipelineDataLoaded: (state, { payload }) => {
       state.userPipelineDataLoaded = payload;
+    },
+    fetchRealtimeValidations: (state) => {
+      state.validationState = PENDING_STATE;
+      state.validations = null;
+    },
+    fetchRealtimeValidationsSuccess: (state, { payload }) => {
+      state.validationState = COMPLETE_STATE;
+      state.validations = payload;
+    },
+    fetchRealtimeValidationsFailed: (state) => {
+      state.validationApiRateLimited = true;
+      state.validations = null;
+      state.validationState = DEFAULT_STATE;
+    },
+    clearRegistrationBackendError: (state, { payload }) => {
+      const registrationErrorTemp = state.registrationError;
+      delete registrationErrorTemp[payload];
+      state.registrationError = registrationErrorTemp;
     },
   },
 });
@@ -46,6 +69,10 @@ export const {
   registerUserSuccess,
   registerUserFailed,
   setUserPipelineDataLoaded,
+  fetchRealtimeValidations,
+  fetchRealtimeValidationsSuccess,
+  fetchRealtimeValidationsFailed,
+  clearRegistrationBackendError,
 } = registerSlice.actions;
 
 export default registerSlice.reducer;

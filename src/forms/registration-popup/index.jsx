@@ -9,7 +9,10 @@ import {
 
 import HonorCodeAndPrivacyPolicyMessage from './components/honorCodeAndTOS';
 import RegistrationFailureAlert from './components/RegistrationFailureAlert';
-import { registerUser, setUserPipelineDataLoaded } from './data/reducers';
+import { FORM_SUBMISSION_ERROR } from './data/constants';
+import { clearRegistrationBackendError, registerUser, setUserPipelineDataLoaded } from './data/reducers';
+import getBackendValidations from './data/selector';
+import isFormValid from './data/utils';
 import messages from './messages';
 import { setCurrentOpenedForm } from '../../authn-component/data/reducers';
 import { InlineLink, SocialAuthProviders } from '../../common-ui';
@@ -22,7 +25,7 @@ import ThirdPartyAuthAlert from '../common-components/ThirdPartyAuthAlert';
 import {
   EmailField,
   MarketingEmailOptInCheckbox,
-  TextField as NameField,
+  NameField,
   PasswordField,
 } from '../fields';
 
@@ -38,7 +41,7 @@ const RegistrationForm = () => {
   const [formFields, setFormFields] = useState({
     name: '', email: '', password: '', marketingEmailOptIn: true,
   });
-
+  const [errors, setErrors] = useState({});
   const [errorCode, setErrorCode] = useState({ type: '', count: 0 });
 
   const registrationResult = useSelector(state => state.register.registrationResult);
@@ -49,6 +52,9 @@ const RegistrationForm = () => {
   const finishAuthUrl = useSelector(state => state.commonData.thirdPartyAuthContext.finishAuthUrl);
   const currentProvider = useSelector(state => state.commonData.thirdPartyAuthContext.currentProvider);
   const pipelineUserDetails = useSelector(state => state.commonData.thirdPartyAuthContext.pipelineUserDetails);
+  const registrationError = useSelector(state => state.register.registrationError);
+  const registrationErrorCode = registrationError?.errorCode;
+  const backendValidations = useSelector(getBackendValidations);
 
   // TODO: this value will be decided later based on from where the SSO flow was initiated.
   const autoSubmitRegForm = currentProvider && thirdPartyAuthApiStatus === COMPLETE_STATE;
@@ -81,7 +87,31 @@ const RegistrationForm = () => {
   const handleOnChange = (event) => {
     const { name } = event.target;
     const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
+
+    if (registrationError[name]) {
+      dispatch(clearRegistrationBackendError(name));
+    }
+    setErrors(prevErrors => ({ ...prevErrors, [name]: '' }));
     setFormFields(prevState => ({ ...prevState, [name]: value }));
+  };
+
+  useEffect(() => {
+    if (backendValidations) {
+      setErrors(prevErrors => ({ ...prevErrors, ...backendValidations }));
+    }
+  }, [backendValidations]);
+
+  useEffect(() => {
+    if (registrationErrorCode) {
+      setErrorCode(prevState => ({ type: registrationErrorCode, count: prevState.count + 1 }));
+    }
+  }, [registrationErrorCode]);
+
+  const handleErrorChange = (fieldName, error) => {
+    setErrors(prevErrors => ({
+      ...prevErrors,
+      [fieldName]: error,
+    }));
   };
 
   const handleUserRegistration = () => {
@@ -92,8 +122,19 @@ const RegistrationForm = () => {
       payload.social_auth_provider = currentProvider;
     }
 
-    payload = snakeCaseObject(payload);
+    // Validating form data before submitting
+    const { isValid, fieldErrors } = isFormValid(
+      payload,
+      errors,
+      formatMessage,
+    );
+    setErrors({ ...fieldErrors });
 
+    if (!isValid) {
+      setErrorCode(prevState => ({ type: FORM_SUBMISSION_ERROR, count: prevState.count + 1 }));
+      return;
+    }
+    payload = snakeCaseObject(payload);
     dispatch(registerUser(payload));
   };
 
@@ -150,22 +191,26 @@ const RegistrationForm = () => {
               <EmailField
                 name="email"
                 value={formFields.email}
+                errorMessage={errors.email}
                 handleChange={handleOnChange}
+                handleErrorChange={handleErrorChange}
                 floatingLabel={formatMessage(messages.registrationFormEmailFieldLabel)}
               />
               <NameField
                 label="Full name"
                 name="name"
                 value={formFields.name}
-                errorMessage=""
+                errorMessage={errors.name}
                 handleChange={handleOnChange}
+                handleErrorChange={handleErrorChange}
                 handleFocus={() => { }}
               />
               <PasswordField
                 name="password"
                 value={formFields.password}
-                errorMessage=""
+                errorMessage={errors.password}
                 handleChange={handleOnChange}
+                handleErrorChange={handleErrorChange}
                 handleFocus={() => { }}
                 floatingLabel={formatMessage(messages.registrationFormPasswordFieldLabel)}
               />

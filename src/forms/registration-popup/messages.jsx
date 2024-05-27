@@ -62,22 +62,48 @@ const messages = defineMessages({
     defaultMessage: 'We couldn\'t create your account.',
     description: 'Login failure header message.',
   },
-  registrationTpaSessionExpired: {
-    id: 'registration.tpa.session.expired',
-    defaultMessage: 'Registration using {provider} has timed out.',
-    description: '',
+  // Error messages
+  registrationRequestFailureHeader: {
+    id: 'registration.request.failure.header',
+    defaultMessage: 'We couldn\'t create your account.',
+    description: 'error message when registration failure.',
   },
-  registrationTpaAuthenticationFailure: {
-    id: 'registration.tpa.authentication.failure',
-    defaultMessage: 'We are sorry, you are not authorized to access edX via this channel. '
-        + 'Please contact your learning administrator or manager in order to access edX.'
-        + '{lineBreak}{lineBreak}Error Details:{lineBreak}{errorMessage}',
-    description: 'Error message third party authentication pipeline fails',
+  registrationEmptyFormSubmissionError: {
+    id: 'registration.empty.form.submission.error',
+    defaultMessage: 'Please check your responses and try again.',
+    description: 'Error message that appears on top of the form when empty form is submitted',
+  },
+  registrationRequestServerError: {
+    id: 'registration.request.server.error',
+    defaultMessage: 'An error has occurred. Try refreshing the page, or check your internet connection.',
+    description: 'Error message for internal server error.',
+  },
+  registrationRateLimitError: {
+    id: 'registration.rate.limit.error',
+    defaultMessage: 'Too many failed registration attempts. Try again later.',
+    description: 'Error message that appears when an anonymous user has made too many failed registration attempts',
+  },
+  registrationTPASessionExpired: {
+    id: 'registration.tpa.session.expired',
+    defaultMessage: 'We couldn’t create your account. Registration using {provider} has timed out.',
+    description: '',
   },
   internalServerErrorMessage: {
     id: 'internal.server.error.message',
     defaultMessage: 'An error has occurred. Try refreshing the page, or check your internet connection.',
     description: 'Error message that appears when server responds with 500 error code',
+  },
+  registrationTPAAuthenticationFailure: {
+    id: 'registration.tpa.authentication.failure',
+    defaultMessage: 'We are sorry, you are not authorized to access {platform_name} via this channel. '
+        + 'Please contact your learning administrator or manager in order to access {platform_name}.'
+        + '{lineBreak}{lineBreak}Error Details:{lineBreak}{errorMessage}',
+    description: 'Error message third party authentication pipeline fails',
+  },
+  registrationFormSubmissionError: {
+    id: 'registration.form.submission.error',
+    defaultMessage: 'We couldn’t create your account. Please correct the errors below.',
+    description: 'Error message that appears when form submit with errors',
   },
 });
 

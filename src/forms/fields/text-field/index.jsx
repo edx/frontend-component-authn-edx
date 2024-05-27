@@ -5,7 +5,7 @@ import { Form } from '@openedx/paragon';
 import PropTypes from 'prop-types';
 
 import messages from './messages';
-
+import './index.scss';
 /**
  * Text field component. It accepts following handler(s)
  * - handleChange for setting value on change
@@ -23,6 +23,7 @@ const TextField = (props) => {
     name,
     value,
     handleChange,
+    handleBlur,
     handleFocus,
     autoComplete,
   } = props;
@@ -37,13 +38,14 @@ const TextField = (props) => {
         value={value}
         onChange={handleChange}
         onFocus={handleFocus}
+        onBlur={handleBlur}
         autoComplete={autoComplete}
         floatingLabel={formatMessage(messages.fieldLabel, { label })}
       />
       {errorMessage !== '' && (
         <Form.Control.Feedback
           key="error"
-          className="form-text-size"
+          className="form-text-size validation-error-margin"
           hasIcon={false}
           feedback-for={name}
           type="invalid"
@@ -62,6 +64,7 @@ TextField.propTypes = {
   value: PropTypes.string.isRequired,
   handleChange: PropTypes.func.isRequired,
   handleFocus: PropTypes.func.isRequired,
+  handleBlur: PropTypes.func.isRequired,
   autoComplete: PropTypes.string,
 };
 

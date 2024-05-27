@@ -1,14 +1,17 @@
 import React from 'react';
 
+import { getConfig } from '@edx/frontend-platform';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Alert } from '@openedx/paragon';
 import PropTypes from 'prop-types';
 
 import {
+  FORBIDDEN_REQUEST,
+  FORM_SUBMISSION_ERROR,
   INTERNAL_SERVER_ERROR,
   TPA_AUTHENTICATION_FAILURE,
   TPA_SESSION_EXPIRED,
-} from '../../../data/constants';
+} from '../data/constants';
 import messages from '../messages';
 
 /**
@@ -17,8 +20,12 @@ import messages from '../messages';
  * @param context
  * @param errorCode
  */
-const RegistrationFailureAlert = ({ context, errorCode }) => {
+
+const RegistrationFailureMessage = (props) => {
   const { formatMessage } = useIntl();
+  const {
+    context, errorCode,
+  } = props;
 
   if (!errorCode) {
     return null;
@@ -26,43 +33,47 @@ const RegistrationFailureAlert = ({ context, errorCode }) => {
 
   let errorMessage;
   switch (errorCode) {
-    case TPA_SESSION_EXPIRED:
-      errorMessage = (
-        <span>
-          {formatMessage(messages.registrationTpaSessionExpired, {
-            provider: context.provider,
-          })}
-        </span>
-      );
+    case INTERNAL_SERVER_ERROR:
+      errorMessage = formatMessage(messages.registrationRequestServerError);
+     break;
+    case FORBIDDEN_REQUEST:
+      errorMessage = formatMessage(messages.registrationRateLimitError);
       break;
     case TPA_AUTHENTICATION_FAILURE:
-      errorMessage = (
-        <span>
-          {formatMessage(messages.registrationTpaAuthenticationFailure, {
-            lineBreak: <br />,
-            errorMessage: context.errorMessage,
-          })}
-        </span>
+      errorMessage = formatMessage(
+        messages.registrationTPAAuthenticationFailure,
+        {
+          platform_name: getConfig().SITE_NAME,
+          lineBreak: <br />,
+          errorMessage: context.errorMessage,
+        },
       );
       break;
-    case INTERNAL_SERVER_ERROR:
+    case TPA_SESSION_EXPIRED:
+      errorMessage = formatMessage(messages.registrationTPASessionExpired, { provider: context.provider });
+      break;
+    case FORM_SUBMISSION_ERROR:
+      errorMessage = formatMessage(messages.registrationFormSubmissionError);
+      break;
     default:
-      errorMessage = <span>{formatMessage(messages.internalServerErrorMessage)}</span>;
+      errorMessage = formatMessage(messages.registrationEmptyFormSubmissionError);
       break;
   }
 
   return (
     <Alert id="registration-failure-alert" className="mb-5" variant="danger">
-      {formatMessage(messages.registrationFailureHeaderTitle)} { errorMessage }
+      <p>{errorMessage}</p>
     </Alert>
   );
 };
 
-RegistrationFailureAlert.defaultProps = {
-  context: {},
+RegistrationFailureMessage.defaultProps = {
+  context: {
+    errorMessage: null,
+  },
 };
 
-RegistrationFailureAlert.propTypes = {
+RegistrationFailureMessage.propTypes = {
   context: PropTypes.shape({
     provider: PropTypes.string,
     errorMessage: PropTypes.string,
@@ -70,4 +81,4 @@ RegistrationFailureAlert.propTypes = {
   errorCode: PropTypes.string.isRequired,
 };
 
-export default RegistrationFailureAlert;
+export default RegistrationFailureMessage;

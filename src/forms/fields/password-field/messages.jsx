@@ -26,6 +26,11 @@ const messages = defineMessages({
     defaultMessage: '8 characters',
     description: 'password requirement to have a minimum of 8 characters',
   },
+  passwordValidationMessage: {
+    id: 'password.validation.message',
+    defaultMessage: 'Password needs to include:',
+    description: 'Error message for empty or invalid password',
+  },
 });
 
 export default messages;
