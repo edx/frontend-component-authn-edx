@@ -15,6 +15,7 @@ export const registerInitialState = {
   submitState: DEFAULT_STATE,
   registrationError: {},
   registrationResult: {},
+  userPipelineDataLoaded: false,
 };
 
 export const registerSlice = createSlice({
@@ -34,6 +35,9 @@ export const registerSlice = createSlice({
       state.registrationResult = {};
       state.submitState = DEFAULT_STATE;
     },
+    setUserPipelineDataLoaded: (state, { payload }) => {
+      state.userPipelineDataLoaded = payload;
+    },
   },
 });
 
@@ -41,6 +45,7 @@ export const {
   registerUser,
   registerUserSuccess,
   registerUserFailed,
+  setUserPipelineDataLoaded,
 } = registerSlice.actions;
 
 export default registerSlice.reducer;

@@ -56,6 +56,29 @@ const messages = defineMessages({
     defaultMessage: 'Privacy Policy',
     description: 'Label for edX privacy policy link',
   },
+  // error messages
+  registrationFailureHeaderTitle: {
+    id: 'register.failure.header.title',
+    defaultMessage: 'We couldn\'t create your account.',
+    description: 'Login failure header message.',
+  },
+  registrationTpaSessionExpired: {
+    id: 'registration.tpa.session.expired',
+    defaultMessage: 'Registration using {provider} has timed out.',
+    description: '',
+  },
+  registrationTpaAuthenticationFailure: {
+    id: 'registration.tpa.authentication.failure',
+    defaultMessage: 'We are sorry, you are not authorized to access edX via this channel. '
+        + 'Please contact your learning administrator or manager in order to access edX.'
+        + '{lineBreak}{lineBreak}Error Details:{lineBreak}{errorMessage}',
+    description: 'Error message third party authentication pipeline fails',
+  },
+  internalServerErrorMessage: {
+    id: 'internal.server.error.message',
+    defaultMessage: 'An error has occurred. Try refreshing the page, or check your internet connection.',
+    description: 'Error message that appears when server responds with 500 error code',
+  },
 });
 
 export default messages;

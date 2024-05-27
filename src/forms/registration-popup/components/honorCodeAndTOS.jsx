@@ -4,7 +4,7 @@ import { getConfig } from '@edx/frontend-platform';
 import { FormattedMessage, useIntl } from '@edx/frontend-platform/i18n';
 import { Hyperlink } from '@openedx/paragon';
 
-import messages from './messages';
+import messages from '../messages';
 
 const HonorCodeAndPrivacyPolicyMessage = () => {
   const { formatMessage } = useIntl();

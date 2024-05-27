@@ -8,10 +8,12 @@ import { MemoryRouter } from 'react-router-dom';
 import configureStore from 'redux-mock-store';
 
 import {
+  COMPLETE_STATE,
   DEFAULT_STATE,
   ENTERPRISE_LOGIN,
   FORGOT_PASSWORD_FORM,
   LOGIN_FORM,
+  PENDING_STATE,
   PROGRESSIVE_PROFILING_FORM,
   REGISTRATION_FORM,
 } from '../../data/constants';
@@ -230,7 +232,7 @@ describe('AuthnComponent Test', () => {
       ...initialState,
       commonData: {
         ...initialState.commonData,
-        thirdPartyAuthApiStatus: 'complete',
+        thirdPartyAuthApiStatus: COMPLETE_STATE,
         currentForm: ENTERPRISE_LOGIN,
         thirdPartyAuthContext: {
           ...initialState.commonData.thirdPartyAuthContext,
@@ -244,5 +246,20 @@ describe('AuthnComponent Test', () => {
     const { getByText } = render(reduxWrapper(<IntlAuthnComponent isOpen close={() => {}} />));
 
     expect(getByText(`Sign in with ${appleProvider.name}`)).toBeTruthy();
+  });
+
+  it('should render Spinner if tpa_hint query param is available and TPA request is pending', () => {
+    store = mockStore({
+      ...initialState,
+      commonData: {
+        ...initialState.commonData,
+        thirdPartyAuthApiStatus: PENDING_STATE,
+      },
+    });
+
+    delete window.location;
+    window.location = { href: 'localhost:2999/login', search: '?tpa_hint=oa2-apple-id' };
+    const { getByTestId } = render(reduxWrapper(<IntlAuthnComponent isOpen close={() => {}} />));
+    expect(getByTestId('tpa-spinner')).toBeTruthy();
   });
 });
