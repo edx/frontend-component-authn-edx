@@ -22,6 +22,17 @@ const mockStore = configureStore();
 // mocking getAllPossibleQueryParams
 jest.mock('../../../data/utils', () => jest.fn());
 
+// Mocking the sendTrackEvent
+jest.mock('@edx/frontend-platform/analytics', () => ({
+  sendTrackEvent: jest.fn(),
+}));
+
+// Mocking the trackForgotPasswordLinkClick function
+jest.mock('../../../tracking/trackers/login', () => ({
+  ...jest.requireActual('../../../tracking/trackers/login'),
+  trackForgotPasswordLinkClick: jest.fn(),
+}));
+
 describe('LoginForm Test', () => {
   let store = {};
 
