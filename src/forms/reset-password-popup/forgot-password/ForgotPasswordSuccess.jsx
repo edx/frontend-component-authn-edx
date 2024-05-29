@@ -17,8 +17,8 @@ const ForgotPasswordSuccess = (props) => {
   const { email } = props;
 
   return (
-    <div id="forgot-password-success-msg">
-      <div className="text-gray-800 mb-4">
+    <div id="forgot-password-success-msg" className="mb-5">
+      <div className="text-gray-800 mb-3">
         <span className="font-weight-bold mr-2 h3 text-center d-block">
           {formatMessage(messages.emailSentMessage)}
         </span>

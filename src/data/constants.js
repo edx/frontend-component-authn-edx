@@ -2,6 +2,7 @@
 export const LOGIN_FORM = 'login';
 export const REGISTRATION_FORM = 'registration';
 export const FORGOT_PASSWORD_FORM = 'forgot-password';
+export const RESET_PASSWORD_FORM = 'reset-password';
 export const PROGRESSIVE_PROFILING_FORM = 'progressive-profiling';
 export const ENTERPRISE_LOGIN = 'enterprise-login';
 export const VALID_FORMS = [LOGIN_FORM, REGISTRATION_FORM];

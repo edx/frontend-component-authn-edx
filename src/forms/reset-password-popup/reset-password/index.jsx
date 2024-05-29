@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
-  Button, Container, Form,
+  Container, Form, StatefulButton,
 } from '@openedx/paragon';
 import PropTypes from 'prop-types';
 
 import ResetPasswordFailure from './ResetPasswordFailure';
+import { DEFAULT_STATE } from '../../../data/constants';
 import { PasswordField } from '../../fields';
 import messages from '../messages';
 import ResetPasswordHeader from '../ResetPasswordHeader';
@@ -51,10 +52,12 @@ const ResetPasswordPage = (props) => {
     setFormErrors({ ...formErrors });
     return !Object.values(formErrors).some(x => (x !== ''));
   };
+
   const handleOnBlur = (event) => {
     const { name, value } = event.target;
     validateInput(name, value);
   };
+
   const handleOnFocus = (e) => {
     setFormErrors({ ...formErrors, [e.target.name]: '' });
   };
@@ -63,9 +66,8 @@ const ResetPasswordPage = (props) => {
     <Container size="lg" className="authn__popup-container overflow-auto">
       <ResetPasswordHeader />
       <ResetPasswordFailure errorMsg={props.errorMsg} />
-
       <div className="text-gray-800 mb-4">{formatMessage(messages.enterConfirmPasswordMessage)}</div>
-      <Form id="set-reset-password-form" name="set-reset-password-form" className="d-flex flex-column mb-4.5">
+      <Form id="set-reset-password-form" name="set-reset-password-form" className="d-flex flex-column">
         <PasswordField
           id="newPassword"
           name="newPassword"
@@ -86,15 +88,19 @@ const ResetPasswordPage = (props) => {
           errorMessage={formErrors.confirmPassword}
           floatingLabel={formatMessage(messages.confirmPasswordLabel)}
         />
-        <Button
-          id="reset-password-user"
-          name="reset-password-user"
-          variant="primary"
+        <StatefulButton
+          id="reset-password"
+          name="reset-password"
           type="submit"
+          variant="primary"
           className="align-self-end"
-        >
-          {formatMessage(messages.resetPasswordButton)}
-        </Button>
+          state={DEFAULT_STATE}
+          labels={{
+            default: formatMessage(messages.resetPasswordButton),
+            pending: '',
+          }}
+          onMouseDown={(e) => e.preventDefault()}
+        />
       </Form>
     </Container>
   );

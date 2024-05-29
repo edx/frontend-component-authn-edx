@@ -70,7 +70,7 @@ const ForgotPasswordForm = () => {
       <ResetPasswordHeader />
       <ForgotPasswordFailureAlert emailError={formErrors} status={status} />
       {!isSuccess && (
-        <Form id="forgot-password-form" name="reset-password-form" className="d-flex flex-column my-4.5">
+        <Form id="forgot-password-form" name="reset-password-form" className="d-flex flex-column">
           <EmailField
             name="email"
             value={formFields.email}
@@ -94,7 +94,7 @@ const ForgotPasswordForm = () => {
             onMouseDown={(e) => e.preventDefault()}
           />
 
-          <div>
+          <div className="my-4">
             <InlineLink
               className="mb-2"
               destination={getConfig().LOGIN_ISSUE_SUPPORT_LINK}
@@ -102,7 +102,7 @@ const ForgotPasswordForm = () => {
               linkText={formatMessage(messages.resetPasswordFormHelpCenterLink)}
             />
             <InlineLink
-              className="mb-2 font-weight-normal small"
+              className="font-weight-normal small"
               destination={getConfig().INFO_EMAIL}
               linkHelpText={formatMessage(messages.resetPasswordFormAdditionalHelpText)}
               linkText={getConfig().INFO_EMAIL}
@@ -113,7 +113,7 @@ const ForgotPasswordForm = () => {
       {isSuccess && (
         <ForgotPasswordSuccess email={formFields.email} />
       )}
-      <form className="text-center">
+      <div className="text-center mt-4.5">
         <Button
           id="reset-password-back-to-login"
           name="reset-password-back-to-login"
@@ -125,7 +125,7 @@ const ForgotPasswordForm = () => {
         >
           {formatMessage(messages.resetPasswordBackToLoginButton)}
         </Button>
-      </form>
+      </div>
     </Container>
   );
 };
