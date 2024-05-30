@@ -62,7 +62,7 @@ describe('ForgotPasswordFailureAlert', () => {
 
   it('should render empty email field error message', () => {
     props = {
-      emailError: 'Enter your email',
+      emailError: 'Email is required',
       status: '',
     };
 
@@ -72,7 +72,7 @@ describe('ForgotPasswordFailureAlert', () => {
       </IntlProvider>,
     );
 
-    const expectedMessage = messages.forgotPasswordExtendFieldErrors.defaultMessage.replace('{emailError}', 'Enter your email');
+    const expectedMessage = messages.forgotPasswordExtendFieldErrors.defaultMessage.replace('{emailError}', 'Email is required');
 
     expect(container.querySelector('#forgot-password-failure-alert').textContent).toBe(expectedMessage);
   });

@@ -55,8 +55,8 @@ describe('ForgotPasswordPage', () => {
     fireEvent.click(submitButton);
 
     // Check if error message for empty email is displayed
-    expect(await screen.findByText('Enter your email below.')).toBeTruthy();
-    expect(await screen.findByText('Enter your email')).toBeTruthy();
+    expect(await screen.findByText('Email is required below.')).toBeTruthy();
+    expect(await screen.findByText('Email is required')).toBeTruthy();
   });
 
   it('displays error message with invalid email', async () => {

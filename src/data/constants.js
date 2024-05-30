@@ -17,6 +17,7 @@ export const FORBIDDEN_STATE = 'forbidden';
 // Error Codes
 export const INTERNAL_SERVER_ERROR = 'internal-server-error';
 export const FORBIDDEN_REQUEST = 'forbidden-request';
+export const FORM_SUBMISSION_ERROR = 'form-submission-error';
 export const INVALID_FORM = 'invalid-form';
 export const TPA_AUTHENTICATION_FAILURE = 'tpa-authentication-failure';
 export const TPA_SESSION_EXPIRED = 'tpa-session-expired';
