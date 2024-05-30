@@ -18,7 +18,7 @@ import {
   REGISTRATION_FORM,
 } from '../../data/constants';
 import { getThirdPartyAuthContext, setCurrentOpenedForm } from '../data/reducers';
-import SignUpComponent, { AuthnComponent, SignInComponent } from '../index';
+import { AuthnComponent, SignInComponent, SignUpComponent } from '../index';
 
 const IntlAuthnComponent = injectIntl(AuthnComponent);
 const mockStore = configureStore();

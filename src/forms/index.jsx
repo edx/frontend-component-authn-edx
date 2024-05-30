@@ -12,3 +12,5 @@ export { default as ForgotPasswordForm } from './reset-password-popup/forgot-pas
 export { default as forgotPasswordReducer } from './reset-password-popup/forgot-password/data/reducers';
 export { default as forgotPasswordSaga } from './reset-password-popup/forgot-password/data/sagas';
 export { storeName as forgotPasswordStoreName } from './reset-password-popup/forgot-password/data/reducers';
+
+export { default as ResetPasswordForm } from './reset-password-popup/reset-password';

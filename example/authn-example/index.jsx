@@ -2,7 +2,9 @@ import React, { useEffect } from 'react';
 
 import { Button, Container, useToggle } from '@openedx/paragon';
 
-import SignUpComponent, { SignInComponent } from '../../src/authn-component';
+import {
+  ResetPasswordComponent, SignInComponent, SignUpComponent,
+} from '../../src/authn-component';
 
 import './index.scss';
 
@@ -13,14 +15,18 @@ import './index.scss';
 const AuthnExampleContainer = () => {
   const [isSignUpFormOpen, setSignUpFormOpen, setSignUpFormClose] = useToggle(false);
   const [isSignInFormOpen, setSignInFormOpen, setSignInFormClose] = useToggle(false);
+  const [isResetPasswordFormOpen, setResetPasswordFormOpen, setResetPasswordFormClose] = useToggle(false);
 
   useEffect(() => {
+    const passwordResetPathRegex = /^\/password_reset_confirm\/[a-zA-Z0-9-]+(?:\/)?$/;
     if (window.location.pathname === '/login') {
       setSignInFormOpen();
     } else if (window.location.pathname === '/register') {
       setSignUpFormOpen();
+    } else if (passwordResetPathRegex.test(window.location.pathname)) {
+      setResetPasswordFormOpen();
     }
-  }, [setSignInFormOpen, setSignUpFormOpen]);
+  }, [setSignInFormOpen, setSignUpFormOpen, setResetPasswordFormOpen]);
 
   return (
     <>
@@ -48,6 +54,10 @@ const AuthnExampleContainer = () => {
         close={setSignInFormClose}
         isOpen={isSignInFormOpen}
         context={{}}
+      />
+      <ResetPasswordComponent
+        close={setResetPasswordFormClose}
+        isOpen={isResetPasswordFormOpen}
       />
     </>
   );

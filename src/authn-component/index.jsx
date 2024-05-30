@@ -16,10 +16,13 @@ import {
   PENDING_STATE,
   PROGRESSIVE_PROFILING_FORM,
   REGISTRATION_FORM,
+  RESET_PASSWORD_FORM,
   VALID_FORMS,
 } from '../data/constants';
 import getAllPossibleQueryParams from '../data/utils';
-import { ForgotPasswordForm, LoginForm, RegistrationForm } from '../forms';
+import {
+  ForgotPasswordForm, LoginForm, RegistrationForm, ResetPasswordForm,
+} from '../forms';
 import EnterpriseSSO from '../forms/enterprise-sso-popup';
 import { getTpaHint, getTpaProvider } from '../forms/enterprise-sso-popup/data/utils';
 import ProgressiveProfilingForm from '../forms/progressive-profiling-popup';
@@ -80,8 +83,8 @@ export const AuthnComponent = ({
     if (currentForm === ENTERPRISE_LOGIN) {
       return <EnterpriseSSO provider={tpaProvider} />;
     }
-    if (currentForm === REGISTRATION_FORM) {
-      return <RegistrationForm />;
+    if (currentForm === FORGOT_PASSWORD_FORM) {
+      return <ForgotPasswordForm />;
     }
     if (currentForm === LOGIN_FORM) {
       return <LoginForm />;
@@ -89,8 +92,11 @@ export const AuthnComponent = ({
     if (currentForm === PROGRESSIVE_PROFILING_FORM) {
       return <ProgressiveProfilingForm />;
     }
-    if (currentForm === FORGOT_PASSWORD_FORM) {
-      return <ForgotPasswordForm />;
+    if (currentForm === REGISTRATION_FORM) {
+      return <RegistrationForm />;
+    }
+    if (currentForm === RESET_PASSWORD_FORM) {
+      return <ResetPasswordForm />;
     }
     return <RegistrationForm />;
   };
@@ -179,8 +185,16 @@ export const SignInComponent = (props) => (
  * @param {Object} props - Props for the component.
  * @returns {JSX.Element} The rendered sign-up component.
  */
-const SignUpComponent = (props) => (
+export const SignUpComponent = (props) => (
   <AuthnComponentWithProvider {...props} />
 );
 
-export default SignUpComponent;
+/**
+ * Component that renders a reset password form using AuthnComponentWithProvider.
+ *
+ * @param {Object} props - Props for the component.
+ * @returns {JSX.Element} The rendered reset password component.
+ */
+export const ResetPasswordComponent = (props) => (
+  <AuthnComponentWithProvider {...props} formToRender={RESET_PASSWORD_FORM} />
+);
