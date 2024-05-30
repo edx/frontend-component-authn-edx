@@ -107,7 +107,6 @@ describe('RegistrationForm Test', () => {
       name: 'Petro',
       email: 'petro  @example.com',
       password: 'password1',
-      country: 'Ukraine',
       honor_code: true,
       totalRegistrationTime: 0,
     };
@@ -309,7 +308,6 @@ describe('RegistrationForm Test', () => {
   });
 
   it('should auto register if autoSubmitRegForm is true and pipeline details are loaded', () => {
-    // isFormValid
     store = mockStore({
       ...initialState,
       register: {
@@ -334,11 +332,6 @@ describe('RegistrationForm Test', () => {
     jest.spyOn(utils, 'default').mockImplementation(() => ({
       isValid: true,
     }));
-
-    // const isFormValidMocked = jest.spyOn(isFormValid, 'isFormValid').mockReturnValue({
-    //   isValid: true
-    // });
-
     render(reduxWrapper(<IntlRegistrationForm />));
 
     expect(store.dispatch).toHaveBeenCalled();

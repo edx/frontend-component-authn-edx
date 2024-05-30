@@ -63,11 +63,6 @@ const messages = defineMessages({
     description: 'Login failure header message.',
   },
   // Error messages
-  registrationRequestFailureHeader: {
-    id: 'registration.request.failure.header',
-    defaultMessage: 'We couldn\'t create your account.',
-    description: 'error message when registration failure.',
-  },
   registrationEmptyFormSubmissionError: {
     id: 'registration.empty.form.submission.error',
     defaultMessage: 'Please check your responses and try again.',

@@ -11,7 +11,7 @@ import configureStore from 'redux-mock-store';
 
 import {
   FORBIDDEN_REQUEST, INTERNAL_SERVER_ERROR, TPA_AUTHENTICATION_FAILURE, TPA_SESSION_EXPIRED,
-} from '../../data/constants';
+} from '../../../../data/constants';
 import RegistrationPage from '../../index';
 import RegistrationFailureAlert from '../RegistrationFailureAlert';
 

@@ -9,7 +9,6 @@ import {
 
 import HonorCodeAndPrivacyPolicyMessage from './components/honorCodeAndTOS';
 import RegistrationFailureAlert from './components/RegistrationFailureAlert';
-import { FORM_SUBMISSION_ERROR } from './data/constants';
 import { clearRegistrationBackendError, registerUser, setUserPipelineDataLoaded } from './data/reducers';
 import getBackendValidations from './data/selector';
 import isFormValid from './data/utils';
@@ -17,7 +16,8 @@ import messages from './messages';
 import { setCurrentOpenedForm } from '../../authn-component/data/reducers';
 import { InlineLink, SocialAuthProviders } from '../../common-ui';
 import {
-  COMPLETE_STATE, ENTERPRISE_LOGIN_URL, LOGIN_FORM, TPA_AUTHENTICATION_FAILURE,
+  COMPLETE_STATE,
+  ENTERPRISE_LOGIN_URL, FORM_SUBMISSION_ERROR, LOGIN_FORM, TPA_AUTHENTICATION_FAILURE,
 } from '../../data/constants';
 import './index.scss';
 import AuthenticatedRedirection from '../common-components/AuthenticatedRedirection';

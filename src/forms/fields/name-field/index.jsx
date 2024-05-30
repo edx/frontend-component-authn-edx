@@ -1,11 +1,11 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { useIntl } from '@edx/frontend-platform/i18n';
 import PropTypes from 'prop-types';
 
 import validateName from './validator';
-import { clearRegistrationBackendError, fetchRealtimeValidations } from '../../registration-popup/data/reducers';
+import { clearRegistrationBackendError } from '../../registration-popup/data/reducers';
 import TextField from '../text-field';
 
 /**
@@ -21,7 +21,6 @@ import TextField from '../text-field';
 const NameField = (props) => {
   const { formatMessage } = useIntl();
   const dispatch = useDispatch();
-  const validationApiRateLimited = useSelector(state => state.register?.validationApiRateLimited);
 
   const {
     handleErrorChange,
@@ -33,8 +32,6 @@ const NameField = (props) => {
     const fieldError = validateName(value, formatMessage);
     if (fieldError) {
       handleErrorChange('name', fieldError);
-    } else if (!validationApiRateLimited) {
-      dispatch(fetchRealtimeValidations({ name: value }));
     }
   };
 
@@ -54,12 +51,10 @@ const NameField = (props) => {
 
 NameField.defaultProps = {
   errorMessage: '',
-  shouldFetchUsernameSuggestions: false,
 };
 
 NameField.propTypes = {
   errorMessage: PropTypes.string,
-  shouldFetchUsernameSuggestions: PropTypes.bool,
   value: PropTypes.string.isRequired,
   handleChange: PropTypes.func.isRequired,
   handleErrorChange: PropTypes.func.isRequired,

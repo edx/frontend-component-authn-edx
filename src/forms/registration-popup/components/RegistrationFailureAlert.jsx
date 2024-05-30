@@ -11,7 +11,7 @@ import {
   INTERNAL_SERVER_ERROR,
   TPA_AUTHENTICATION_FAILURE,
   TPA_SESSION_EXPIRED,
-} from '../data/constants';
+} from '../../../data/constants';
 import messages from '../messages';
 
 /**
