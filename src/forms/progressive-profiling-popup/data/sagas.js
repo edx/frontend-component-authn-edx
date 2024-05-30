@@ -8,6 +8,10 @@ import {
 } from './reducers';
 import patchAccount from './services';
 
+/**
+ * Saga function for handling save user profile.
+ * @param {object} action - The Redux action object containing the payload.
+ */
 export function* handleSaveUserProfile(action) {
   try {
     yield call(patchAccount, action.payload.username, action.payload.data);

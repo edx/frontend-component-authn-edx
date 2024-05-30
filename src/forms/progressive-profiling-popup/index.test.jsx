@@ -26,15 +26,21 @@ jest.mock('@edx/frontend-platform/auth', () => ({
   configure: jest.fn(),
   getAuthenticatedUser: jest.fn({}),
 }));
+
 getAuthenticatedUser.mockReturnValue({ userId: 3, username: 'abc123', name: 'Test User' });
 jest.mock('@edx/frontend-platform/i18n', () => ({
   ...jest.requireActual('@edx/frontend-platform/i18n'),
   getLocale: jest.fn(),
 }));
+
 jest.mock('./data/hooks/useSubjectList', () => jest.fn());
 
 describe('ProgressiveProfilingForm Test', () => {
   let store = {};
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
 
   const reduxWrapper = children => (
     <IntlProvider locale="en">
@@ -47,6 +53,19 @@ describe('ProgressiveProfilingForm Test', () => {
   const initialState = {
     progressiveProfiling: {
       submitState: DEFAULT_STATE,
+    },
+    commonData: {
+      thirdPartyAuthContext: {
+        countryCode: '',
+      },
+    },
+    register: {
+      registrationResult: {
+        authenticatedUser: {
+          userId: 1,
+          username: 'abc123',
+        },
+      },
     },
   };
 
@@ -75,7 +94,7 @@ describe('ProgressiveProfilingForm Test', () => {
 
   // ******** test progressive profiling form submission ********
 
-  it('should submit form with all form inputs', async () => {
+  it('should submit form with all form inputs', () => {
     store.dispatch = jest.fn(store.dispatch);
     const payload = {
       username: 'abc123',
@@ -127,7 +146,7 @@ describe('ProgressiveProfilingForm Test', () => {
     expect(store.dispatch).toHaveBeenCalledWith(saveUserProfile(payload));
   });
 
-  it('should submit form with partial form inputs', async () => {
+  it('should submit form with partial form inputs', () => {
     store.dispatch = jest.fn(store.dispatch);
     const payload = {
       username: 'abc123',
@@ -160,7 +179,74 @@ describe('ProgressiveProfilingForm Test', () => {
     expect(store.dispatch).toHaveBeenCalledWith(saveUserProfile(payload));
   });
 
-  it('should redirect to dashboard on skip button click', async () => {
+  it('should not submit form if country is not selected', () => {
+    store.dispatch = jest.fn(store.dispatch);
+    const payload = {
+      username: 'abc123',
+      data: {
+        gender: 'm',
+        level_of_education: 'none',
+        extended_profile: [],
+      },
+    };
+
+    const { container, getByText } = render(reduxWrapper(<IntlProgressiveProfilingForm />));
+
+    const levelOfEducationInput = container.querySelector('#levelOfEducation');
+    fireEvent.click(levelOfEducationInput);
+    const levelOfEducationDropdownItem = container.querySelector('.dropdown-item');
+    fireEvent.click(levelOfEducationDropdownItem);
+
+    const gender = getByText('Male');
+    fireEvent.click(gender);
+
+    const submitButton = container.querySelector('#submit-optional-fields');
+    fireEvent.click(submitButton);
+
+    expect(store.dispatch).not.toHaveBeenCalledWith(saveUserProfile(payload));
+  });
+
+  it('should clear country field error message on focus event', () => {
+    store.dispatch = jest.fn(store.dispatch);
+    const payload = {
+      username: 'abc123',
+      data: {
+        gender: 'm',
+        level_of_education: 'none',
+        extended_profile: [],
+      },
+    };
+    const expectedError = 'Country must match with an option available in the dropdown';
+
+    const { container, getByText } = render(reduxWrapper(<IntlProgressiveProfilingForm />));
+    const countryInput = container.querySelector('#country');
+    const submitButton = container.querySelector('#submit-optional-fields');
+    fireEvent.click(submitButton);
+
+    expect(getByText(expectedError)).toBeTruthy();
+    expect(store.dispatch).not.toHaveBeenCalledWith(saveUserProfile(payload));
+
+    fireEvent.focus(countryInput);
+    expect(container.querySelector('.pgn__form-text-invalid')).toBeFalsy();
+  });
+
+  it('should country field auto populated based store countryCode value', () => {
+    store = mockStore({
+      ...initialState,
+      commonData: {
+        thirdPartyAuthContext: {
+          countryCode: 'US',
+        },
+      },
+    });
+    store.dispatch = jest.fn(store.dispatch);
+    const { container } = render(reduxWrapper(<IntlProgressiveProfilingForm />));
+
+    const countryInput = container.querySelector('#country');
+    expect(countryInput.value).toEqual('United States of America');
+  });
+
+  it('should redirect to dashboard on skip button click', () => {
     mergeConfig({
       BASE_URL: 'http://localhost:18000',
     });

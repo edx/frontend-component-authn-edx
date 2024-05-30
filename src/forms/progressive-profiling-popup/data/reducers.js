@@ -1,7 +1,7 @@
 /**
  * Redux slice for managing progressiveProfiling state.
  * This slice handles the progressiveProfiling process, including the submission state,
- * login success, and any progressiveProfiling errors.
+ * progressiveProfiling success and progressiveProfiling failure.
  */
 
 import { createSlice } from '@reduxjs/toolkit';

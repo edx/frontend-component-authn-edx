@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
@@ -15,6 +15,7 @@ import messages from '../../progressive-profiling-popup/messages';
 /**
  * Auto Suggest field wrapper. It accepts following handlers
  * - handleChange for setting value on change
+ * - onFocusHandler for clearing error state
  *
  * It is responsible for
  * - Auto populating progressive profiling fields
@@ -31,18 +32,33 @@ const AutoSuggestField = (props) => {
     selectedOption,
     leadingElement,
     onChangeHandler,
+    onFocusHandler,
   } = props;
   const { formatMessage } = useIntl();
+  const [value, setValue] = useState({});
 
-  const [value, setValue] = useState({
-    userProvidedText: selectedOption?.displayText,
-    selectionValue: selectedOption?.value,
-    selectionId: selectedOption?.value,
-  });
+  useEffect(() => {
+    if (name === 'country'
+      && selectedOption.value !== ''
+      && !value.country
+    ) {
+      setValue({
+        ...value,
+        country: {
+          userProvidedText: selectedOption?.displayText,
+          selectionValue: selectedOption?.value,
+          selectionId: selectedOption?.value,
+        },
+      });
+    }
+  }, [name, selectedOption, value]);
 
-  const handleOnChange = (fieldValue) => {
-    setValue({ ...fieldValue });
-    onChangeHandler({ target: { name, value: fieldValue.selectionId } });
+  const handleOnChange = (e, fieldName) => {
+    setValue({
+      ...value,
+      [fieldName]: e,
+    });
+    onChangeHandler({ target: { name, value: e.selectionId } });
   };
 
   const getFieldOptions = (fieldName, fieldOptions) => fieldOptions.map(option => {
@@ -69,10 +85,11 @@ const AutoSuggestField = (props) => {
         placeholder={placeholder}
         aria-label="form autosuggest"
         name={name}
-        value={value || {}}
+        value={value[name] || {}}
         leadingElement={leadingElement}
         className={classNames({ 'form-field-error': errorMessage })}
-        onChange={handleOnChange}
+        onChange={(e) => { handleOnChange(e, name); }}
+        onFocus={() => { onFocusHandler({ target: { name, value: '' } }); }}
       >
         {getFieldOptions(name, options)}
       </FormAutosuggest>
@@ -81,7 +98,7 @@ const AutoSuggestField = (props) => {
           key={errorMessage ? 'error' : 'feedback'}
           hasIcon={false}
           feedback-for={name}
-          type={errorMessage && 'invalid'}
+          type={errorMessage ? 'invalid' : 'valid'}
         >
           {errorMessage || feedBack}
         </FormControlFeedback>
@@ -104,6 +121,7 @@ AutoSuggestField.propTypes = {
   feedBack: PropTypes.string,
   leadingElement: PropTypes.node,
   onChangeHandler: PropTypes.func.isRequired,
+  onFocusHandler: PropTypes.func,
   selectedOption: PropTypes.shape({
     displayText: PropTypes.string,
     value: PropTypes.string,
@@ -111,6 +129,7 @@ AutoSuggestField.propTypes = {
 };
 
 AutoSuggestField.defaultProps = {
+  onFocusHandler: () => {},
   errorMessage: '',
   feedBack: '',
   label: '',
