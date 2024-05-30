@@ -14,3 +14,8 @@ export { default as forgotPasswordSaga } from './reset-password-popup/forgot-pas
 export { storeName as forgotPasswordStoreName } from './reset-password-popup/forgot-password/data/reducers';
 
 export { default as ResetPasswordForm } from './reset-password-popup/reset-password';
+
+export { default as ProgressiveProfilingForm } from './progressive-profiling-popup';
+export { default as progressiveProfilingReducer } from './progressive-profiling-popup/data/reducers';
+export { default as progressiveProfilingSaga } from './progressive-profiling-popup/data/sagas';
+export { storeName as progressiveProfilingStoreName } from './progressive-profiling-popup/data/reducers';
