@@ -11,11 +11,32 @@ import { setCurrentOpenedForm } from '../../../authn-component/data/reducers';
 import {
   COMPLETE_STATE, DEFAULT_STATE, LOGIN_FORM,
 } from '../../../data/constants';
-import { registerUser, setUserPipelineDataLoaded } from '../data/reducers';
+import { clearRegistrationBackendError, registerUser, setUserPipelineDataLoaded } from '../data/reducers';
+import * as utils from '../data/utils';
 import RegistrationForm from '../index';
 
 const IntlRegistrationForm = injectIntl(RegistrationForm);
 const mockStore = configureStore();
+
+const emptyFieldValidation = {
+  name: 'Full name is required',
+  email: 'Email is required',
+  password: 'Password needs to include:',
+};
+
+const populateRequiredFields = (
+  getByLabelText,
+  payload,
+  isThirdPartyAuth = false,
+) => {
+  fireEvent.change(getByLabelText('Full name'), { target: { value: payload.name, name: 'name' } });
+
+  fireEvent.change(getByLabelText('Email'), { target: { value: payload.email, name: 'email' } });
+
+  if (!isThirdPartyAuth) {
+    fireEvent.change(getByLabelText('Password'), { target: { value: payload.password, name: 'password' } });
+  }
+};
 
 describe('RegistrationForm Test', () => {
   let store = {};
@@ -58,7 +79,7 @@ describe('RegistrationForm Test', () => {
     const payload = {
       email: 'test@example.com',
       name: 'test',
-      password: 'test-password',
+      password: 'test-password12',
       marketing_email_opt_in: true,
       honor_code: true,
       terms_of_service: true,
@@ -76,6 +97,113 @@ describe('RegistrationForm Test', () => {
     fireEvent.click(registerButton);
 
     expect(store.dispatch).toHaveBeenCalledWith(registerUser(payload));
+  });
+
+  it('should display an error when form is submitted with an invalid email', () => {
+    jest.spyOn(global.Date, 'now').mockImplementation(() => 0);
+    const emailError = 'We couldn’t create your account. Please correct the errors below.';
+
+    const formPayload = {
+      name: 'Petro',
+      email: 'petro  @example.com',
+      password: 'password1',
+      honor_code: true,
+      totalRegistrationTime: 0,
+    };
+
+    store.dispatch = jest.fn(store.dispatch);
+    const { getByLabelText, container } = render(reduxWrapper(<IntlRegistrationForm />));
+    populateRequiredFields(getByLabelText, formPayload, true);
+
+    const registerButton = container.querySelector('#register-user');
+    fireEvent.click(registerButton);
+
+    const validationErrors = container.querySelector('#registration-failure-alert');
+    expect(validationErrors.textContent).toContain(emailError);
+  });
+
+  it('should not dispatch registerNewUser on empty form Submission', () => {
+    store.dispatch = jest.fn(store.dispatch);
+
+    const { container } = render(reduxWrapper(<IntlRegistrationForm />));
+
+    const registerButton = container.querySelector('#register-user');
+    fireEvent.click(registerButton);
+
+    expect(store.dispatch).not.toHaveBeenCalledWith(registerUser({}));
+  });
+
+  // ******** test registration form validations ********
+
+  it('should show error messages for required fields on empty form submission', () => {
+    const { container } = render(reduxWrapper(<IntlRegistrationForm />));
+
+    const registerButton = container.querySelector('#register-user');
+    fireEvent.click(registerButton);
+
+    Object.entries(emptyFieldValidation).forEach(([fieldName, validationMessage]) => {
+      const feedbackElement = container.querySelector(`div[feedback-for="${fieldName}"]`);
+      expect(feedbackElement.textContent).toContain(validationMessage);
+    });
+
+    const alertBanner = 'We couldn’t create your account. Please correct the errors below.';
+    const validationErrors = container.querySelector('#registration-failure-alert');
+    expect(validationErrors.textContent).toContain(alertBanner);
+  });
+
+  it('should set errors with validations returned by registration api', () => {
+    const emailError = `This email is already associated with an existing or previous ${getConfig().SITE_NAME} account`;
+    store = mockStore({
+      ...initialState,
+      register: {
+        ...initialState.register,
+        registrationError: {
+          email: [{ userMessage: emailError }],
+        },
+      },
+    });
+    const { container } = render(reduxWrapper(<IntlProvider locale="en"><IntlRegistrationForm /></IntlProvider>));
+    const emailFeedback = container.querySelector('div[feedback-for="email"]');
+
+    expect(emailFeedback.textContent).toContain(emailError);
+  });
+
+  it('should clear error on focus', () => {
+    const { container } = render(reduxWrapper(<IntlRegistrationForm />));
+
+    const registerButton = container.querySelector('#register-user');
+    fireEvent.click(registerButton);
+
+    const passwordFeedback = container.querySelector('div[feedback-for="password"]');
+    expect(passwordFeedback.textContent).toContain(emptyFieldValidation.password);
+
+    const passwordField = container.querySelector('input#password');
+    fireEvent.focus(passwordField);
+
+    const isFeedbackPresent = container.contains(passwordFeedback);
+    expect(isFeedbackPresent).toBeFalsy();
+  });
+
+  it('should clear registration backend error on change', () => {
+    const emailError = 'This email is already associated with an existing or previous account';
+    store = mockStore({
+      ...initialState,
+      register: {
+        ...initialState.register,
+        registrationError: {
+          email: [{ userMessage: emailError }],
+        },
+      },
+    });
+    store.dispatch = jest.fn(store.dispatch);
+
+    const { container } = render(reduxWrapper(
+      <IntlRegistrationForm />,
+    ));
+
+    const emailInput = container.querySelector('input#email');
+    fireEvent.change(emailInput, { target: { value: 'test1@gmail.com', name: 'email' } });
+    expect(store.dispatch).toHaveBeenCalledWith(clearRegistrationBackendError('email'));
   });
 
   // ******** School or Organization Login Link Tests ********
@@ -201,7 +329,9 @@ describe('RegistrationForm Test', () => {
       },
     });
     store.dispatch = jest.fn(store.dispatch);
-
+    jest.spyOn(utils, 'default').mockImplementation(() => ({
+      isValid: true,
+    }));
     render(reduxWrapper(<IntlRegistrationForm />));
 
     expect(store.dispatch).toHaveBeenCalled();

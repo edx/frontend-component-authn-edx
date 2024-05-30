@@ -78,6 +78,7 @@ const ForgotPasswordForm = () => {
             autoComplete="email"
             errorMessage={formErrors}
             floatingLabel={formatMessage(messages.forgotPasswordFormEmailFieldLabel)}
+            isRegistration={false}
           />
           <StatefulButton
             id="reset-password-user"
