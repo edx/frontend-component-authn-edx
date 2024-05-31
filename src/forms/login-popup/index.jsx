@@ -22,6 +22,9 @@ import {
   TPA_AUTHENTICATION_FAILURE,
 } from '../../data/constants';
 import getAllPossibleQueryParams from '../../data/utils';
+import {
+  trackForgotPasswordLinkClick, trackInstitutionLoginLinkClick, trackLoginPageEvent,
+} from '../../tracking/trackers/login';
 import AuthenticatedRedirection from '../common-components/AuthenticatedRedirection';
 import ThirdPartyAuthAlert from '../common-components/ThirdPartyAuthAlert';
 import {
@@ -60,6 +63,10 @@ const LoginForm = () => {
     password: '',
   });
   const [errorCode, setErrorCode] = useState({ type: '', context: {} });
+
+  useEffect(() => {
+    trackLoginPageEvent();
+  }, []);
 
   useEffect(() => {
     if (loginErrorCode) {
@@ -106,6 +113,11 @@ const LoginForm = () => {
   const handleOnFocus = (event) => {
     const { name } = event.target;
     setFormErrors(prevErrors => ({ ...prevErrors, [name]: '' }));
+  };
+
+  const handleForgotPasswordClick = () => {
+    dispatch(setCurrentOpenedForm(FORGOT_PASSWORD_FORM));
+    trackForgotPasswordLinkClick();
   };
 
   const handleSubmit = (e) => {
@@ -176,7 +188,7 @@ const LoginForm = () => {
         />
         <InlineLink
           className="hyper-link mb-4"
-          onClick={() => dispatch(setCurrentOpenedForm(FORGOT_PASSWORD_FORM))}
+          onClick={handleForgotPasswordClick}
           linkText={formatMessage(messages.loginFormForgotPasswordButton)}
         />
         <div className="d-flex flex-column m-0">
@@ -205,6 +217,7 @@ const LoginForm = () => {
         />
         <InlineLink
           destination={getConfig().LMS_BASE_URL + ENTERPRISE_LOGIN_URL}
+          onClick={trackInstitutionLoginLinkClick}
           linkHelpText={formatMessage(messages.loginFormSchoolAndOrganizationHelpText)}
           linkText={formatMessage(messages.loginFormSchoolAndOrganizationLink)}
         />
