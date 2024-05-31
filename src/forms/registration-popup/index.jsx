@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getConfig, snakeCaseObject } from '@edx/frontend-platform';
+import { sendPageEvent } from '@edx/frontend-platform/analytics';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
   Button, Container, Form, Spinner,
@@ -23,6 +24,7 @@ import './index.scss';
 import AuthenticatedRedirection from '../common-components/AuthenticatedRedirection';
 import SSOFailureAlert from '../common-components/SSOFailureAlert';
 import ThirdPartyAuthAlert from '../common-components/ThirdPartyAuthAlert';
+import { registrationSuccessEvent } from '../../tracking/trackers/register';
 import {
   EmailField,
   MarketingEmailOptInCheckbox,
@@ -95,6 +97,17 @@ const RegistrationForm = () => {
     setErrors(prevErrors => ({ ...prevErrors, [name]: '' }));
     setFormFields(prevState => ({ ...prevState, [name]: value }));
   };
+
+  useEffect(() => {
+    if (registrationResult.success) {
+      // This event is used by GTM
+      registrationSuccessEvent()
+    }
+  }, [registrationResult]);
+
+  useEffect(() => {
+    sendPageEvent('login_and_registration', 'register');
+  }, []);
 
   useEffect(() => {
     if (backendValidations) {

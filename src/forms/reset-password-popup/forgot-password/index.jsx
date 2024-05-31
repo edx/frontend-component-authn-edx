@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
+import { sendPageEvent } from '@edx/frontend-platform/analytics';
 import { getConfig } from '@edx/frontend-platform';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
@@ -17,6 +17,7 @@ import { COMPLETE_STATE, LOGIN_FORM } from '../../../data/constants';
 import EmailField from '../../fields/email-field';
 import messages from '../messages';
 import ResetPasswordHeader from '../ResetPasswordHeader';
+import { forgotPasswordPageViewedEvent } from '../../../tracking/trackers/forgotpassword';
 
 import '../index.scss';
 
@@ -33,6 +34,11 @@ const ForgotPasswordForm = () => {
   const [formErrors, setFormErrors] = useState('');
   const [formFields, setFormFields] = useState({ email: '' });
   const [isSuccess, setIsSuccess] = useState(false);
+
+  useEffect(() => {
+    forgotPasswordPageViewedEvent();
+    sendPageEvent('login_and_registration', 'reset');
+  }, []);
 
   const handleOnChange = (event) => {
     const { name } = event.target;

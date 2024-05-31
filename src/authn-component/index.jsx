@@ -89,7 +89,7 @@ export const AuthnComponent = ({
       return <ForgotPasswordForm />;
     }
     if (currentForm === LOGIN_FORM) {
-      return <LoginForm />;
+      return <ProgressiveProfilingForm />;
     }
     if (currentForm === PROGRESSIVE_PROFILING_FORM) {
       return <ProgressiveProfilingForm />;
