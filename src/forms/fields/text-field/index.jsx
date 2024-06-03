@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Form } from '@openedx/paragon';
@@ -15,7 +15,7 @@ import './index.scss';
  * - setting value on change
  * - clearing error on focus
  */
-const TextField = (props) => {
+const TextField = forwardRef((props, ref) => {
   const { formatMessage } = useIntl();
   const {
     errorMessage,
@@ -41,6 +41,7 @@ const TextField = (props) => {
         onBlur={handleBlur}
         autoComplete={autoComplete}
         floatingLabel={formatMessage(messages.fieldLabel, { label })}
+        ref={ref}
       />
       {errorMessage !== '' && (
         <Form.Control.Feedback
@@ -55,7 +56,7 @@ const TextField = (props) => {
       )}
     </Form.Group>
   );
-};
+});
 
 TextField.propTypes = {
   errorMessage: PropTypes.string.isRequired,

@@ -1,4 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, {
+  useEffect, useMemo, useRef, useState,
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getConfig, snakeCaseObject } from '@edx/frontend-platform';
@@ -46,6 +48,9 @@ const LoginForm = () => {
   const dispatch = useDispatch();
   const queryParams = useMemo(() => getAllPossibleQueryParams(), []);
 
+  const emailOrUsernameRef = useRef(null);
+  const socialAuthnButtonRef = useRef(null);
+
   const loginResult = useSelector(state => state.login.loginResult);
   const loginErrorCode = useSelector(state => state.login.loginError?.errorCode);
   const loginErrorContext = useSelector(state => state.login.loginError?.errorContext);
@@ -71,6 +76,19 @@ const LoginForm = () => {
 
   useEffect(() => {
     trackLoginPageEvent();
+  }, []);
+
+  useEffect(() => {
+    const focusInterval = setInterval(() => {
+      if (socialAuthnButtonRef.current) {
+        socialAuthnButtonRef.current.focus();
+        clearInterval(focusInterval);
+      } else if (emailOrUsernameRef.current) {
+        emailOrUsernameRef.current.focus();
+      }
+    }, 100);
+
+    return () => clearInterval(focusInterval);
   }, []);
 
   useEffect(() => {
@@ -165,11 +183,11 @@ const LoginForm = () => {
       <SSOFailureAlert
         errorCode={errorCode.type}
         context={errorCode.context}
-        alertTitle={messages.loginFailureHeaderTitle}
+        alertTitle={formatMessage(messages.loginFailureHeaderTitle)}
       />
       {!currentProvider && (
         <>
-          <SocialAuthProviders />
+          <SocialAuthProviders ref={socialAuthnButtonRef} />
           <div className="text-center my-3 my-sm-4">
             {formatMessage(messages.loginFormHeading2)}
           </div>
@@ -195,6 +213,7 @@ const LoginForm = () => {
           errorMessage={formErrors.emailOrUsername}
           handleChange={handleOnChange}
           handleFocus={handleOnFocus}
+          ref={emailOrUsernameRef}
         />
         <PasswordField
           name="password"

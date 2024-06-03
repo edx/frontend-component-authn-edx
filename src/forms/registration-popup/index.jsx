@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getConfig, snakeCaseObject } from '@edx/frontend-platform';
@@ -46,6 +46,10 @@ const RegistrationForm = () => {
   const [errors, setErrors] = useState({});
   const [errorCode, setErrorCode] = useState({ type: '', count: 0 });
 
+  const emailRef = useRef(null);
+  const socialAuthnButtonRef = useRef(null);
+  const errorRef = useRef(null);
+
   const registrationResult = useSelector(state => state.register.registrationResult);
   const userPipelineDataLoaded = useSelector(state => state.register.userPipelineDataLoaded);
 
@@ -85,6 +89,27 @@ const RegistrationForm = () => {
     pipelineUserDetails,
     userPipelineDataLoaded,
   ]);
+
+  useEffect(() => {
+    const focusInterval = setInterval(() => {
+      if (socialAuthnButtonRef.current) {
+        socialAuthnButtonRef.current.focus();
+        clearInterval(focusInterval);
+      } else if (emailRef.current) {
+        emailRef.current.focus();
+      }
+    }, 100);
+
+    return () => clearInterval(focusInterval);
+  }, []);
+
+  useEffect(() => {
+    if (errors && Object.keys(errors).length > 0 && errorRef.current) {
+      setTimeout(() => {
+        errorRef.current.focus();
+      }, 100);
+    }
+  }, [errors]);
 
   const handleOnChange = (event) => {
     const { name } = event.target;
@@ -192,7 +217,7 @@ const RegistrationForm = () => {
           <>
             {(!autoSubmitRegForm || errorCode.type) && (!currentProvider) && (
               <>
-                <SocialAuthProviders isLoginForm={false} />
+                <SocialAuthProviders isLoginForm={false} ref={socialAuthnButtonRef} />
                 <div className="text-center mb-4 mt-3">
                   {formatMessage(messages.registrationFormHeading2)}
                 </div>
@@ -201,12 +226,13 @@ const RegistrationForm = () => {
             <ThirdPartyAuthAlert
               currentProvider={currentProvider}
             />
-
-            <RegistrationFailureAlert
-              errorCode={errorCode.type}
-              failureCount={errorCode.count}
-              context={{ provider: currentProvider, errorMessage: thirdPartyAuthErrorMessage }}
-            />
+            <div ref={errorRef} tabIndex="-1" aria-live="assertive">
+              <RegistrationFailureAlert
+                errorCode={errorCode.type}
+                failureCount={errorCode.count}
+                context={{ provider: currentProvider, errorMessage: thirdPartyAuthErrorMessage }}
+              />
+            </div>
 
             <Form id="registration-form" name="registration-form" className="d-flex flex-column my-4">
               <EmailField
@@ -216,6 +242,7 @@ const RegistrationForm = () => {
                 handleChange={handleOnChange}
                 handleErrorChange={handleErrorChange}
                 floatingLabel={formatMessage(messages.registrationFormEmailFieldLabel)}
+                ref={emailRef}
               />
               <NameField
                 label="Full name"

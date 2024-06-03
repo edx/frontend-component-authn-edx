@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { forwardRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useIntl } from '@edx/frontend-platform/i18n';
@@ -25,7 +25,7 @@ import './index.scss';
  * - setting value on change
  * - clearing the error state
  */
-const PasswordField = (props) => {
+const PasswordField = forwardRef((props, ref) => {
   const { formatMessage } = useIntl();
 
   const dispatch = useDispatch();
@@ -148,6 +148,7 @@ const PasswordField = (props) => {
     <Form.Group key={name} controlId="password" className="w-100 mb-4">
       <OverlayTrigger key="tooltip" placement={placement} overlay={tooltip} show={showPasswordRequirements}>
         <Form.Control
+          ref={ref}
           as="input"
           data-testid={dataTestId}
           className="mr-0"
@@ -206,7 +207,7 @@ const PasswordField = (props) => {
       )}
     </Form.Group>
   );
-};
+});
 
 PasswordField.propTypes = {
   name: PropTypes.string.isRequired,
