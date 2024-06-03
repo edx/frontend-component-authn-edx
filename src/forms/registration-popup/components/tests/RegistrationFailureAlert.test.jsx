@@ -12,6 +12,7 @@ import configureStore from 'redux-mock-store';
 import {
   FORBIDDEN_REQUEST, INTERNAL_SERVER_ERROR, TPA_AUTHENTICATION_FAILURE, TPA_SESSION_EXPIRED,
 } from '../../../../data/constants';
+import SSOFailureAlert from '../../../common-components/SSOFailureAlert';
 import RegistrationPage from '../../index';
 import RegistrationFailureAlert from '../RegistrationFailureAlert';
 
@@ -22,6 +23,7 @@ jest.mock('@edx/frontend-platform/i18n', () => ({
 
 const IntlRegistrationPage = injectIntl(RegistrationPage);
 const IntlRegistrationFailure = injectIntl(RegistrationFailureAlert);
+const IntlSSOFailureAlert = injectIntl(SSOFailureAlert);
 const mockStore = configureStore();
 
 jest.mock('react-router-dom', () => {
@@ -178,7 +180,7 @@ describe('RegistrationFailure', () => {
         failureCount: 0,
       };
 
-      const { container } = render(reduxWrapper(<IntlRegistrationFailure {...props} />));
+      const { container } = render(reduxWrapper(<IntlSSOFailureAlert {...props} />));
 
       const alert = container.querySelector('div.alert');
       expect(alert.textContent).toContain(expectedMessageSubstring);

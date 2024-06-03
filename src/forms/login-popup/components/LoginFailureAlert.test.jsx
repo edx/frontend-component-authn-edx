@@ -13,6 +13,7 @@ import {
   INVALID_FORM,
   TPA_AUTHENTICATION_FAILURE,
 } from '../../../data/constants';
+import SSOFailureAlert from '../../common-components/SSOFailureAlert';
 import {
   ACCOUNT_LOCKED_OUT,
   ALLOWED_DOMAIN_LOGIN_ERROR,
@@ -23,6 +24,7 @@ import {
 } from '../data/constants';
 
 const IntlLoginFailureAlert = injectIntl(LoginFailureAlert);
+const IntlSSOFailureAlert = injectIntl(SSOFailureAlert);
 
 describe('LoginFailureAlert', () => {
   let props = {};
@@ -259,10 +261,10 @@ describe('LoginFailureAlert', () => {
 
     const { container } = render(
       <IntlProvider locale="en">
-        <IntlLoginFailureAlert {...props} />
+        <IntlSSOFailureAlert {...props} />
       </IntlProvider>,
     );
 
-    expect(container.querySelector('#login-failure-alert').textContent).toContain(errorMsg);
+    expect(container.querySelector('#SSO-failure-alert').textContent).toContain(errorMsg);
   });
 });

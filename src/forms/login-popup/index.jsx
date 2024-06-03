@@ -26,6 +26,7 @@ import {
   trackForgotPasswordLinkClick, trackInstitutionLoginLinkClick, trackLoginPageEvent,
 } from '../../tracking/trackers/login';
 import AuthenticatedRedirection from '../common-components/AuthenticatedRedirection';
+import SSOFailureAlert from '../common-components/SSOFailureAlert';
 import ThirdPartyAuthAlert from '../common-components/ThirdPartyAuthAlert';
 import {
   TextField as EmailOrUsernameField,
@@ -153,6 +154,11 @@ const LoginForm = () => {
         {formatMessage(messages.loginFormHeading1)}
       </h1>
       <hr className="heading-separator my-3 my-sm-4" />
+      <SSOFailureAlert
+        errorCode={errorCode.type}
+        context={errorCode.context}
+        alertTitle={messages.loginFailureHeaderTitle}
+      />
       <SocialAuthProviders />
       <div className="text-center my-3 my-sm-4">
         {formatMessage(messages.loginFormHeading2)}
