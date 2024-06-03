@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
@@ -12,6 +11,7 @@ import PropTypes from 'prop-types';
 
 import messages from './messages';
 import validatePasswordField from './validator';
+import { useDispatch, useSelector } from '../../../data/storeHooks';
 import { LETTER_REGEX, NUMBER_REGEX } from '../../registration-popup/data/constants';
 import { clearRegistrationBackendError, fetchRealtimeValidations } from '../../registration-popup/data/reducers';
 import './index.scss';
@@ -32,19 +32,20 @@ const PasswordField = (props) => {
 
   const validationApiRateLimited = useSelector(state => state.register?.validationApiRateLimited);
   const {
-    errorMessage,
+    errorMessage = '',
     name,
     value,
     handleChange,
-    handleErrorChange,
+    handleErrorChange = () => {},
     floatingLabel,
-    showPasswordTooltip,
+    handleBlur = () => {},
+    showPasswordTooltip = true,
   } = props;
 
   const [isPasswordHidden, setHiddenTrue, setHiddenFalse] = useToggle(true);
   const [showPasswordRequirements, setShowPasswordRequirements] = useState(false);
 
-  const handleBlur = (e) => {
+  const handleOnBlur = (e) => {
     const { name: fieldName, value: fieldValue } = e.target;
     if (fieldName === props.name && e.relatedTarget?.name === 'passwordIcon') {
       return; // Do not run validations on password icon click
@@ -56,8 +57,8 @@ const PasswordField = (props) => {
       passwordValue = props.value;
     }
 
-    if (props.handleBlur) {
-      props.handleBlur({
+    if (handleBlur) {
+      handleBlur({
         target: {
           name: props.name,
           value: passwordValue,
@@ -96,7 +97,7 @@ const PasswordField = (props) => {
       name="passwordIcon"
       src={VisibilityOff}
       onFocus={handleFocus}
-      onBlur={handleBlur}
+      onBlur={handleOnBlur}
       iconAs={Icon}
       onClick={setHiddenTrue}
       size="sm"
@@ -211,17 +212,11 @@ PasswordField.propTypes = {
   value: PropTypes.string.isRequired,
   handleChange: PropTypes.func.isRequired,
   handleBlur: PropTypes.func,
-  handleErrorChange: PropTypes.func.isRequired,
+  handleErrorChange: PropTypes.func,
   handleFocus: PropTypes.func.isRequired,
   errorMessage: PropTypes.string,
   floatingLabel: PropTypes.string.isRequired,
   showPasswordTooltip: PropTypes.bool,
-};
-
-PasswordField.defaultProps = {
-  errorMessage: '',
-  showPasswordTooltip: true,
-  handleBlur: () => {},
 };
 
 export default PasswordField;

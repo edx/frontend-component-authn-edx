@@ -12,7 +12,7 @@ import messages from '../messages';
  * @param {string} emailError
  * @param {string} status
  */
-const ForgotPasswordFailureAlert = ({ emailError, status }) => {
+const ForgotPasswordFailureAlert = ({ emailError = '', status = '' }) => {
   const { formatMessage } = useIntl();
   let message = '';
 
@@ -36,11 +36,6 @@ const ForgotPasswordFailureAlert = ({ emailError, status }) => {
       <p>{message}</p>
     </Alert>
   ) : null;
-};
-
-ForgotPasswordFailureAlert.defaultProps = {
-  emailError: '',
-  status: '',
 };
 
 ForgotPasswordFailureAlert.propTypes = {

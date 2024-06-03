@@ -12,6 +12,7 @@ import configureStore from 'redux-mock-store';
 import {
   FORBIDDEN_REQUEST, INTERNAL_SERVER_ERROR, TPA_AUTHENTICATION_FAILURE, TPA_SESSION_EXPIRED,
 } from '../../../../data/constants';
+import { AuthnContext } from '../../../../data/storeHooks';
 import SSOFailureAlert from '../../../common-components/SSOFailureAlert';
 import RegistrationPage from '../../index';
 import RegistrationFailureAlert from '../RegistrationFailureAlert';
@@ -24,6 +25,7 @@ jest.mock('@edx/frontend-platform/analytics', () => ({
 jest.mock('@edx/frontend-platform/i18n', () => ({
   ...jest.requireActual('@edx/frontend-platform/i18n'),
   getLocale: jest.fn(),
+  getMessages: jest.fn(),
 }));
 
 const IntlRegistrationPage = injectIntl(RegistrationPage);
@@ -72,7 +74,7 @@ describe('RegistrationFailure', () => {
 
   const reduxWrapper = children => (
     <IntlProvider locale="en">
-      <Provider store={store}>{children}</Provider>
+      <Provider context={AuthnContext} store={store}>{children}</Provider>
     </IntlProvider>
   );
 

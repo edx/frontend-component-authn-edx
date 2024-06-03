@@ -20,11 +20,12 @@ import messages from '../messages';
  * @param errorCode
  */
 
-const RegistrationFailureMessage = (props) => {
+const RegistrationFailureMessage = ({
+  context = {
+    errorMessage: null,
+  }, errorCode,
+}) => {
   const { formatMessage } = useIntl();
-  const {
-    context, errorCode,
-  } = props;
 
   if (!errorCode || errorCode === TPA_AUTHENTICATION_FAILURE) {
     return null;
@@ -54,12 +55,6 @@ const RegistrationFailureMessage = (props) => {
       <p>{errorMessage}</p>
     </Alert>
   );
-};
-
-RegistrationFailureMessage.defaultProps = {
-  context: {
-    errorMessage: null,
-  },
 };
 
 RegistrationFailureMessage.propTypes = {

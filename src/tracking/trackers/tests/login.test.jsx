@@ -19,6 +19,10 @@ describe('Tracking Functions', () => {
     jest.clearAllMocks();
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('trackForgotPasswordLinkClick function', () => {
     trackForgotPasswordLinkClick();
 

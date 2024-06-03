@@ -1,5 +1,4 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 
 import { getConfig } from '@edx/frontend-platform';
 import { useIntl } from '@edx/frontend-platform/i18n';
@@ -10,6 +9,7 @@ import PropTypes from 'prop-types';
 import socialLogos from './constants';
 import providersSelector from '../../authn-component/data/selectors';
 import { PENDING_STATE } from '../../data/constants';
+import { useSelector } from '../../data/storeHooks';
 import messages from '../messages';
 
 import './index.scss';
@@ -17,13 +17,17 @@ import './index.scss';
 /**
  * A reusable button component for social authentication providers (Facebook, Google, etc.).
  *
- * @param {string} provider - Required. The social authentication provider
+ * @param {object} provider - Required. The social authentication provider
  * @param {boolean} isLoginForm - Whether to display a sign-in or sign-up text based on the login page context.
  * @param {boolean} inverseTextColor - Whether to use inverted text color (white for dark backgrounds).
  *
  * @returns {JSX.Element} The rendered SocialAuthButton component.
  */
-export const SocialAuthButton = ({ provider, isLoginForm, inverseTextColor }) => {
+export const SocialAuthButton = ({
+  provider = null,
+  isLoginForm,
+  inverseTextColor = false,
+}) => {
   const { formatMessage } = useIntl();
 
   if (!provider) {
@@ -82,11 +86,6 @@ SocialAuthButton.propTypes = {
   inverseTextColor: PropTypes.bool,
 };
 
-SocialAuthButton.defaultProps = {
-  inverseTextColor: false,
-  provider: null,
-};
-
 /**
  * A component that renders a group of SocialAuthButton components for different social authentication providers.
  *
@@ -94,7 +93,7 @@ SocialAuthButton.defaultProps = {
  *
  * @returns {JSX.Element} The rendered SocialAuthProviders component.
  */
-const SocialAuthProviders = ({ isLoginForm }) => {
+const SocialAuthProviders = ({ isLoginForm = true }) => {
   const thirdPartyAuthApiStatus = useSelector(state => state.commonData.thirdPartyAuthApiStatus);
   const providers = useSelector(providersSelector);
 
@@ -115,10 +114,6 @@ const SocialAuthProviders = ({ isLoginForm }) => {
 
 SocialAuthProviders.propTypes = {
   isLoginForm: PropTypes.bool,
-};
-
-SocialAuthProviders.defaultProps = {
-  isLoginForm: true,
 };
 
 export default SocialAuthProviders;

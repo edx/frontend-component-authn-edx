@@ -8,6 +8,7 @@ import configureStore from 'redux-mock-store';
 
 import { setCurrentOpenedForm } from '../../../../authn-component/data/reducers';
 import { COMPLETE_STATE, LOGIN_FORM } from '../../../../data/constants';
+import { AuthnContext } from '../../../../data/storeHooks';
 import { forgotPassword, forgotPasswordClearStatus } from '../data/reducers';
 import ForgotPasswordPage from '../index';
 
@@ -31,13 +32,17 @@ describe('ForgotPasswordPage', () => {
   const reduxWrapper = (children) => (
     <IntlProvider locale="en">
       <MemoryRouter>
-        <Provider store={store}>{children}</Provider>
+        <Provider context={AuthnContext} store={store}>{children}</Provider>
       </MemoryRouter>
     </IntlProvider>
   );
 
   beforeEach(() => {
     store = mockStore(initialState);
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('renders forgot password form', () => {

@@ -1,10 +1,9 @@
-import { useDispatch } from 'react-redux';
-
 import { getConfig } from '@edx/frontend-platform';
 import PropTypes from 'prop-types';
 
 import { setCurrentOpenedForm } from '../../authn-component/data/reducers';
 import { PROGRESSIVE_PROFILING_FORM } from '../../data/constants';
+import { useDispatch } from '../../data/storeHooks';
 
 /**
  * Component that handles redirection after successful authentication.
@@ -22,10 +21,10 @@ import { PROGRESSIVE_PROFILING_FORM } from '../../data/constants';
  * @returns {null} This component does not render anything, it handles redirects.
  */
 const AuthenticatedRedirection = ({
-  finishAuthUrl,
-  redirectUrl,
-  redirectToProgressiveProfilingForm,
-  success,
+  finishAuthUrl = null,
+  redirectUrl = '',
+  redirectToProgressiveProfilingForm = false,
+  success = false,
 }) => {
   const dispatch = useDispatch();
 
@@ -52,13 +51,6 @@ const AuthenticatedRedirection = ({
   }
 
   return null;
-};
-
-AuthenticatedRedirection.defaultProps = {
-  finishAuthUrl: null,
-  success: false,
-  redirectUrl: '',
-  redirectToProgressiveProfilingForm: false,
 };
 
 AuthenticatedRedirection.propTypes = {

@@ -21,7 +21,7 @@ export const NUMBER_REGEX = /\d/;
  * This component provides a form for users to reset their password.
  * @returns {string} A message indicating the success or failure of the password reset process.
  */
-const ResetPasswordPage = (props) => {
+const ResetPasswordPage = ({ errorMsg = null }) => {
   const { formatMessage } = useIntl();
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -70,7 +70,7 @@ const ResetPasswordPage = (props) => {
   return (
     <Container size="lg" className="authn__popup-container overflow-auto">
       <ResetPasswordHeader />
-      <ResetPasswordFailure errorMsg={props.errorMsg} />
+      <ResetPasswordFailure errorMsg={errorMsg} />
       <div className="text-gray-800 mb-4">{formatMessage(messages.enterConfirmPasswordMessage)}</div>
       <Form id="set-reset-password-form" name="set-reset-password-form" className="d-flex flex-column">
         <PasswordField
@@ -109,10 +109,6 @@ const ResetPasswordPage = (props) => {
       </Form>
     </Container>
   );
-};
-
-ResetPasswordPage.defaultProps = {
-  errorMsg: null,
 };
 
 ResetPasswordPage.propTypes = {

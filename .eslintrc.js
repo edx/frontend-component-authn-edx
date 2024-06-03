@@ -47,5 +47,6 @@ module.exports = createConfig('eslint', {
         'state',
       ],
     }],
+    'react/require-default-props': 'off', // defaultProps are going to be deprecated
   },
 });

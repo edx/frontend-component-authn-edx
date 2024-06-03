@@ -25,8 +25,8 @@ initialize({
       mergeConfig({
         AUTHN_ALGOLIA_APP_ID: process.env.AUTHN_ALGOLIA_APP_ID || '',
         AUTHN_ALGOLIA_SEARCH_API_KEY: process.env.AUTHN_ALGOLIA_SEARCH_API_KEY || '',
-        AUTHN_TOS_AND_HONOR_CODE_LINK: process.env.AUTHN_TOS_AND_HONOR_CODE_LINK || '',
-        AUTHN_PRIVACY_POLICY_LINK: process.env.AUTHN_PRIVACY_POLICY_LINK || '',
+        TOS_AND_HONOR_CODE: process.env.TOS_AND_HONOR_CODE || '',
+        PRIVACY_POLICY: process.env.PRIVACY_POLICY || '',
         INFO_EMAIL: process.env.INFO_EMAIL || '',
       });
     },

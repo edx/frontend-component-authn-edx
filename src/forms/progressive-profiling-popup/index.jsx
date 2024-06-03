@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 
 import { getConfig, snakeCaseObject } from '@edx/frontend-platform';
 import { getCountryList, getLocale, useIntl } from '@edx/frontend-platform/i18n';
@@ -15,6 +14,7 @@ import languageCookieValue from './data/utils';
 import messages from './messages';
 import { setCurrentOpenedForm } from '../../authn-component/data/reducers';
 import { COMPLETE_STATE, LOGIN_FORM } from '../../data/constants';
+import { useDispatch, useSelector } from '../../data/storeHooks';
 import {
   trackProgressiveProfilingPageEvent,
   trackProgressiveProfilingSkipLinkClickEvent,

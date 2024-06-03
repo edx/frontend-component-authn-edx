@@ -12,6 +12,7 @@ import { setCurrentOpenedForm } from '../../../authn-component/data/reducers';
 import {
   DEFAULT_STATE, FORGOT_PASSWORD_FORM, INTERNAL_SERVER_ERROR, REGISTRATION_FORM,
 } from '../../../data/constants';
+import { AuthnContext } from '../../../data/storeHooks';
 import getAllPossibleQueryParams from '../../../data/utils';
 import { loginUser } from '../data/reducers';
 import LoginForm from '../index';
@@ -40,7 +41,7 @@ describe('LoginForm Test', () => {
   const reduxWrapper = children => (
     <IntlProvider locale="en">
       <MemoryRouter>
-        <Provider store={store}>{children}</Provider>
+        <Provider context={AuthnContext} store={store}>{children}</Provider>
       </MemoryRouter>
     </IntlProvider>
   );
@@ -63,9 +64,13 @@ describe('LoginForm Test', () => {
   beforeEach(() => {
     store = mockStore(initialState);
     mergeConfig({
-      AUTHN_TOS_AND_HONOR_CODE_LINK: process.env.AUTHN_TOS_AND_HONOR_CODE_LINK,
-      AUTHN_PRIVACY_POLICY_LINK: process.env.AUTHN_PRIVACY_POLICY_LINK,
+      TOS_AND_HONOR_CODE: process.env.TOS_AND_HONOR_CODE,
+      PRIVACY_POLICY: process.env.PRIVACY_POLICY,
     });
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('should render login form', () => {

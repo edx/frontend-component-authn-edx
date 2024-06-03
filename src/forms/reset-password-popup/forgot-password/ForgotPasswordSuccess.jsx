@@ -14,7 +14,7 @@ import messages from '../messages';
  */
 const ForgotPasswordSuccess = (props) => {
   const { formatMessage } = useIntl();
-  const { email } = props;
+  const { email = '' } = props;
 
   return (
     <div id="forgot-password-success-msg" className="mb-5">
@@ -43,10 +43,6 @@ const ForgotPasswordSuccess = (props) => {
       </p>
     </div>
   );
-};
-
-ForgotPasswordSuccess.defaultProps = {
-  email: '',
 };
 
 ForgotPasswordSuccess.propTypes = {

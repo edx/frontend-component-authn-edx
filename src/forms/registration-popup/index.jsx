@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 
 import { getConfig, snakeCaseObject } from '@edx/frontend-platform';
 import { useIntl } from '@edx/frontend-platform/i18n';
@@ -17,8 +16,12 @@ import { setCurrentOpenedForm, setRegisterIntent } from '../../authn-component/d
 import { InlineLink, SocialAuthProviders } from '../../common-ui';
 import {
   COMPLETE_STATE,
-  ENTERPRISE_LOGIN_URL, FORM_SUBMISSION_ERROR, LOGIN_FORM, TPA_AUTHENTICATION_FAILURE,
+  ENTERPRISE_LOGIN_URL,
+  FORM_SUBMISSION_ERROR,
+  LOGIN_FORM,
+  TPA_AUTHENTICATION_FAILURE,
 } from '../../data/constants';
+import { useDispatch, useSelector } from '../../data/storeHooks';
 import './index.scss';
 import { registrationSuccessEvent, trackRegistrationPageEvent } from '../../tracking/trackers/register';
 import AuthenticatedRedirection from '../common-components/AuthenticatedRedirection';
@@ -232,7 +235,7 @@ const RegistrationForm = () => {
                 errorMessage={errors.password}
                 handleChange={handleOnChange}
                 handleErrorChange={handleErrorChange}
-                handleFocus={() => { }}
+                handleFocus={() => {}}
                 floatingLabel={formatMessage(messages.registrationFormPasswordFieldLabel)}
               />
               <MarketingEmailOptInCheckbox

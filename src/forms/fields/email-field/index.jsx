@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Alert, Form, Icon } from '@openedx/paragon';
@@ -9,6 +8,7 @@ import PropTypes from 'prop-types';
 
 import messages from './messages';
 import validateEmail from './validator';
+import { useDispatch, useSelector } from '../../../data/storeHooks';
 import { clearRegistrationBackendError, fetchRealtimeValidations } from '../../registration-popup/data/reducers';
 
 import './index.scss';
@@ -22,11 +22,15 @@ import './index.scss';
  */
 const EmailField = (props) => {
   const dispatch = useDispatch();
-
   const { formatMessage } = useIntl();
   const {
-    name, value, isRegistration,
-    handleChange, floatingLabel, errorMessage, handleErrorChange,
+    name,
+    value,
+    isRegistration = true,
+    handleChange,
+    floatingLabel,
+    errorMessage = '',
+    handleErrorChange = () => {},
   } = props;
 
   const validationApiRateLimited = useSelector(state => state.register?.validationApiRateLimited);
@@ -131,12 +135,6 @@ EmailField.propTypes = {
   floatingLabel: PropTypes.string.isRequired,
   errorMessage: PropTypes.string,
   isRegistration: PropTypes.bool,
-};
-
-EmailField.defaultProps = {
-  errorMessage: '',
-  isRegistration: true,
-  handleErrorChange: () => {},
 };
 
 export default EmailField;

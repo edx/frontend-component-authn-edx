@@ -1,5 +1,4 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
 
 import { getConfig } from '@edx/frontend-platform';
 import { useIntl } from '@edx/frontend-platform/i18n';
@@ -13,6 +12,7 @@ import messages from './messages';
 import { setCurrentOpenedForm } from '../../authn-component/data/reducers';
 import { SocialAuthButton as EnterpriseSSOButton } from '../../common-ui/SocialAuthButtons';
 import { LOGIN_FORM } from '../../data/constants';
+import { useDispatch } from '../../data/storeHooks';
 /**
  * This component renders the Single sign-on (SSO) button only for the tpa provider passed
  *
@@ -21,7 +21,14 @@ import { LOGIN_FORM } from '../../data/constants';
 const EnterpriseSSO = (props) => {
   const { formatMessage } = useIntl();
   const dispatch = useDispatch();
-  const { provider } = props;
+  const {
+    provider = {
+      id: '',
+      name: '',
+      loginUrl: '',
+      registerUrl: '',
+    },
+  } = props;
   const inverseTextColor = WHITE_TEXT_COLOR_PROVIDERS.includes(provider.name);
 
   const handleClick = (e, url) => {
@@ -79,15 +86,6 @@ const EnterpriseSSO = (props) => {
     );
   }
   return null;
-};
-
-EnterpriseSSO.defaultProps = {
-  provider: {
-    id: '',
-    name: '',
-    loginUrl: '',
-    registerUrl: '',
-  },
 };
 
 EnterpriseSSO.propTypes = {

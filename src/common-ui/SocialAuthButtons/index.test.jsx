@@ -1,16 +1,14 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 
-import { IntlProvider } from '@edx/frontend-platform/i18n';
+import { injectIntl, IntlProvider } from '@edx/frontend-platform/i18n';
 import { fireEvent, render } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
 import configureStore from 'redux-mock-store';
 
 import { COMPLETE_STATE, PENDING_STATE } from '../../data/constants';
+import { AuthnContext } from '../../data/storeHooks';
 
 import SocialAuthProviders, { SocialAuthButton } from './index';
-
-const mockStore = configureStore();
 
 jest.mock('@edx/frontend-platform', () => ({
   ...jest.requireActual('@edx/frontend-platform'),
@@ -19,9 +17,15 @@ jest.mock('@edx/frontend-platform', () => ({
   }),
 }));
 
+const mockStore = configureStore();
+
 describe('SocialAuthButton', () => {
-  const intlWrapper = children => (
-    <IntlProvider locale="en">{children}</IntlProvider>
+  let store = {};
+  const IntlSocialAuthButton = injectIntl(SocialAuthButton);
+  const reduxWrapper = children => (
+    <IntlProvider locale="en">
+      <Provider context={AuthnContext} store={store}>{children}</Provider>
+    </IntlProvider>
   );
 
   const provider = {
@@ -31,31 +35,39 @@ describe('SocialAuthButton', () => {
     registerUrl: '/register/google',
   };
 
+  beforeEach(() => {
+    store = mockStore({});
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('renders with default props for Sign In', () => {
-    const { getByText } = render(intlWrapper(
-      <SocialAuthButton provider={provider} isLoginForm />,
+    const { getByText } = render(reduxWrapper(
+      <IntlSocialAuthButton provider={provider} isLoginForm />,
     ));
     expect(getByText('Sign in with Google')).toBeTruthy();
   });
 
   it('renders with default props for Sign Up', () => {
-    const { getByText } = render(intlWrapper(
-      <SocialAuthButton provider={provider} isLoginForm={false} />,
+    const { getByText } = render(reduxWrapper(
+      <IntlSocialAuthButton provider={provider} isLoginForm={false} />,
     ));
     expect(getByText('Sign up with Google')).toBeTruthy();
   });
 
   it('renders with inverse text color', () => {
-    const { container } = render(intlWrapper(
-      <SocialAuthButton provider={provider} isLoginForm inverseTextColor />,
+    const { container } = render(reduxWrapper(
+      <IntlSocialAuthButton provider={provider} isLoginForm inverseTextColor />,
     ));
     const button = container.querySelector('.social-auth-button_google');
     expect(button.getAttribute('class')).toContain('text-white');
   });
 
   it('calls handleSubmit on button click', () => {
-    const { getByText } = render(intlWrapper(
-      <SocialAuthButton provider={provider} isLoginForm />,
+    const { getByText } = render(reduxWrapper(
+      <IntlSocialAuthButton provider={provider} isLoginForm />,
     ));
 
     delete window.location;
@@ -70,12 +82,11 @@ describe('SocialAuthButton', () => {
 
 describe('SocialAuthProviders', () => {
   let store = {};
+  const IntlSocialAuthProviders = injectIntl(SocialAuthProviders);
 
   const reduxWrapper = children => (
     <IntlProvider locale="en">
-      <MemoryRouter>
-        <Provider store={store}>{children}</Provider>
-      </MemoryRouter>
+      <Provider context={AuthnContext} store={store}>{children}</Provider>
     </IntlProvider>
   );
 
@@ -112,13 +123,18 @@ describe('SocialAuthProviders', () => {
       },
     },
   };
+
   beforeEach(() => {
     store = mockStore(initialState);
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('renders all social auth buttons when thirdPartyAuthContext call is complete', () => {
     const { getByText } = render(reduxWrapper(
-      <SocialAuthProviders />,
+      <IntlSocialAuthProviders />,
     ));
     expect(getByText('Sign in with Google')).toBeTruthy();
     expect(getByText('Sign in with Apple')).toBeTruthy();
@@ -136,7 +152,7 @@ describe('SocialAuthProviders', () => {
     });
 
     const { container } = render(reduxWrapper(
-      <SocialAuthProviders />,
+      <IntlSocialAuthProviders />,
     ));
 
     expect(container.querySelector('.react-loading-skeleton')).toBeTruthy();
