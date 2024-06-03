@@ -8,6 +8,8 @@ import configureStore from 'redux-mock-store';
 
 import { setCurrentOpenedForm } from '../../../../authn-component/data/reducers';
 import { COMPLETE_STATE, LOGIN_FORM } from '../../../../data/constants';
+import { NUDGE_PASSWORD_CHANGE, REQUIRE_PASSWORD_CHANGE } from '../../../login-popup/data/constants';
+import { loginErrorClear } from '../../../login-popup/data/reducers';
 import { forgotPassword, forgotPasswordClearStatus } from '../data/reducers';
 import ForgotPasswordPage from '../index';
 
@@ -20,6 +22,11 @@ const IntlForgotPasswordPage = injectIntl(ForgotPasswordPage);
 const mockStore = configureStore();
 
 const initialState = {
+  login: {
+    loginError: {
+      errorCode: '',
+    },
+  },
   forgotPassword: {
     status: '',
   },
@@ -89,6 +96,7 @@ describe('ForgotPasswordPage', () => {
     const actions = store.getActions();
     expect(actions).toEqual([
       { type: forgotPasswordClearStatus.type },
+      { type: loginErrorClear.type },
       { type: setCurrentOpenedForm.type, payload: LOGIN_FORM },
     ]);
   });
@@ -96,6 +104,7 @@ describe('ForgotPasswordPage', () => {
   it('handles COMPLETE_STATE correctly in useEffect', () => {
     // Update initial state to COMPLETE_STATE
     store = mockStore({
+      ...initialState,
       forgotPassword: {
         status: COMPLETE_STATE,
       },
@@ -154,5 +163,35 @@ describe('ForgotPasswordPage', () => {
     fireEvent(submitButton, mockMouseDownEvent);
 
     expect(mockMouseDownEvent.preventDefault).toHaveBeenCalled();
+  });
+
+  it('should show password vulnerability warned message copy if login errorCode is NUDGE_PASSWORD_CHANGE', () => {
+    store = mockStore({
+      ...initialState,
+      login: {
+        loginError: {
+          errorCode: NUDGE_PASSWORD_CHANGE,
+        },
+      },
+    });
+
+    const { getByTestId } = render(reduxWrapper(<IntlForgotPasswordPage />));
+
+    expect(getByTestId('nudge-password-change-message')).toBeTruthy();
+  });
+
+  it('should show password vulnerability blocked message copy if login errorCode is NUDGE_PASSWORD_CHANGE', () => {
+    store = mockStore({
+      ...initialState,
+      login: {
+        loginError: {
+          errorCode: REQUIRE_PASSWORD_CHANGE,
+        },
+      },
+    });
+
+    const { getByTestId } = render(reduxWrapper(<IntlForgotPasswordPage />));
+
+    expect(getByTestId('require-password-change-message')).toBeTruthy();
   });
 });

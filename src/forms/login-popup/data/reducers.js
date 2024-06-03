@@ -47,10 +47,15 @@ export const loginSlice = createSlice({
       state.loginResult = {};
       state.submitState = FAILURE_STATE;
     },
+    loginErrorClear: (state) => {
+      state.loginError = {};
+      state.submitState = DEFAULT_STATE;
+    },
   },
 });
 
 export const {
+  loginErrorClear,
   loginUser,
   loginUserSuccess,
   loginUserFailed,

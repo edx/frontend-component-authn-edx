@@ -13,6 +13,7 @@ import {
   DEFAULT_STATE, FORGOT_PASSWORD_FORM, INTERNAL_SERVER_ERROR, REGISTRATION_FORM,
 } from '../../../data/constants';
 import getAllPossibleQueryParams from '../../../data/utils';
+import { NUDGE_PASSWORD_CHANGE, REQUIRE_PASSWORD_CHANGE } from '../data/constants';
 import { loginUser } from '../data/reducers';
 import LoginForm from '../index';
 
@@ -52,6 +53,7 @@ describe('LoginForm Test', () => {
       loginError: {},
     },
     commonData: {
+      currentForm: '',
       thirdPartyAuthContext: {
         finishAuthUrl: null,
         providers: [],
@@ -66,6 +68,10 @@ describe('LoginForm Test', () => {
       AUTHN_TOS_AND_HONOR_CODE_LINK: process.env.AUTHN_TOS_AND_HONOR_CODE_LINK,
       AUTHN_PRIVACY_POLICY_LINK: process.env.AUTHN_PRIVACY_POLICY_LINK,
     });
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('should render login form', () => {
@@ -247,6 +253,40 @@ describe('LoginForm Test', () => {
     const { getByText } = render(reduxWrapper(<IntlLoginForm />));
 
     fireEvent.click(getByText('Forgot Password?'));
+
+    expect(store.dispatch).toHaveBeenCalledWith(setCurrentOpenedForm(FORGOT_PASSWORD_FORM));
+  });
+
+  it('should redirects to forget password popup if login API returns error code NUDGE_PASSWORD_CHANGE', () => {
+    store = mockStore({
+      ...initialState,
+      login: {
+        ...initialState.login,
+        loginError: {
+          errorCode: NUDGE_PASSWORD_CHANGE,
+        },
+      },
+    });
+    store.dispatch = jest.fn(store.dispatch);
+
+    render(reduxWrapper(<IntlLoginForm />));
+
+    expect(store.dispatch).toHaveBeenCalledWith(setCurrentOpenedForm(FORGOT_PASSWORD_FORM));
+  });
+
+  it('should redirects to forget password popup if login API returns error code REQUIRE_PASSWORD_CHANGE', () => {
+    store = mockStore({
+      ...initialState,
+      login: {
+        ...initialState.login,
+        loginError: {
+          errorCode: REQUIRE_PASSWORD_CHANGE,
+        },
+      },
+    });
+    store.dispatch = jest.fn(store.dispatch);
+
+    render(reduxWrapper(<IntlLoginForm />));
 
     expect(store.dispatch).toHaveBeenCalledWith(setCurrentOpenedForm(FORGOT_PASSWORD_FORM));
   });

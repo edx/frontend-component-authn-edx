@@ -29,6 +29,7 @@ import {
 } from '../forms';
 import EnterpriseSSO from '../forms/enterprise-sso-popup';
 import { getTpaHint, getTpaProvider } from '../forms/enterprise-sso-popup/data/utils';
+import { REQUIRE_PASSWORD_CHANGE } from '../forms/login-popup/data/constants';
 /**
  * Main component that conditionally renders a login or registration form inside a modal window.
  *
@@ -52,6 +53,7 @@ export const AuthnComponent = ({
   const providers = useSelector(state => state.commonData.thirdPartyAuthContext?.providers);
   const secondaryProviders = useSelector(state => state.commonData.thirdPartyAuthContext?.secondaryProviders);
   const thirdPartyAuthApiStatus = useSelector(state => state.commonData.thirdPartyAuthApiStatus);
+  const loginErrorCode = useSelector(state => state.login.loginError?.errorCode);
 
   const tpaHint = getTpaHint();
   const { provider: tpaProvider } = getTpaProvider(tpaHint, providers, secondaryProviders);
@@ -62,7 +64,12 @@ export const AuthnComponent = ({
       setHasCloseButton(false);
       setScreenSize('fullscreen');
     }
-  }, [currentForm]);
+    if (loginErrorCode === REQUIRE_PASSWORD_CHANGE
+      && currentForm === FORGOT_PASSWORD_FORM
+    ) {
+      setHasCloseButton(false);
+    }
+  }, [currentForm, loginErrorCode]);
 
   useEffect(() => {
     if (tpaProvider) {

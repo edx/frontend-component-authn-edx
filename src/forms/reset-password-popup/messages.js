@@ -51,6 +51,17 @@ const messages = defineMessages({
     defaultMessage: 'Enter and confirm the new password',
     description: 'Message for entering and confirming the new password',
   },
+  // vulnerable password messages
+  vulnerablePasswordBlockedMessage: {
+    id: 'vulnerable.blocked.password.message',
+    defaultMessage: 'Our system detected critical password vulnerability. Please reset your password to keep your account secure.',
+    description: 'Message for blocking user to reset password due to vulnerable password',
+  },
+  vulnerablePasswordWarnedMessage: {
+    id: 'vulnerable.warned.password.message',
+    defaultMessage: 'Our system detected password vulnerability. We encourage you to reset your password to keep your account secure.',
+    description: 'Message for warned user to reset password due to vulnerable password',
+  },
   // email sent messages
   emailSentMessage: {
     id: 'email.sent.message',

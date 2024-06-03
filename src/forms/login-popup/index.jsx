@@ -9,6 +9,7 @@ import {
 
 import AccountActivationMessage from './components/AccountActivationMessage';
 import LoginFailureAlert from './components/LoginFailureAlert';
+import { NUDGE_PASSWORD_CHANGE, REQUIRE_PASSWORD_CHANGE } from './data/constants';
 import useGetActivationMessage from './data/hooks';
 import { loginUser } from './data/reducers';
 import messages from './messages';
@@ -76,8 +77,11 @@ const LoginForm = () => {
         type: loginErrorCode,
         context: { ...loginErrorContext },
       });
+      if (loginErrorCode === NUDGE_PASSWORD_CHANGE || loginErrorCode === REQUIRE_PASSWORD_CHANGE) {
+        dispatch(setCurrentOpenedForm(FORGOT_PASSWORD_FORM));
+      }
     }
-  }, [loginErrorCode, loginErrorContext]);
+  }, [dispatch, loginErrorCode, loginErrorContext]);
 
   useEffect(() => {
     if (thirdPartyAuthErrorMessage) {
