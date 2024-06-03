@@ -12,11 +12,11 @@ export const trackProgressiveProfilingSkipLinkClickEvent = () => createEventTrac
   {},
 )();
 
-//Event tracker for progressive profiling submit button click
+// Event tracker for progressive profiling submit button click
 export const trackProgressiveProfilinSubmitClickEvent = (evenProperties) => createEventTracker(
-    eventNames.ProgressiveProfilinSubmitClick,
-    {...evenProperties},
-)()
+  eventNames.ProgressiveProfilinSubmitClick,
+  { ...evenProperties },
+)();
 
 // Tracks the progressive profiling page event.
 export const trackProgressiveProfilingPageEvent = () => {

@@ -10,7 +10,7 @@ import { sendPageEvent, sendTrackEvent } from '@edx/frontend-platform/analytics'
  */
 export const createEventTracker = (name, options = {}) => () => sendTrackEvent(
   name,
-  { ...options },
+  { ...options, app_name: 'onboarding_component' },
 );
 
 /**
@@ -20,7 +20,8 @@ export const createEventTracker = (name, options = {}) => () => sendTrackEvent(
  * @param {object} [options={}] - Additional options to be included with the event.
  * @returns {function} - A function that, when called, sends the tracking event.
  */
-export const createPageEventTracker = (name, options= null) => () => sendPageEvent(
+export const createPageEventTracker = (name, options = null) => () => sendPageEvent(
   name,
   options,
+  { app_name: 'onboarding_component' },
 );

@@ -15,10 +15,12 @@ import { saveUserProfile } from './data/reducers';
 import messages from './messages';
 import { setCurrentOpenedForm } from '../../authn-component/data/reducers';
 import { COMPLETE_STATE, LOGIN_FORM } from '../../data/constants';
-import AutoSuggestField from '../fields/auto-suggested-field';
-import { trackProgressiveProfilinSubmitClickEvent, 
+import {
   trackProgressiveProfilingPageEvent,
-  trackProgressiveProfilingSkipLinkClickEvent } from '../../tracking/trackers/progressive-profiling';
+  trackProgressiveProfilingSkipLinkClickEvent,
+  trackProgressiveProfilinSubmitClickEvent,
+} from '../../tracking/trackers/progressive-profiling';
+import AutoSuggestField from '../fields/auto-suggested-field';
 
 import './index.scss';
 
@@ -43,12 +45,10 @@ const ProgressiveProfilingForm = () => {
     if (authenticatedUser === null) {
       dispatch(setCurrentOpenedForm(LOGIN_FORM));
     }
-  }, [authenticatedUser, dispatch]);
-  useEffect(() => {
     if (authenticatedUser?.userId) {
       trackProgressiveProfilingPageEvent();
     }
-  }, [authenticatedUser]);
+  }, [authenticatedUser, dispatch]);
 
   useEffect(() => {
     if (submitState === COMPLETE_STATE) {
@@ -93,7 +93,7 @@ const ProgressiveProfilingForm = () => {
         ...formData,
       },
     };
-    trackProgressiveProfilinSubmitClickEvent(eventProperties)
+    trackProgressiveProfilinSubmitClickEvent(eventProperties);
     dispatch(saveUserProfile(snakeCaseObject(payload)));
   };
 

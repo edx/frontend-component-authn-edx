@@ -11,6 +11,11 @@ import { COMPLETE_STATE, LOGIN_FORM } from '../../../../data/constants';
 import { forgotPassword, forgotPasswordClearStatus } from '../data/reducers';
 import ForgotPasswordPage from '../index';
 
+jest.mock('@edx/frontend-platform/analytics', () => ({
+  sendTrackEvent: jest.fn(),
+  sendPageEvent: jest.fn(),
+}));
+
 const IntlForgotPasswordPage = injectIntl(ForgotPasswordPage);
 const mockStore = configureStore();
 

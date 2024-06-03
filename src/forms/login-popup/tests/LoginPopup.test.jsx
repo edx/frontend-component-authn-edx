@@ -25,6 +25,7 @@ jest.mock('../../../data/utils', () => jest.fn());
 // Mocking the sendTrackEvent
 jest.mock('@edx/frontend-platform/analytics', () => ({
   sendTrackEvent: jest.fn(),
+  sendPageEvent: jest.fn(),
 }));
 
 // Mocking the trackForgotPasswordLinkClick function

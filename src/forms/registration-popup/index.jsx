@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getConfig, snakeCaseObject } from '@edx/frontend-platform';
-import { sendPageEvent } from '@edx/frontend-platform/analytics';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
   Button, Container, Form, Spinner,
@@ -14,17 +13,17 @@ import { clearRegistrationBackendError, registerUser, setUserPipelineDataLoaded 
 import getBackendValidations from './data/selector';
 import isFormValid from './data/utils';
 import messages from './messages';
-import { setCurrentOpenedForm } from '../../authn-component/data/reducers';
+import { setCurrentOpenedForm, setRegisterIntent } from '../../authn-component/data/reducers';
 import { InlineLink, SocialAuthProviders } from '../../common-ui';
 import {
   COMPLETE_STATE,
   ENTERPRISE_LOGIN_URL, FORM_SUBMISSION_ERROR, LOGIN_FORM, TPA_AUTHENTICATION_FAILURE,
 } from '../../data/constants';
 import './index.scss';
+import { registrationSuccessEvent, trackRegistrationPageEvent } from '../../tracking/trackers/register';
 import AuthenticatedRedirection from '../common-components/AuthenticatedRedirection';
 import SSOFailureAlert from '../common-components/SSOFailureAlert';
 import ThirdPartyAuthAlert from '../common-components/ThirdPartyAuthAlert';
-import { registrationSuccessEvent } from '../../tracking/trackers/register';
 import {
   EmailField,
   MarketingEmailOptInCheckbox,
@@ -101,12 +100,12 @@ const RegistrationForm = () => {
   useEffect(() => {
     if (registrationResult.success) {
       // This event is used by GTM
-      registrationSuccessEvent()
+      registrationSuccessEvent();
     }
   }, [registrationResult]);
 
   useEffect(() => {
-    sendPageEvent('login_and_registration', 'register');
+    trackRegistrationPageEvent();
   }, []);
 
   useEffect(() => {
@@ -258,7 +257,10 @@ const RegistrationForm = () => {
             <div>
               <InlineLink
                 className="mb-2"
-                onClick={() => dispatch(setCurrentOpenedForm(LOGIN_FORM))}
+                onClick={() => {
+                  dispatch(setCurrentOpenedForm(LOGIN_FORM));
+                  dispatch(setRegisterIntent());
+                }}
                 linkHelpText={formatMessage(messages.registrationFormAlreadyHaveAccountText)}
                 linkText={formatMessage(messages.registrationFormSignInLink)}
               />

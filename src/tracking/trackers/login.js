@@ -1,4 +1,4 @@
-import { createEventTracker } from '../../data/segment/utils';
+import { createEventTracker, createPageEventTracker } from '../../data/segment/utils';
 
 export const eventNames = {
   forgotPasswordLinkClicked: 'edx.bi.password-reset_form.toggled',
@@ -25,7 +25,7 @@ export const trackLoginPageViewed = () => createEventTracker(
 
 // Tracks the login page event.
 export const trackLoginPageEvent = () => {
-  createEventTracker(eventNames.loginAndRegistration, { page_name: 'login' })();
+  createPageEventTracker(eventNames.loginAndRegistration, 'login')();
 };
 
 // Tracks the event of clicking the institution login link.
