@@ -34,6 +34,7 @@ const PasswordField = (props) => {
   const {
     errorMessage,
     name,
+    dataTestId,
     value,
     handleChange,
     handleErrorChange,
@@ -144,10 +145,11 @@ const PasswordField = (props) => {
   );
 
   return (
-    <Form.Group controlId="password" className="w-100 mb-4">
+    <Form.Group key={name} controlId="password" className="w-100 mb-4">
       <OverlayTrigger key="tooltip" placement={placement} overlay={tooltip} show={showPasswordRequirements}>
         <Form.Control
           as="input"
+          data-testid={dataTestId}
           className="mr-0"
           type={isPasswordHidden ? 'password' : 'text'}
           name={name}
@@ -208,6 +210,7 @@ const PasswordField = (props) => {
 
 PasswordField.propTypes = {
   name: PropTypes.string.isRequired,
+  dataTestId: PropTypes.string,
   value: PropTypes.string.isRequired,
   handleChange: PropTypes.func.isRequired,
   handleBlur: PropTypes.func,
@@ -220,6 +223,7 @@ PasswordField.propTypes = {
 
 PasswordField.defaultProps = {
   errorMessage: '',
+  dataTestId: '',
   showPasswordTooltip: true,
   handleBlur: () => {},
 };

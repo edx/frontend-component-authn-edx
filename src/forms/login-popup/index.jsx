@@ -33,6 +33,7 @@ import {
   TextField as EmailOrUsernameField,
   PasswordField,
 } from '../fields';
+import ResetPasswordSuccess from '../reset-password-popup/reset-password/components/ResetPasswordSuccess';
 import './index.scss';
 
 /**
@@ -53,6 +54,7 @@ const LoginForm = () => {
   const currentProvider = useSelector(state => state.commonData.thirdPartyAuthContext.currentProvider);
   const thirdPartyAuthErrorMessage = useSelector(state => state.commonData.thirdPartyAuthContext.errorMessage);
   const finishAuthUrl = useSelector(state => state.commonData.thirdPartyAuthContext.finishAuthUrl);
+  const showResetPasswordSuccessBanner = useSelector(state => state.login.showResetPasswordSuccessBanner);
 
   const accountActivation = useGetActivationMessage();
 
@@ -177,6 +179,7 @@ const LoginForm = () => {
         errorCode={errorCode.type}
         context={errorCode.context}
       />
+      {showResetPasswordSuccessBanner && <ResetPasswordSuccess />}
       <ThirdPartyAuthAlert
         currentProvider={currentProvider}
       />

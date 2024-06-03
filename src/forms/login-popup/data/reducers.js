@@ -20,6 +20,7 @@ export const loginInitialState = {
   submitState: DEFAULT_STATE,
   loginError: {},
   loginResult: {},
+  showResetPasswordSuccessBanner: false,
 };
 
 export const loginSlice = createSlice({
@@ -33,6 +34,9 @@ export const loginSlice = createSlice({
     loginUserSuccess: (state, { payload }) => {
       state.submitState = COMPLETE_STATE;
       state.loginResult = payload;
+    },
+    setPasswordResetBanner: (state) => {
+      state.showResetPasswordSuccessBanner = true;
     },
     loginUserFailed: (state, { payload }) => {
       const {
@@ -59,6 +63,7 @@ export const {
   loginUser,
   loginUserSuccess,
   loginUserFailed,
+  setPasswordResetBanner,
 } = loginSlice.actions;
 
 export default loginSlice.reducer;

@@ -6,6 +6,7 @@ import {
   loginSaga,
   progressiveProfilingSaga,
   registerSaga,
+  resetPasswordSaga,
 } from '../forms';
 
 export default function* rootSaga() {
@@ -15,5 +16,6 @@ export default function* rootSaga() {
     loginSaga(),
     thirdPartyAuthSaga(),
     forgotPasswordSaga(),
+    resetPasswordSaga(),
   ]);
 }
