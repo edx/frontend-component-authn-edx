@@ -190,7 +190,7 @@ const RegistrationForm = () => {
           </div>
         ) : (
           <>
-            {(!autoSubmitRegForm || errorCode.type) && (
+            {(!autoSubmitRegForm || errorCode.type) && (!currentProvider) && (
               <>
                 <SocialAuthProviders isLoginForm={false} />
                 <div className="text-center mb-4 mt-3">
@@ -226,15 +226,17 @@ const RegistrationForm = () => {
                 handleErrorChange={handleErrorChange}
                 handleFocus={() => { }}
               />
-              <PasswordField
-                name="password"
-                value={formFields.password}
-                errorMessage={errors.password}
-                handleChange={handleOnChange}
-                handleErrorChange={handleErrorChange}
-                handleFocus={() => { }}
-                floatingLabel={formatMessage(messages.registrationFormPasswordFieldLabel)}
-              />
+              {!currentProvider && (
+                <PasswordField
+                  name="password"
+                  value={formFields.password}
+                  errorMessage={errors.password}
+                  handleChange={handleOnChange}
+                  handleErrorChange={handleErrorChange}
+                  handleFocus={() => { }}
+                  floatingLabel={formatMessage(messages.registrationFormPasswordFieldLabel)}
+                />
+              )}
               <MarketingEmailOptInCheckbox
                 name="marketingEmailOptIn"
                 value={formFields.marketingEmailOptIn}

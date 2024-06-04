@@ -165,10 +165,14 @@ const LoginForm = () => {
         context={errorCode.context}
         alertTitle={messages.loginFailureHeaderTitle}
       />
-      <SocialAuthProviders />
-      <div className="text-center my-3 my-sm-4">
-        {formatMessage(messages.loginFormHeading2)}
-      </div>
+      {!currentProvider && (
+        <>
+          <SocialAuthProviders />
+          <div className="text-center my-3 my-sm-4">
+            {formatMessage(messages.loginFormHeading2)}
+          </div>
+        </>
+      )}
       <LoginFailureAlert
         errorCode={errorCode.type}
         context={errorCode.context}
