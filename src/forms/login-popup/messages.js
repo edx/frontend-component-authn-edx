@@ -127,13 +127,6 @@ const messages = defineMessages({
     defaultMessage: 'An error has occurred. Try refreshing the page, or check your internet connection.',
     description: 'Error message that appears when server responds with 500 error code',
   },
-  loginTpaAuthenticationFailure: {
-    id: 'login.tpa.authentication.failure',
-    defaultMessage: 'We are sorry, you are not authorized to access edX via this channel. '
-        + 'Please contact your learning administrator or manager in order to access edX.'
-        + '{lineBreak}{lineBreak}Error Details:{lineBreak}{errorMessage}',
-    description: 'Error message third party authentication pipeline fails',
-  },
   loginIncorrectCredentialsErrorBeforeAccountBlockedText: {
     id: 'login.incorrect.credentials.error.before.account.blocked.text',
     defaultMessage: 'click here to reset it.',

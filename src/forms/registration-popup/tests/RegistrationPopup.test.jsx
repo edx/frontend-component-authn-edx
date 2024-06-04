@@ -360,6 +360,6 @@ describe('RegistrationForm Test', () => {
 
     const { container } = render(reduxWrapper(<IntlRegistrationForm />));
 
-    expect(container.querySelector('#registration-failure-alert').textContent).toContain(errorMsg);
+    expect(container.querySelector('#SSO-failure-alert').textContent).toContain(errorMsg);
   });
 });

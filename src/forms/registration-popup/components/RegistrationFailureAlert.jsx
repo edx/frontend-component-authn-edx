@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { getConfig } from '@edx/frontend-platform';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Alert } from '@openedx/paragon';
 import PropTypes from 'prop-types';
@@ -27,7 +26,7 @@ const RegistrationFailureMessage = (props) => {
     context, errorCode,
   } = props;
 
-  if (!errorCode) {
+  if (!errorCode || errorCode === TPA_AUTHENTICATION_FAILURE) {
     return null;
   }
 
@@ -38,16 +37,6 @@ const RegistrationFailureMessage = (props) => {
      break;
     case FORBIDDEN_REQUEST:
       errorMessage = formatMessage(messages.registrationRateLimitError);
-      break;
-    case TPA_AUTHENTICATION_FAILURE:
-      errorMessage = formatMessage(
-        messages.registrationTPAAuthenticationFailure,
-        {
-          platform_name: getConfig().SITE_NAME,
-          lineBreak: <br />,
-          errorMessage: context.errorMessage,
-        },
-      );
       break;
     case TPA_SESSION_EXPIRED:
       errorMessage = formatMessage(messages.registrationTPASessionExpired, { provider: context.provider });

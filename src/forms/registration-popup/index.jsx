@@ -21,6 +21,7 @@ import {
 } from '../../data/constants';
 import './index.scss';
 import AuthenticatedRedirection from '../common-components/AuthenticatedRedirection';
+import SSOFailureAlert from '../common-components/SSOFailureAlert';
 import ThirdPartyAuthAlert from '../common-components/ThirdPartyAuthAlert';
 import {
   EmailField,
@@ -165,6 +166,12 @@ const RegistrationForm = () => {
           {formatMessage(messages.registrationFormHeading1)}
         </h2>
         <hr className="separator my-3 my-sm-4" />
+
+        <SSOFailureAlert
+          errorCode={errorCode.type}
+          context={{ errorMessage: thirdPartyAuthErrorMessage }}
+        />
+
         {(autoSubmitRegForm && !errorCode.type) ? (
           <div className="my-6 text-center">
             <Spinner animation="border" variant="primary" id="tpa-spinner" />
@@ -182,11 +189,13 @@ const RegistrationForm = () => {
             <ThirdPartyAuthAlert
               currentProvider={currentProvider}
             />
+
             <RegistrationFailureAlert
               errorCode={errorCode.type}
               failureCount={errorCode.count}
               context={{ provider: currentProvider, errorMessage: thirdPartyAuthErrorMessage }}
             />
+
             <Form id="registration-form" name="registration-form" className="d-flex flex-column my-4">
               <EmailField
                 name="email"

@@ -16,6 +16,13 @@ const messages = defineMessages({
     description: 'Message that appears on register page if user has successfully authenticated with TPA '
                   + 'but no associated platform account exists',
   },
+  TPAAuthenticationFailure: {
+    id: 'tpa.authentication.failure',
+    defaultMessage: 'We are sorry, you are not authorized to access {platform_name} via this channel. '
+        + 'Please contact your learning administrator or manager in order to access {platform_name}.'
+        + '{lineBreak}{lineBreak}Error Details:{lineBreak}{errorMessage}',
+    description: 'Error message third party authentication pipeline fails',
+  },
 });
 
 export default messages;

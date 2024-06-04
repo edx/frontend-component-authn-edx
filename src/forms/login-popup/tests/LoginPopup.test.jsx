@@ -197,7 +197,7 @@ describe('LoginForm Test', () => {
     const { container } = render(reduxWrapper(<IntlLoginForm />));
 
     expect(
-      container.querySelector('#login-failure-alert').textContent,
+      container.querySelector('#SSO-failure-alert').textContent,
     ).toContain('Third party authentication failed.');
   });
 

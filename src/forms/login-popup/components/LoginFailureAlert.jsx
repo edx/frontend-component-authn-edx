@@ -32,7 +32,7 @@ const LoginFailureAlert = (props) => {
   const { formatMessage } = useIntl();
   const { context, errorCode } = props;
 
-  if (!errorCode) {
+  if (!errorCode || errorCode === TPA_AUTHENTICATION_FAILURE) {
     return null;
   }
 
@@ -129,16 +129,6 @@ const LoginFailureAlert = (props) => {
           </span>
         );
       }
-      break;
-    case TPA_AUTHENTICATION_FAILURE:
-      errorMessage = (
-        <span>
-          {formatMessage(messages.loginTpaAuthenticationFailure, {
-            lineBreak: <br />,
-            errorMessage: context.errorMessage,
-          })}
-        </span>
-      );
       break;
     case INTERNAL_SERVER_ERROR:
     default:
