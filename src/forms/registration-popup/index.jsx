@@ -13,13 +13,14 @@ import { clearRegistrationBackendError, registerUser, setUserPipelineDataLoaded 
 import getBackendValidations from './data/selector';
 import isFormValid from './data/utils';
 import messages from './messages';
-import { setCurrentOpenedForm } from '../../authn-component/data/reducers';
+import { setCurrentOpenedForm, setRegisterIntent } from '../../authn-component/data/reducers';
 import { InlineLink, SocialAuthProviders } from '../../common-ui';
 import {
   COMPLETE_STATE,
   ENTERPRISE_LOGIN_URL, FORM_SUBMISSION_ERROR, LOGIN_FORM, TPA_AUTHENTICATION_FAILURE,
 } from '../../data/constants';
 import './index.scss';
+import { registrationSuccessEvent, trackRegistrationPageEvent } from '../../tracking/trackers/register';
 import AuthenticatedRedirection from '../common-components/AuthenticatedRedirection';
 import SSOFailureAlert from '../common-components/SSOFailureAlert';
 import ThirdPartyAuthAlert from '../common-components/ThirdPartyAuthAlert';
@@ -95,6 +96,17 @@ const RegistrationForm = () => {
     setErrors(prevErrors => ({ ...prevErrors, [name]: '' }));
     setFormFields(prevState => ({ ...prevState, [name]: value }));
   };
+
+  useEffect(() => {
+    if (registrationResult.success) {
+      // This event is used by GTM
+      registrationSuccessEvent();
+    }
+  }, [registrationResult]);
+
+  useEffect(() => {
+    trackRegistrationPageEvent();
+  }, []);
 
   useEffect(() => {
     if (backendValidations) {
@@ -245,7 +257,10 @@ const RegistrationForm = () => {
             <div>
               <InlineLink
                 className="mb-2"
-                onClick={() => dispatch(setCurrentOpenedForm(LOGIN_FORM))}
+                onClick={() => {
+                  dispatch(setCurrentOpenedForm(LOGIN_FORM));
+                  dispatch(setRegisterIntent());
+                }}
                 linkHelpText={formatMessage(messages.registrationFormAlreadyHaveAccountText)}
                 linkText={formatMessage(messages.registrationFormSignInLink)}
               />

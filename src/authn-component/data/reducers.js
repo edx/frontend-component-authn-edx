@@ -14,6 +14,7 @@ export const COMMON_DATA_SLICE_NAME = 'commonData';
 export const commonDataInitialState = {
   currentForm: REGISTRATION_FORM,
   thirdPartyAuthApiStatus: DEFAULT_STATE,
+  registerIntent: false,
   thirdPartyAuthContext: {
     autoSubmitRegForm: false,
     currentProvider: null,
@@ -44,6 +45,9 @@ export const commonDataSlice = createSlice({
       state.currentForm = currentForm;
       state.thirdPartyAuthContext.errorMessage = null;
     },
+    setRegisterIntent: (state) => {
+      state.registerIntent = true;
+    },
   },
 });
 
@@ -52,6 +56,7 @@ export const {
   getThirdPartyAuthContextSuccess,
   getThirdPartyAuthContextFailed,
   setCurrentOpenedForm,
+  setRegisterIntent,
 } = commonDataSlice.actions;
 
 export default commonDataSlice.reducer;

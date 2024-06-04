@@ -14,6 +14,10 @@ import ForgotPasswordSuccess from './ForgotPasswordSuccess';
 import { setCurrentOpenedForm } from '../../../authn-component/data/reducers';
 import { InlineLink } from '../../../common-ui';
 import { COMPLETE_STATE, LOGIN_FORM } from '../../../data/constants';
+import {
+  forgotPasswordPageViewedEvent,
+  trackForgotPasswordPageEvent,
+} from '../../../tracking/trackers/forgotpassword';
 import EmailField from '../../fields/email-field';
 import messages from '../messages';
 import ResetPasswordHeader from '../ResetPasswordHeader';
@@ -33,6 +37,11 @@ const ForgotPasswordForm = () => {
   const [formErrors, setFormErrors] = useState('');
   const [formFields, setFormFields] = useState({ email: '' });
   const [isSuccess, setIsSuccess] = useState(false);
+
+  useEffect(() => {
+    forgotPasswordPageViewedEvent();
+    trackForgotPasswordPageEvent();
+  }, []);
 
   const handleOnChange = (event) => {
     const { name } = event.target;

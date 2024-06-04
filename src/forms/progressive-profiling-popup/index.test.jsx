@@ -17,6 +17,11 @@ import ProgressiveProfilingForm from './index';
 const IntlProgressiveProfilingForm = injectIntl(ProgressiveProfilingForm);
 const mockStore = configureStore();
 
+jest.mock('@edx/frontend-platform/analytics', () => ({
+  sendTrackEvent: jest.fn(),
+  sendPageEvent: jest.fn(),
+}));
+
 jest.mock('@edx/frontend-platform/auth', () => ({
   configure: jest.fn(),
   getAuthenticatedUser: jest.fn({}),

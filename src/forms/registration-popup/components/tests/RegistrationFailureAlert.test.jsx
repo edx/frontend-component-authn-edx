@@ -16,6 +16,11 @@ import SSOFailureAlert from '../../../common-components/SSOFailureAlert';
 import RegistrationPage from '../../index';
 import RegistrationFailureAlert from '../RegistrationFailureAlert';
 
+jest.mock('@edx/frontend-platform/analytics', () => ({
+  sendTrackEvent: jest.fn(),
+  sendPageEvent: jest.fn(),
+}));
+
 jest.mock('@edx/frontend-platform/i18n', () => ({
   ...jest.requireActual('@edx/frontend-platform/i18n'),
   getLocale: jest.fn(),

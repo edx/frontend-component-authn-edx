@@ -47,6 +47,7 @@ const LoginForm = () => {
   const loginResult = useSelector(state => state.login.loginResult);
   const loginErrorCode = useSelector(state => state.login.loginError?.errorCode);
   const loginErrorContext = useSelector(state => state.login.loginError?.errorContext);
+  const registerIntent = useSelector(state => state.commonData.registerIntent);
   const submitState = useSelector(state => state.login.submitState);
   const currentProvider = useSelector(state => state.commonData.thirdPartyAuthContext.currentProvider);
   const thirdPartyAuthErrorMessage = useSelector(state => state.commonData.thirdPartyAuthContext.errorMessage);
@@ -136,6 +137,7 @@ const LoginForm = () => {
     const payload = {
       ...snakeCaseObject(formFields),
       ...queryParams,
+      register_intent: registerIntent,
     };
     dispatch(loginUser(payload));
   };

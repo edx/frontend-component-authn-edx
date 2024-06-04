@@ -15,6 +15,11 @@ import { saveUserProfile } from './data/reducers';
 import messages from './messages';
 import { setCurrentOpenedForm } from '../../authn-component/data/reducers';
 import { COMPLETE_STATE, LOGIN_FORM } from '../../data/constants';
+import {
+  trackProgressiveProfilingPageEvent,
+  trackProgressiveProfilingSkipLinkClickEvent,
+  trackProgressiveProfilinSubmitClickEvent,
+} from '../../tracking/trackers/progressive-profiling';
 import AutoSuggestField from '../fields/auto-suggested-field';
 
 import './index.scss';
@@ -40,6 +45,9 @@ const ProgressiveProfilingForm = () => {
     if (authenticatedUser === null) {
       dispatch(setCurrentOpenedForm(LOGIN_FORM));
     }
+    if (authenticatedUser?.userId) {
+      trackProgressiveProfilingPageEvent();
+    }
   }, [authenticatedUser, dispatch]);
 
   useEffect(() => {
@@ -61,6 +69,14 @@ const ProgressiveProfilingForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    const eventProperties = {
+      isGenderSelected: !!formData.gender,
+      isLevelOfEducationSelected: !!formData.levelOfEducation,
+      isWorkExperienceSelected: !!formData.workExperience,
+      isSubjectSelected: !!formData.subject,
+      isLearningTypeSelected: !!formData.learningType,
+    };
+
     const extendedProfile = [];
     if (Object.keys(formData).length > 0) {
       Object.keys(formData).forEach(fieldName => {
@@ -77,12 +93,13 @@ const ProgressiveProfilingForm = () => {
         ...formData,
       },
     };
+    trackProgressiveProfilinSubmitClickEvent(eventProperties);
     dispatch(saveUserProfile(snakeCaseObject(payload)));
   };
 
   const handleSkip = (e) => {
     e.preventDefault();
-
+    trackProgressiveProfilingSkipLinkClickEvent();
     window.location.href = getConfig().LMS_BASE_URL;
   };
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 
 import ResetPasswordFailure from './ResetPasswordFailure';
 import { DEFAULT_STATE } from '../../../data/constants';
+import { trackResettPasswordPageEvent } from '../../../tracking/trackers/reset-password';
 import { PasswordField } from '../../fields';
 import messages from '../messages';
 import ResetPasswordHeader from '../ResetPasswordHeader';
@@ -25,6 +26,10 @@ const ResetPasswordPage = (props) => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [formErrors, setFormErrors] = useState({});
+
+  useEffect(() => {
+    trackResettPasswordPageEvent();
+  }, []);
 
   const validateInput = (name, value) => {
     switch (name) {

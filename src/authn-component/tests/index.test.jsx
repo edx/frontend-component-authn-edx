@@ -34,6 +34,7 @@ jest.mock('@edx/frontend-platform/auth', () => ({
 }));
 jest.mock('@edx/frontend-platform/analytics', () => ({
   sendTrackEvent: jest.fn(),
+  sendPageEvent: jest.fn(),
 }));
 jest.mock('@edx/frontend-platform/i18n', () => ({
   ...jest.requireActual('@edx/frontend-platform/i18n'),

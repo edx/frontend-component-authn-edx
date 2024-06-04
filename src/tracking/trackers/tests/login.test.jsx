@@ -1,4 +1,4 @@
-import { createEventTracker } from '../../../data/segment/utils';
+import { createEventTracker, createPageEventTracker } from '../../../data/segment/utils';
 import {
   categories,
   eventNames,
@@ -11,6 +11,7 @@ import {
 // Mock createEventTracker function
 jest.mock('../../../data/segment/utils', () => ({
   createEventTracker: jest.fn().mockImplementation(() => jest.fn()),
+  createPageEventTracker: jest.fn().mockImplementation(() => jest.fn()),
 }));
 
 describe('Tracking Functions', () => {
@@ -39,9 +40,9 @@ describe('Tracking Functions', () => {
   it('trackLoginPageEvent function', () => {
     trackLoginPageEvent();
 
-    expect(createEventTracker).toHaveBeenCalledWith(
+    expect(createPageEventTracker).toHaveBeenCalledWith(
       eventNames.loginAndRegistration,
-      { page_name: 'login' },
+      'login',
     );
   });
 
