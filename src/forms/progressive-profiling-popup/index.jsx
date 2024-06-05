@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getConfig, snakeCaseObject } from '@edx/frontend-platform';
-import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
 import { getCountryList, getLocale, useIntl } from '@edx/frontend-platform/i18n';
 import {
   Container, Form, Icon, StatefulButton,
@@ -12,6 +11,7 @@ import { Language } from '@openedx/paragon/icons';
 import { extendedProfileFields, optionalFieldsData } from './data/constants';
 import useSubjectsList from './data/hooks/useSubjectList';
 import { saveUserProfile } from './data/reducers';
+import languageCookieValue from './data/utils';
 import messages from './messages';
 import { setCurrentOpenedForm } from '../../authn-component/data/reducers';
 import { COMPLETE_STATE, LOGIN_FORM } from '../../data/constants';
@@ -35,11 +35,33 @@ const ProgressiveProfilingForm = () => {
   const dispatch = useDispatch();
 
   const { subjectsList, subjectsLoading } = useSubjectsList();
-  const authenticatedUser = getAuthenticatedUser();
   const submitState = useSelector(state => state.progressiveProfiling.submitState);
+  const authContextCountryCode = useSelector(state => state.commonData.thirdPartyAuthContext.countryCode);
+  const authenticatedUser = useSelector(state => state.register.registrationResult.authenticatedUser);
   const countryList = useMemo(() => getCountryList(getLocale()), []);
 
   const [formData, setFormData] = useState({});
+  const [formErrors, setFormErrors] = useState({});
+  const [autoFilledCountry, setAutoFilledCountry] = useState({ value: '', displayText: '' });
+
+  useEffect(() => {
+    let countryCode = null;
+    if (languageCookieValue) {
+      countryCode = languageCookieValue;
+    } else {
+      countryCode = authContextCountryCode;
+    }
+
+    if (!countryCode) {
+      return;
+    }
+    const userCountry = countryList.find((country) => country.code === countryCode);
+    if (userCountry?.code !== '' && autoFilledCountry.value === '') {
+      setAutoFilledCountry({ value: userCountry?.code, displayText: userCountry?.name });
+      // set formData state for auto populated country field to pass into payload
+      setFormData({ ...formData, country: userCountry?.code });
+    }
+  }, [authContextCountryCode, autoFilledCountry, countryList, formData]);
 
   useEffect(() => {
     if (authenticatedUser === null) {
@@ -56,19 +78,36 @@ const ProgressiveProfilingForm = () => {
     }
   }, [submitState]);
 
+  const hasFormErrors = () => {
+    let error = false;
+    if (!('country' in formData) || (formData?.country === '')) {
+      setFormErrors({ ...formErrors, country: formatMessage(messages.progressiveProfilingCountryFieldErrorMessage) });
+      error = true;
+    }
+    return error;
+  };
+
   const handleSelect = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const onChangeHandler = (e) => {
+  const radioButtonOnChangeHandler = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  const onFieldFocus = (e) => {
+    const { name, value } = e.target;
+    setFormErrors({ ...formErrors, [name]: value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    if (hasFormErrors()) {
+      return;
+    }
     const eventProperties = {
       isGenderSelected: !!formData.gender,
       isLevelOfEducationSelected: !!formData.levelOfEducation,
@@ -129,7 +168,10 @@ const ProgressiveProfilingForm = () => {
             feedBack={formatMessage(messages.progressiveProfilingCountryFieldHelpText)}
             placeholder={formatMessage(messages.useProfileCountryFieldUndetected)}
             options={countryList}
+            selectedOption={autoFilledCountry}
+            errorMessage={formErrors?.country}
             onChangeHandler={handleSelect}
+            onFocusHandler={onFieldFocus}
           />
         </Form.Group>
         <h3 className="mb-2.5">
@@ -178,11 +220,11 @@ const ProgressiveProfilingForm = () => {
           <Form.RadioSet
             value={formData.gender}
             name="gender"
-            onChange={onChangeHandler}
+            onChange={radioButtonOnChangeHandler}
             isInline
           >
             {optionalFieldsData.gender.options.map(option => (
-              <Form.Radio value={option.label}>
+              <Form.Radio value={option.label} key={option.label}>
                 {formatMessage(messages[`gender.option.${option.label}`])}
               </Form.Radio>
             ))}
@@ -203,6 +245,7 @@ const ProgressiveProfilingForm = () => {
           <StatefulButton
             id="submit-optional-fields"
             name="submit-optional-fields"
+            className="authn-progressive-profiling-submit-button"
             type="submit"
             state={submitState}
             labels={{

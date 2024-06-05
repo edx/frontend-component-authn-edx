@@ -31,6 +31,11 @@ const messages = defineMessages({
     defaultMessage: 'Your country of residence determines availability of certain courses',
     description: 'Help text for country field',
   },
+  progressiveProfilingCountryFieldErrorMessage: {
+    id: 'progressive.profiling.country.field.error.message',
+    defaultMessage: 'Country must match with an option available in the dropdown',
+    description: 'Error text appers on the country field when country is not selected and the user submit the form',
+  },
   progressiveProfilingDataCollectionTitle: {
     id: 'progressive.profiling.data.collection.title',
     defaultMessage: 'Personalize your experience',

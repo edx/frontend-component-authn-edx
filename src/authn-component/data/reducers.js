@@ -18,6 +18,7 @@ export const commonDataInitialState = {
   thirdPartyAuthContext: {
     autoSubmitRegForm: false,
     currentProvider: null,
+    countryCode: null,
     finishAuthUrl: null,
     providers: [],
     secondaryProviders: [],
