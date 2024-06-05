@@ -15,11 +15,6 @@ import { clearRegistrationBackendError, registerUser, setUserPipelineDataLoaded 
 import * as utils from '../data/utils';
 import RegistrationForm from '../index';
 
-jest.mock('@edx/frontend-platform/analytics', () => ({
-  sendTrackEvent: jest.fn(),
-  sendPageEvent: jest.fn(),
-}));
-
 const IntlRegistrationForm = injectIntl(RegistrationForm);
 const mockStore = configureStore();
 

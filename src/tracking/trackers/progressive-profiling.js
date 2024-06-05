@@ -6,7 +6,7 @@ export const eventNames = {
   loginAndRegistration: 'login_and_registration',
 };
 
-// Event tracker for successful registration
+// Event tracker for Progressive profiling skip button click
 export const trackProgressiveProfilingSkipLinkClickEvent = () => createEventTracker(
   eventNames.ProgressiveProfilingSkipLinkClick,
   {},
