@@ -2,6 +2,10 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getConfig, snakeCaseObject } from '@edx/frontend-platform';
+import {
+  AxiosJwtAuthService,
+  configure as configureAuth,
+} from '@edx/frontend-platform/auth';
 import { getCountryList, getLocale, useIntl } from '@edx/frontend-platform/i18n';
 import {
   Container, Form, Icon, StatefulButton,
@@ -20,6 +24,7 @@ import {
   trackProgressiveProfilingSkipLinkClickEvent,
   trackProgressiveProfilinSubmitClickEvent,
 } from '../../tracking/trackers/progressive-profiling';
+import AuthenticatedRedirection from '../common-components/AuthenticatedRedirection';
 import AutoSuggestField from '../fields/auto-suggested-field';
 
 import './index.scss';
@@ -37,7 +42,9 @@ const ProgressiveProfilingForm = () => {
   const { subjectsList, subjectsLoading } = useSubjectsList();
   const submitState = useSelector(state => state.progressiveProfiling.submitState);
   const authContextCountryCode = useSelector(state => state.commonData.thirdPartyAuthContext.countryCode);
+  const finishAuthUrl = useSelector(state => state.commonData.thirdPartyAuthContext.finishAuthUrl);
   const authenticatedUser = useSelector(state => state.register.registrationResult.authenticatedUser);
+  const redirectUrl = useSelector(state => state.register.registrationResult.redirectUrl);
   const countryList = useMemo(() => getCountryList(getLocale()), []);
 
   const [formData, setFormData] = useState({});
@@ -68,15 +75,10 @@ const ProgressiveProfilingForm = () => {
       dispatch(setCurrentOpenedForm(LOGIN_FORM));
     }
     if (authenticatedUser?.userId) {
+      configureAuth(AxiosJwtAuthService, { config: getConfig() });
       trackProgressiveProfilingPageEvent();
     }
   }, [authenticatedUser, dispatch]);
-
-  useEffect(() => {
-    if (submitState === COMPLETE_STATE) {
-      window.location.href = getConfig().LMS_BASE_URL;
-    }
-  }, [submitState]);
 
   const hasFormErrors = () => {
     let error = false;
@@ -144,6 +146,11 @@ const ProgressiveProfilingForm = () => {
 
   return (
     <Container size="lg" className="authn__popup-progressive-profiling-container m-0 overflow-auto">
+      <AuthenticatedRedirection
+        success={submitState === COMPLETE_STATE}
+        redirectUrl={redirectUrl}
+        finishAuthUrl={finishAuthUrl}
+      />
       <h1
         className="display-1 font-italic text-center mb-4"
         data-testid="progressive-profiling-heading"
@@ -213,7 +220,7 @@ const ProgressiveProfilingForm = () => {
             onChangeHandler={handleSelect}
           />
         </Form.Group>
-        <Form.Group className="mb-4">
+        <Form.Group controlId="gender" className="mb-4">
           <Form.Label>
             {formatMessage(messages.progressiveProfilingGenderFieldLabel)}
           </Form.Label>
