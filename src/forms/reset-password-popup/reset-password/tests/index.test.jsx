@@ -14,6 +14,7 @@ import {
   DEFAULT_STATE, FORGOT_PASSWORD_FORM,
   LOGIN_FORM,
 } from '../../../../data/constants';
+import { AuthnContext } from '../../../../data/storeHooks';
 import {
   PASSWORD_RESET, PASSWORD_RESET_ERROR, SUCCESS, TOKEN_STATE,
 } from '../data/constants';
@@ -43,7 +44,7 @@ describe('ResetPasswordPage', () => {
   const reduxWrapper = children => (
     <IntlProvider locale="en">
       <MemoryRouter>
-        <Provider store={store}>{children}</Provider>
+        <Provider context={AuthnContext} store={store}>{children}</Provider>
       </MemoryRouter>
     </IntlProvider>
   );

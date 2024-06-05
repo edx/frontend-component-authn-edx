@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { getConfig } from '@edx/frontend-platform';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Alert } from '@openedx/paragon';
 import PropTypes from 'prop-types';
@@ -16,9 +15,12 @@ import { LOGIN_FORM } from '../../data/constants';
  *
  * @returns {JSX.Element} The rendered alert component.
  */
-const ThirdPartyAuthAlert = ({ currentProvider, referrer }) => {
+const ThirdPartyAuthAlert = ({
+  currentProvider = '',
+  referrer = LOGIN_FORM,
+}) => {
   const { formatMessage } = useIntl();
-  const platformName = getConfig().SITE_NAME;
+  const platformName = 'edX';
 
   if (!currentProvider) {
     return null;
@@ -34,11 +36,6 @@ const ThirdPartyAuthAlert = ({ currentProvider, referrer }) => {
       <p>{ message }</p>
     </Alert>
   );
-};
-
-ThirdPartyAuthAlert.defaultProps = {
-  currentProvider: '',
-  referrer: LOGIN_FORM,
 };
 
 ThirdPartyAuthAlert.propTypes = {

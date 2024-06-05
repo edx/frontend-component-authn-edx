@@ -1,13 +1,14 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 
-import { IntlProvider } from '@edx/frontend-platform/i18n';
+import { injectIntl, IntlProvider } from '@edx/frontend-platform/i18n';
 import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import configureStore from 'redux-mock-store';
 
 import { setCurrentOpenedForm } from '../../../authn-component/data/reducers';
 import { PROGRESSIVE_PROFILING_FORM } from '../../../data/constants';
+import { AuthnContext } from '../../../data/storeHooks';
 import AuthenticatedRedirection from '../AuthenticatedRedirection';
 
 const mockStore = configureStore();
@@ -21,13 +22,14 @@ describe('AuthenticatedRedirection', () => {
   const mockFinishAuthUrl = '/finishAuth';
   const mockRedirectUrl = 'http://example.com/redirect';
   const mockSuccess = true;
+  const IntlAuthenticatedRedirection = injectIntl(AuthenticatedRedirection);
 
   let store = {};
 
   const reduxWrapper = children => (
     <IntlProvider locale="en">
       <MemoryRouter>
-        <Provider store={store}>{children}</Provider>
+        <Provider context={AuthnContext} store={store}>{children}</Provider>
       </MemoryRouter>
     </IntlProvider>
   );
@@ -48,9 +50,13 @@ describe('AuthenticatedRedirection', () => {
     window.location = { href: '' };
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('should not redirect if success is false', () => {
     render(reduxWrapper(
-      <AuthenticatedRedirection
+      <IntlAuthenticatedRedirection
         finishAuthUrl={mockFinishAuthUrl}
         redirectUrl={mockRedirectUrl}
         success={false}
@@ -62,7 +68,7 @@ describe('AuthenticatedRedirection', () => {
 
   it('should redirect to finishAuthUrl if provided and not already included in redirectUrl', () => {
     render(reduxWrapper(
-      <AuthenticatedRedirection
+      <IntlAuthenticatedRedirection
         finishAuthUrl={mockFinishAuthUrl}
         redirectUrl={mockRedirectUrl}
         success={mockSuccess}
@@ -74,7 +80,7 @@ describe('AuthenticatedRedirection', () => {
 
   it('should redirect to redirectUrl if finishAuthUrl is not provided or already included in redirectUrl', () => {
     render(reduxWrapper(
-      <AuthenticatedRedirection
+      <IntlAuthenticatedRedirection
         finishAuthUrl={null}
         redirectUrl={mockRedirectUrl + mockFinishAuthUrl} // finishAuthUrl already included
         success={mockSuccess}
@@ -87,7 +93,7 @@ describe('AuthenticatedRedirection', () => {
   it('should redirect to progressive profiling if redirectToProgressiveProfilingForm is true', () => {
     store.dispatch = jest.fn(store.dispatch);
     render(reduxWrapper(
-      <AuthenticatedRedirection
+      <IntlAuthenticatedRedirection
         finishAuthUrl={null}
         redirectUrl={mockRedirectUrl + mockFinishAuthUrl} // finishAuthUrl already included
         success={mockSuccess}

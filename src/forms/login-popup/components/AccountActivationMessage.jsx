@@ -16,7 +16,7 @@ import messages from '../messages';
  *
  * @returns {JSX.Element} The rendered the account activation banner component.
  */
-const AccountActivationMessage = ({ messageType }) => {
+const AccountActivationMessage = ({ messageType = null }) => {
   const { formatMessage } = useIntl();
 
   if (!messageType) {
@@ -24,7 +24,7 @@ const AccountActivationMessage = ({ messageType }) => {
   }
 
   const variant = messageType === ACCOUNT_ACTIVATION_MESSAGE.ERROR ? 'danger' : messageType;
-  const activationOrConfirmation = getConfig().MARKETING_EMAILS_OPT_IN ? 'Confirmation' : 'Activation';
+  const activationOrConfirmation = 'Confirmation';
   const iconMapping = {
     [ACCOUNT_ACTIVATION_MESSAGE.SUCCESS]: CheckCircle,
     [ACCOUNT_ACTIVATION_MESSAGE.ERROR]: Error,
@@ -79,10 +79,6 @@ const AccountActivationMessage = ({ messageType }) => {
 
 AccountActivationMessage.propTypes = {
   messageType: PropTypes.string,
-};
-
-AccountActivationMessage.defaultProps = {
-  messageType: null,
 };
 
 export default AccountActivationMessage;

@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { getConfig } from '@edx/frontend-platform';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { Alert } from '@openedx/paragon';
 import PropTypes from 'prop-types';
@@ -17,7 +16,7 @@ import { TPA_AUTHENTICATION_FAILURE } from '../../data/constants';
  */
 const SSOFailureAlert = (props) => {
   const { formatMessage } = useIntl();
-  const { context, errorCode, alertTitle } = props;
+  const { context = {}, errorCode, alertTitle = null } = props;
 
   if (!errorCode || errorCode !== TPA_AUTHENTICATION_FAILURE) {
     return null;
@@ -26,7 +25,6 @@ const SSOFailureAlert = (props) => {
     ? (
       <span>
         {formatMessage(messages.TPAAuthenticationFailure, {
-          platform_name: getConfig().SITE_NAME,
           lineBreak: <br />,
           errorMessage: context.errorMessage,
         })}
@@ -39,11 +37,6 @@ const SSOFailureAlert = (props) => {
       {alertTitle && <span>{alertTitle}</span>} {errorMessage}
     </Alert>
   );
-};
-
-SSOFailureAlert.defaultProps = {
-  context: {},
-  alertTitle: null,
 };
 
 SSOFailureAlert.propTypes = {

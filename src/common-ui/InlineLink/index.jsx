@@ -18,7 +18,11 @@ import PropTypes from 'prop-types';
  * @param {Function} onClick - The function to call when the link is clicked. If provided, `destination` is ignored.
  */
 const InlineLink = ({
-  className, destination, linkHelpText, linkText, onClick,
+  className = '',
+  destination = '',
+  linkHelpText = '',
+  linkText,
+  onClick = null,
 }) => {
   const handleClick = (e) => {
     if (onClick) {
@@ -52,13 +56,6 @@ InlineLink.propTypes = {
   onClick: PropTypes.func,
   linkHelpText: PropTypes.string,
   linkText: PropTypes.string.isRequired,
-};
-
-InlineLink.defaultProps = {
-  linkHelpText: '',
-  className: '',
-  destination: '',
-  onClick: null,
 };
 
 export default InlineLink;

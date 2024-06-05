@@ -23,9 +23,9 @@ const TextField = forwardRef((props, ref) => {
     name,
     value,
     handleChange,
-    handleBlur,
+    handleBlur = null,
     handleFocus,
-    autoComplete,
+    autoComplete = '',
   } = props;
 
   return (
@@ -65,12 +65,8 @@ TextField.propTypes = {
   value: PropTypes.string.isRequired,
   handleChange: PropTypes.func.isRequired,
   handleFocus: PropTypes.func.isRequired,
-  handleBlur: PropTypes.func.isRequired,
+  handleBlur: PropTypes.func,
   autoComplete: PropTypes.string,
-};
-
-TextField.defaultProps = {
-  autoComplete: '',
 };
 
 export default TextField;

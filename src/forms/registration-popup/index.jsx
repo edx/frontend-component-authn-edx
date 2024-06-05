@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, {
+  useEffect, useMemo, useRef, useState,
+} from 'react';
 
 import { getConfig, snakeCaseObject } from '@edx/frontend-platform';
 import { useIntl } from '@edx/frontend-platform/i18n';
@@ -28,7 +29,9 @@ import {
   REGISTRATION_FORM,
   TPA_AUTHENTICATION_FAILURE,
 } from '../../data/constants';
+import { useDispatch, useSelector } from '../../data/storeHooks';
 import './index.scss';
+import getAllPossibleQueryParams from '../../data/utils';
 import { registrationSuccessEvent, trackRegistrationPageEvent } from '../../tracking/trackers/register';
 import AuthenticatedRedirection from '../common-components/AuthenticatedRedirection';
 import SSOFailureAlert from '../common-components/SSOFailureAlert';
@@ -58,10 +61,12 @@ const RegistrationForm = () => {
   const emailRef = useRef(null);
   const socialAuthnButtonRef = useRef(null);
   const errorRef = useRef(null);
+  const queryParams = useMemo(() => getAllPossibleQueryParams(), []);
 
   const registrationResult = useSelector(state => state.register.registrationResult);
   const userPipelineDataLoaded = useSelector(state => state.register.userPipelineDataLoaded);
 
+  const onboardingComponentContext = useSelector(state => state.commonData.onboardingComponentContext);
   const thirdPartyAuthApiStatus = useSelector(state => state.commonData.thirdPartyAuthApiStatus);
   const thirdPartyAuthErrorMessage = useSelector(state => state.commonData.thirdPartyAuthContext.errorMessage);
   const finishAuthUrl = useSelector(state => state.commonData.thirdPartyAuthContext.finishAuthUrl);
@@ -193,6 +198,8 @@ const RegistrationForm = () => {
       setErrorCode(prevState => ({ type: FORM_SUBMISSION_ERROR, count: prevState.count + 1 }));
       return;
     }
+
+    payload = { ...onboardingComponentContext, ...queryParams, ...payload };
     payload = snakeCaseObject(payload);
     dispatch(registerUser(payload));
   };

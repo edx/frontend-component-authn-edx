@@ -28,8 +28,8 @@ jest.mock('@openedx/paragon', () => ({
 describe('HonorCodeAndPrivacyPolicyMessage Tests', () => {
   beforeEach(() => {
     mergeConfig({
-      AUTHN_TOS_AND_HONOR_CODE_LINK: process.env.AUTHN_TOS_AND_HONOR_CODE_LINK,
-      AUTHN_PRIVACY_POLICY_LINK: process.env.AUTHN_PRIVACY_POLICY_LINK,
+      TOS_AND_HONOR_CODE: process.env.TOS_AND_HONOR_CODE,
+      PRIVACY_POLICY: process.env.PRIVACY_POLICY,
     });
   });
 

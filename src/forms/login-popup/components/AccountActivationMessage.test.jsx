@@ -18,6 +18,10 @@ describe('AccountActivationMessage', () => {
     });
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('should match account already activated message', () => {
     render(
       <IntlProvider locale="en">
@@ -25,7 +29,7 @@ describe('AccountActivationMessage', () => {
       </IntlProvider>,
     );
 
-    const expectedMessage = 'This account has already been activated.';
+    const expectedMessage = 'This email has already been confirmed.';
 
     expect(screen.getByText(
       '',
@@ -40,9 +44,7 @@ describe('AccountActivationMessage', () => {
       </IntlProvider>,
     );
 
-    const expectedMessage = 'Success! You have activated your account.'
-                            + 'You will now receive email updates and alerts from us related to '
-                            + 'the courses you are enrolled in. Sign in to continue.';
+    const expectedMessage = 'Success! You have confirmed your email.Sign in to continue.';
 
     expect(screen.getByText(
       '',
@@ -57,7 +59,7 @@ describe('AccountActivationMessage', () => {
       </IntlProvider>,
     );
 
-    const expectedMessage = 'Your account could not be activated'
+    const expectedMessage = 'Your email could not be confirmed'
                             + 'Something went wrong, please contact support to resolve this issue.';
 
     expect(screen.getByText(
@@ -83,6 +85,10 @@ describe('EmailConfirmationMessage', () => {
     mergeConfig({
       MARKETING_EMAILS_OPT_IN: 'true',
     });
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('should match email already confirmed message', () => {
