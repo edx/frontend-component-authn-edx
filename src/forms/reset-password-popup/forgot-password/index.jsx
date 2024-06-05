@@ -19,6 +19,8 @@ import {
   trackForgotPasswordPageEvent,
 } from '../../../tracking/trackers/forgotpassword';
 import EmailField from '../../fields/email-field';
+import { NUDGE_PASSWORD_CHANGE, REQUIRE_PASSWORD_CHANGE } from '../../login-popup/data/constants';
+import { loginErrorClear } from '../../login-popup/data/reducers';
 import messages from '../messages';
 import ResetPasswordHeader from '../ResetPasswordHeader';
 
@@ -33,6 +35,7 @@ const ForgotPasswordForm = () => {
   const dispatch = useDispatch();
 
   const status = useSelector(state => state.forgotPassword?.status);
+  const loginErrorCode = useSelector(state => state.login.loginError?.errorCode);
 
   const [formErrors, setFormErrors] = useState('');
   const [formFields, setFormFields] = useState({ email: '' });
@@ -52,6 +55,7 @@ const ForgotPasswordForm = () => {
   const backToLogin = (e) => {
     e.preventDefault();
     dispatch(forgotPasswordClearStatus());
+    dispatch(loginErrorClear());
     dispatch(setCurrentOpenedForm(LOGIN_FORM));
   };
 
@@ -78,6 +82,12 @@ const ForgotPasswordForm = () => {
     <Container size="lg" className="authn__popup-container overflow-auto">
       <ResetPasswordHeader />
       <ForgotPasswordFailureAlert emailError={formErrors} status={status} />
+      {loginErrorCode === REQUIRE_PASSWORD_CHANGE && (
+        <p data-testid="require-password-change-message">{formatMessage(messages.vulnerablePasswordBlockedMessage)}</p>
+      )}
+      {loginErrorCode === NUDGE_PASSWORD_CHANGE && (
+        <p data-testid="nudge-password-change-message">{formatMessage(messages.vulnerablePasswordWarnedMessage)}</p>
+      )}
       {!isSuccess && (
         <Form id="forgot-password-form" name="reset-password-form" className="d-flex flex-column">
           <EmailField
@@ -124,17 +134,19 @@ const ForgotPasswordForm = () => {
         <ForgotPasswordSuccess email={formFields.email} />
       )}
       <div className="text-center mt-4.5">
-        <Button
-          id="reset-password-back-to-login"
-          name="reset-password-back-to-login"
-          variant="tertiary"
-          type="submit"
-          className="align-self-center back-to-login__button"
-          onClick={backToLogin}
-          onMouseDown={(e) => e.preventDefault()}
-        >
-          {formatMessage(messages.resetPasswordBackToLoginButton)}
-        </Button>
+        {(loginErrorCode !== REQUIRE_PASSWORD_CHANGE) && (
+          <Button
+            id="reset-password-back-to-login"
+            name="reset-password-back-to-login"
+            variant="tertiary"
+            type="submit"
+            className="align-self-center back-to-login__button"
+            onClick={backToLogin}
+            onMouseDown={(e) => e.preventDefault()}
+          >
+            {formatMessage(messages.resetPasswordBackToLoginButton)}
+          </Button>
+        )}
       </div>
     </Container>
   );
