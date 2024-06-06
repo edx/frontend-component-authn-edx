@@ -6,12 +6,15 @@ import {
   resetPassword,
   resetPasswordFailure,
   resetPasswordSuccess,
+  validatePassword,
+  validatePasswordFailure,
+  validatePasswordSuccess,
   validateToken,
   validateTokenFailed,
   validateTokenSuccess,
 } from './reducers';
-import { resetPasswordRequest, validateTokenRequest } from './service';
-import { setPasswordResetBanner } from '../../../login-popup/data/reducers';
+import { resetPasswordRequest, validatePasswordRequest, validateTokenRequest } from './service';
+import { setShowPasswordResetBanner } from '../../../login-popup/data/reducers';
 import { forgotPassweordTokenInvalidFailure } from '../../forgot-password/data/reducers';
 
 // Services
@@ -39,6 +42,16 @@ export function* handleValidateToken(action) {
   }
 }
 
+export function* handleValidatePassword(action) {
+  try {
+    const data = yield call(validatePasswordRequest, action.payload);
+    yield put(validatePasswordSuccess(data));
+  } catch (err) {
+    yield put(validatePasswordFailure());
+    logError(err);
+  }
+}
+
 export function* handleResetPassword(action) {
   try {
     const data = yield call(
@@ -52,7 +65,7 @@ export function* handleResetPassword(action) {
 
     if (resetStatus) {
       yield put(resetPasswordSuccess(resetStatus));
-      yield put(setPasswordResetBanner());
+      yield put(setShowPasswordResetBanner());
     } else if (data.token_invalid) {
       yield put(resetPasswordFailure({
         status: PASSWORD_RESET.INVALID_TOKEN,
@@ -82,4 +95,5 @@ export function* handleResetPassword(action) {
 export default function* saga() {
   yield takeEvery(resetPassword.type, handleResetPassword);
   yield takeEvery(validateToken.type, handleValidateToken);
+  yield takeEvery(validatePassword.type, handleValidatePassword);
 }

@@ -130,6 +130,11 @@ const messages = defineMessages({
     defaultMessage: 'Your previous request is in progress, please try again in a few moments.',
     description: 'Message displayed when previous password reset request is still in progress.',
   },
+  resetPasswordTokenValidatingHeadingText: {
+    id: 'reset.password.validate.token.heading.text',
+    defaultMessage: 'Validating your reset password link...',
+    description: 'Message displayed when token is being validated',
+  },
   // Reset password token validation failure
   'invalid.token.heading': {
     id: 'invalid.token.heading',

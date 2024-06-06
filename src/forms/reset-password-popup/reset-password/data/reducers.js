@@ -21,6 +21,7 @@ export const resetPasswordInitialState = {
   token: null,
   errorMsg: null,
   tokenError: null,
+  backendValidationError: null,
 };
 
 export const resetPasswordSlice = createSlice({
@@ -54,16 +55,28 @@ export const resetPasswordSlice = createSlice({
       state.submitState = FAILURE_STATE;
       state.errorMsg = payload.errorMsg;
     },
+    validatePassword: (state) => {
+      state.backendValidationError = null;
+    },
+    validatePasswordSuccess: (state, { payload }) => {
+      state.backendValidationError = payload;
+    },
+    validatePasswordFailure: (state) => {
+      state.backendValidationError = null;
+    },
   },
 });
 
 export const {
   validateToken,
+  validatePassword,
   validateTokenSuccess,
   validateTokenFailed,
   resetPassword,
   resetPasswordSuccess,
   resetPasswordFailure,
+  validatePasswordSuccess,
+  validatePasswordFailure,
 } = resetPasswordSlice.actions;
 
 export default resetPasswordSlice.reducer;

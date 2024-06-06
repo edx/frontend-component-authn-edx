@@ -211,9 +211,9 @@ describe('ResetPasswordPage', () => {
   it('show spinner when api call is pending', () => {
     delete window.location;
     window.location = {
-      href: 'localhost:2999',
+      href: 'localhost:2999?track=pwreset&authMode=1c-bmjdkc-5e60e084cf8113048ca7',
       pathname: '/password_reset_confirm/1c-bmjdkc-5e60e084cf8113048ca7/',
-      search: '?track=pwreset',
+      search: '?track=pwreset&authMode=1c-bmjdkc-5e60e084cf8113048ca7',
     };
     store = mockStore({
       ...initialState,
@@ -221,6 +221,7 @@ describe('ResetPasswordPage', () => {
         status: TOKEN_STATE.PENDING,
       },
     });
+    window.history.replaceState = jest.fn();
     store.dispatch = jest.fn(store.dispatch);
     render(reduxWrapper(<IntlResetPasswordPage />));
 

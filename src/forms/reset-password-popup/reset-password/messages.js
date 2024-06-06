@@ -1,30 +1,10 @@
 import { defineMessages } from '@edx/frontend-platform/i18n';
 
 const messages = defineMessages({
-  'sign.in': {
-    id: 'sign.in',
-    defaultMessage: 'Sign in',
-    description: 'Sign in toggle text',
-  },
-  'reset.password.page.title': {
-    id: 'reset.password.page.title',
-    defaultMessage: 'Reset Password | {siteName}',
-    description: 'page title',
-  },
   'reset.password': {
     id: 'reset.password',
     defaultMessage: 'Reset password',
     description: 'The page heading and button text for reset password page.',
-  },
-  'reset.password.page.instructions': {
-    id: 'reset.password.page.instructions',
-    defaultMessage: 'Enter and confirm your new password.',
-    description: 'Instructions message for reset password page.',
-  },
-  'new.password.label': {
-    id: 'new.password.label',
-    defaultMessage: 'New password',
-    description: 'New password field label for the reset password page.',
   },
   'confirm.password.label': {
     id: 'confirm.password.label',
@@ -48,20 +28,10 @@ const messages = defineMessages({
     description: 'Field validation message when confirm password is empty',
   },
   // alert banner strings
-  'reset.password.failure.heading': {
-    id: 'reset.password.failure.heading',
-    defaultMessage: 'We couldn\'t reset your password.',
-    description: 'Heading for reset password request failure',
-  },
   'reset.password.form.submission.error': {
     id: 'reset.password.form.submission.error',
     defaultMessage: 'Please check your responses and try again.',
     description: 'Error message for reset password page',
-  },
-  'reset.server.rate.limit.error': {
-    id: 'reset.server.rate.limit.error',
-    defaultMessage: 'Too many requests.',
-    description: 'Too many request at server end point',
   },
   'reset.password.success': {
     id: 'reset.password.success',

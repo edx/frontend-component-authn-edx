@@ -4,7 +4,8 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { Alert } from '@openedx/paragon';
 import PropTypes from 'prop-types';
 
-import { FORM_SUBMISSION_ERROR, PASSWORD_RESET, PASSWORD_VALIDATION_ERROR } from '../data/constants';
+import { FORM_SUBMISSION_ERROR } from '../../../../data/constants';
+import { PASSWORD_RESET, PASSWORD_VALIDATION_ERROR } from '../data/constants';
 import messages from '../messages';
 
 const ResetPasswordFailure = (props) => {

@@ -2,7 +2,6 @@ import { getConfig } from '@edx/frontend-platform';
 import { getHttpClient } from '@edx/frontend-platform/auth';
 import formurlencoded from 'form-urlencoded';
 
-// eslint-disable-next-line import/prefer-default-export
 export async function validateTokenRequest(token) {
   const requestConfig = {
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -20,7 +19,6 @@ export async function validateTokenRequest(token) {
   return data;
 }
 
-// eslint-disable-next-line import/prefer-default-export
 export async function resetPasswordRequest(payload, token, queryParams) {
   const requestConfig = {
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },

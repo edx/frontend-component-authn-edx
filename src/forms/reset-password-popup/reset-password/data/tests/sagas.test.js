@@ -1,7 +1,7 @@
 import { runSaga } from 'redux-saga';
 
 import initializeMockLogging from '../../../../../setupTest';
-import { setPasswordResetBanner } from '../../../../login-popup/data/reducers';
+import { setShowPasswordResetBanner } from '../../../../login-popup/data/reducers';
 import { forgotPassweordTokenInvalidFailure } from '../../../forgot-password/data/reducers';
 import { PASSWORD_RESET } from '../constants';
 import {
@@ -47,7 +47,7 @@ describe('handleResetPassword', () => {
       params,
     );
 
-    expect(dispatched).toEqual([resetPasswordSuccess(true), setPasswordResetBanner()]);
+    expect(dispatched).toEqual([resetPasswordSuccess(true), setShowPasswordResetBanner()]);
     resetPasswordRequest.mockClear();
   });
 
