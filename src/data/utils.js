@@ -21,4 +21,14 @@ const getAllPossibleQueryParams = (locationURl = null) => {
   );
 };
 
+export const deleteQueryParam = (param) => {
+  const queryParams = getAllPossibleQueryParams();
+
+  if (queryParams[param]) {
+    const url = new URL(window.location.href);
+    url.searchParams.delete(param);
+    window.history.replaceState(window.history.state, '', url.href);
+  }
+};
+
 export default getAllPossibleQueryParams;

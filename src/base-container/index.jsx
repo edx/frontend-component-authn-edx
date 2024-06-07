@@ -3,6 +3,7 @@ import React from 'react';
 import { ModalDialog } from '@openedx/paragon';
 import PropTypes from 'prop-types';
 
+import { deleteQueryParam } from '../data/utils';
 import './index.scss';
 
 /**
@@ -16,23 +17,30 @@ import './index.scss';
  */
 const BaseContainer = ({
   children, close, hasCloseButton, isOpen, size,
-}) => (
-  <ModalDialog
-    isOpen={isOpen}
-    onClose={close}
-    size={size}
-    variant="default"
-    title="authn-component"
-    className="bg-light-200 authn-component__modal"
-    hasCloseButton={hasCloseButton}
-  >
-    <ModalDialog.Body className="modal-body-container p-0">
-      <div className="d-flex w-100 h-100 justify-content-center overflow-hidden">
-        {children}
-      </div>
-    </ModalDialog.Body>
-  </ModalDialog>
-);
+}) => {
+  const handleOnClose = () => {
+    deleteQueryParam('authMode');
+    close();
+  };
+
+  return (
+    <ModalDialog
+      isOpen={isOpen}
+      onClose={handleOnClose}
+      size={size}
+      variant="default"
+      title="authn-component"
+      className="bg-light-200 authn-component__modal"
+      hasCloseButton={hasCloseButton}
+    >
+      <ModalDialog.Body className="modal-body-container p-0">
+        <div className="d-flex w-100 h-100 justify-content-center overflow-hidden">
+          {children}
+        </div>
+      </ModalDialog.Body>
+    </ModalDialog>
+  );
+};
 
 BaseContainer.propTypes = {
   children: PropTypes.node.isRequired,
