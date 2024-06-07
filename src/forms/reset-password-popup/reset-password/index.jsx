@@ -1,4 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, {
+  useEffect, useMemo, useRef, useState,
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useIntl } from '@edx/frontend-platform/i18n';
@@ -43,6 +45,9 @@ const ResetPasswordPage = () => {
   const [formErrors, setFormErrors] = useState({});
   const [errorCode, setErrorCode] = useState(null);
 
+  const newPasswordRef = useRef(null);
+  const errorRef = useRef(null);
+
   const status = useSelector(state => state.resetPassword.status);
   const errorMsg = useSelector(state => state.resetPassword?.errorMsg);
   const backendValidationError = useSelector(state => state.resetPassword?.backendValidationError);
@@ -61,6 +66,20 @@ const ResetPasswordPage = () => {
       newPassword: backendValidationError || '',
     }));
   }, [backendValidationError]);
+
+  useEffect(() => {
+    if (newPasswordRef.current) {
+      newPasswordRef.current.focus();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (formErrors && Object.keys(formErrors).length > 0 && errorRef.current) {
+      setTimeout(() => {
+        errorRef.current.focus();
+      }, 100);
+    }
+  }, [formErrors]);
 
   useEffect(() => {
     trackResettPasswordPageEvent();
@@ -149,7 +168,9 @@ const ResetPasswordPage = () => {
   return (
     <Container size="lg" className="authn__popup-container overflow-auto">
       <ResetPasswordHeader />
-      <ResetPasswordFailure errorCode={errorCode} errorMsg={errorMsg} />
+      <div ref={errorRef} tabIndex="-1" aria-live="assertive">
+        <ResetPasswordFailure errorCode={errorCode} errorMsg={errorMsg} />
+      </div>
       <div className="text-gray-800 mb-4">{formatMessage(messages.enterConfirmPasswordMessage)}</div>
       <Form id="set-reset-password-form" name="set-reset-password-form" className="d-flex flex-column">
         <PasswordField
@@ -162,6 +183,7 @@ const ResetPasswordPage = () => {
           handleBlur={handleOnBlur}
           errorMessage={formErrors.newPassword}
           floatingLabel={formatMessage(messages.newPasswordLabel)}
+          ref={newPasswordRef}
         />
         <PasswordField
           id="confirmPassword"

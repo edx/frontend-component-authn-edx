@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getConfig } from '@edx/frontend-platform';
@@ -23,7 +23,6 @@ import { NUDGE_PASSWORD_CHANGE, REQUIRE_PASSWORD_CHANGE } from '../../login-popu
 import { loginErrorClear } from '../../login-popup/data/reducers';
 import messages from '../messages';
 import ResetPasswordHeader from '../ResetPasswordHeader';
-
 import '../index.scss';
 
 /**
@@ -33,13 +32,15 @@ import '../index.scss';
 const ForgotPasswordForm = () => {
   const { formatMessage } = useIntl();
   const dispatch = useDispatch();
-
   const status = useSelector(state => state.forgotPassword?.status);
   const loginErrorCode = useSelector(state => state.login.loginError?.errorCode);
 
   const [formErrors, setFormErrors] = useState('');
   const [formFields, setFormFields] = useState({ email: '' });
   const [isSuccess, setIsSuccess] = useState(false);
+
+  const emailRef = useRef(null);
+  const errorRef = useRef(null);
 
   useEffect(() => {
     forgotPasswordPageViewedEvent();
@@ -66,6 +67,20 @@ const ForgotPasswordForm = () => {
     }
   }, [status]);
 
+  useEffect(() => {
+    if (emailRef.current) {
+      emailRef.current.focus();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (formErrors && errorRef.current) {
+      setTimeout(() => {
+        errorRef.current.focus();
+      }, 100);
+    }
+  }, [formErrors]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setFormErrors('');
@@ -81,7 +96,9 @@ const ForgotPasswordForm = () => {
   return (
     <Container size="lg" className="authn__popup-container overflow-auto">
       <ResetPasswordHeader />
-      <ForgotPasswordFailureAlert emailError={formErrors} status={status} />
+      <div ref={errorRef} tabIndex="-1" aria-live="assertive">
+        <ForgotPasswordFailureAlert emailError={formErrors} status={status} />
+      </div>
       {loginErrorCode === REQUIRE_PASSWORD_CHANGE && (
         <p data-testid="require-password-change-message">{formatMessage(messages.vulnerablePasswordBlockedMessage)}</p>
       )}
@@ -98,6 +115,7 @@ const ForgotPasswordForm = () => {
             errorMessage={formErrors}
             floatingLabel={formatMessage(messages.forgotPasswordFormEmailFieldLabel)}
             isRegistration={false}
+            ref={emailRef}
           />
           <StatefulButton
             id="reset-password-user"

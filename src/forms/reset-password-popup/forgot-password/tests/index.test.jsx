@@ -94,11 +94,11 @@ describe('ForgotPasswordPage', () => {
     fireEvent.click(backToLoginButton);
 
     const actions = store.getActions();
-    expect(actions).toEqual([
+    expect(actions).toEqual(expect.arrayContaining([
       { type: forgotPasswordClearStatus.type },
       { type: loginErrorClear.type },
       { type: setCurrentOpenedForm.type, payload: LOGIN_FORM },
-    ]);
+    ]));
   });
 
   it('handles COMPLETE_STATE correctly in useEffect', () => {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { useSelector } from 'react-redux';
 
 import { getConfig } from '@edx/frontend-platform';
@@ -23,7 +23,8 @@ import './index.scss';
  *
  * @returns {JSX.Element} The rendered SocialAuthButton component.
  */
-export const SocialAuthButton = ({ provider, isLoginForm, inverseTextColor }) => {
+export const SocialAuthButton = forwardRef((props, ref) => {
+  const { provider, isLoginForm, inverseTextColor } = props;
   const { formatMessage } = useIntl();
 
   if (!provider) {
@@ -46,6 +47,7 @@ export const SocialAuthButton = ({ provider, isLoginForm, inverseTextColor }) =>
 
   return (
     <Button
+      ref={ref}
       id={providerId}
       type="button"
       data-provider-url={isLoginForm ? loginUrl : registerUrl}
@@ -69,7 +71,7 @@ export const SocialAuthButton = ({ provider, isLoginForm, inverseTextColor }) =>
       </span>
     </Button>
   );
-};
+});
 
 SocialAuthButton.propTypes = {
   provider: PropTypes.shape({
@@ -94,7 +96,8 @@ SocialAuthButton.defaultProps = {
  *
  * @returns {JSX.Element} The rendered SocialAuthProviders component.
  */
-const SocialAuthProviders = ({ isLoginForm }) => {
+const SocialAuthProviders = forwardRef((props, ref) => {
+  const { isLoginForm } = props;
   const thirdPartyAuthApiStatus = useSelector(state => state.commonData.thirdPartyAuthApiStatus);
   const providers = useSelector(providersSelector);
 
@@ -105,13 +108,13 @@ const SocialAuthProviders = ({ isLoginForm }) => {
   }
   return (
     <div className="d-flex flex-column">
-      <SocialAuthButton isLoginForm={isLoginForm} provider={providers?.Google} />
+      <SocialAuthButton isLoginForm={isLoginForm} provider={providers?.Google} ref={ref} />
       <SocialAuthButton isLoginForm={isLoginForm} provider={providers?.Apple} inverseTextColor />
       <SocialAuthButton isLoginForm={isLoginForm} provider={providers?.Facebook} inverseTextColor />
       <SocialAuthButton isLoginForm={isLoginForm} provider={providers?.Microsoft} />
     </div>
   );
-};
+});
 
 SocialAuthProviders.propTypes = {
   isLoginForm: PropTypes.bool,

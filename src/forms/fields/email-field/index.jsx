@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { forwardRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useIntl } from '@edx/frontend-platform/i18n';
@@ -20,7 +20,7 @@ import './index.scss';
  * It is responsible for
  * - setting value on change
  */
-const EmailField = (props) => {
+const EmailField = forwardRef((props, ref) => {
   const dispatch = useDispatch();
 
   const { formatMessage } = useIntl();
@@ -111,6 +111,7 @@ const EmailField = (props) => {
         onBlur={handleOnBlur}
         onFocus={handleOnFocus}
         floatingLabel={floatingLabel}
+        ref={ref} // Forwarding the ref here
       />
 
       {errorMessage !== '' && (
@@ -121,7 +122,7 @@ const EmailField = (props) => {
       {emailSuggestion.suggestion && isRegistration ? renderEmailFeedback() : null}
     </Form.Group>
   );
-};
+});
 
 EmailField.propTypes = {
   name: PropTypes.string.isRequired,

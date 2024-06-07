@@ -36,7 +36,7 @@ const SSOFailureAlert = (props) => {
 
   return (
     <Alert id="SSO-failure-alert" className="mb-4" variant="danger">
-      {alertTitle && formatMessage(alertTitle)} {errorMessage}
+      {alertTitle && <span>{alertTitle}</span>} {errorMessage}
     </Alert>
   );
 };
