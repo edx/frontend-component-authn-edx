@@ -8,6 +8,14 @@
   border-color: $primary-500;
   border: 2px solid;
 }
+
+.loader-container {
+  height: 275px !important;
+}
+
+.loader-heading {
+  color: $primary-500;
+}
 #set-reset-password-form  .pgn__form-control-floating-label-text:after {
     content: none;
 }

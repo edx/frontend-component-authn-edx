@@ -5,6 +5,7 @@ import { Button, Container, useToggle } from '@openedx/paragon';
 import {
   ResetPasswordComponent, SignInComponent, SignUpComponent,
 } from '../../src/authn-component';
+import getAllPossibleQueryParams from '../../src/data/utils';
 
 import './index.scss';
 
@@ -17,16 +18,17 @@ const AuthnExampleContainer = () => {
   const [isSignInFormOpen, setSignInFormOpen, setSignInFormClose] = useToggle(false);
   const [isResetPasswordFormOpen, setResetPasswordFormOpen, setResetPasswordFormClose] = useToggle(false);
 
+  const queryParam = getAllPossibleQueryParams();
+
   useEffect(() => {
-    const passwordResetPathRegex = /^\/password_reset_confirm\/[a-zA-Z0-9-]+(?:\/)?$/;
     if (window.location.pathname === '/login') {
       setSignInFormOpen();
     } else if (window.location.pathname === '/register') {
       setSignUpFormOpen();
-    } else if (passwordResetPathRegex.test(window.location.pathname)) {
+    } else if (queryParam?.authMode) {
       setResetPasswordFormOpen();
     }
-  }, [setSignInFormOpen, setSignUpFormOpen, setResetPasswordFormOpen]);
+  }, [setSignInFormOpen, setSignUpFormOpen, setResetPasswordFormOpen, queryParam?.authMode]);
 
   return (
     <>

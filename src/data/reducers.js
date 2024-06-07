@@ -10,6 +10,8 @@ import {
   progressiveProfilingStoreName,
   registerReducer,
   registerStoreName,
+  resetPasswordReducer,
+  resetPasswordStoreName,
 } from '../forms';
 
 const createRootReducer = () => combineReducers({
@@ -18,6 +20,7 @@ const createRootReducer = () => combineReducers({
   [progressiveProfilingStoreName]: progressiveProfilingReducer,
   [commonDataStoreName]: commonDataReducer,
   [forgotPasswordStoreName]: forgotPasswordReducer,
+  [resetPasswordStoreName]: resetPasswordReducer,
 });
 
 export default createRootReducer;

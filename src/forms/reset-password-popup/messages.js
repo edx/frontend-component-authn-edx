@@ -76,7 +76,7 @@ const messages = defineMessages({
   },
   passwordValidationMessage: {
     id: 'password.validation.message',
-    defaultMessage: 'Password criteria has not been met',
+    defaultMessage: 'Password needs to include:',
     description: 'Error message for invalid password',
   },
   passwordDoNotMatch: {
@@ -130,7 +130,22 @@ const messages = defineMessages({
     defaultMessage: 'Your previous request is in progress, please try again in a few moments.',
     description: 'Message displayed when previous password reset request is still in progress.',
   },
-
+  resetPasswordTokenValidatingHeadingText: {
+    id: 'reset.password.validate.token.heading.text',
+    defaultMessage: 'Validating your reset password link...',
+    description: 'Message displayed when token is being validated',
+  },
+  // Reset password token validation failure
+  'invalid.token.heading': {
+    id: 'invalid.token.heading',
+    defaultMessage: 'Invalid password reset link',
+    description: 'Alert heading when reset password link is invalid',
+  },
+  'invalid.token.error.message': {
+    id: 'invalid.token.error.message',
+    defaultMessage: 'This password reset link is invalid. It may have been used already. Enter your email below to receive a new link.',
+    description: 'Alert message when reset password link has expired or is invalid',
+  },
 });
 
 export default messages;

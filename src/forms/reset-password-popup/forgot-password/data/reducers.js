@@ -40,6 +40,9 @@ export const forgotPasswordSlice = createSlice({
     forgotPasswordClearStatus: (state) => {
       state.status = DEFAULT_STATE;
     },
+    forgotPassweordTokenInvalidFailure: (state, { payload }) => {
+      state.status = payload;
+    },
   },
 });
 
@@ -49,6 +52,7 @@ export const {
   forgotPasswordForbidden,
   forgotPasswordFailed,
   forgotPasswordClearStatus,
+  forgotPassweordTokenInvalidFailure,
 } = forgotPasswordSlice.actions;
 
 export default forgotPasswordSlice.reducer;

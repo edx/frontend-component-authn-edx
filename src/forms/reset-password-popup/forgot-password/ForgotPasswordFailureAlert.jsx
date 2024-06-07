@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 
 import { FORBIDDEN_STATE, INTERNAL_SERVER_ERROR } from '../../../data/constants';
 import messages from '../messages';
+import { PASSWORD_RESET } from '../reset-password/data/constants';
 
 /**
  * Component responsible for showing error alert based on forgot password request status.
@@ -23,6 +24,9 @@ const ForgotPasswordFailureAlert = ({ emailError, status }) => {
   switch (status) {
     case INTERNAL_SERVER_ERROR:
       message = formatMessage(messages.forgotPasswordInternalServerError);
+      break;
+    case PASSWORD_RESET.INVALID_TOKEN:
+      message = formatMessage(messages['invalid.token.error.message']);
       break;
     case FORBIDDEN_STATE:
       message = formatMessage(messages.forgotPasswordRequestInProgressMessage);
