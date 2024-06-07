@@ -105,9 +105,7 @@ const RegistrationForm = () => {
 
   useEffect(() => {
     if (errors && Object.keys(errors).length > 0 && errorRef.current) {
-      setTimeout(() => {
-        errorRef.current.focus();
-      }, 100);
+      errorRef.current.focus();
     }
   }, [errors]);
 

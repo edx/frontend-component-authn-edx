@@ -75,9 +75,7 @@ const ForgotPasswordForm = () => {
 
   useEffect(() => {
     if (formErrors && errorRef.current) {
-      setTimeout(() => {
-        errorRef.current.focus();
-      }, 100);
+      errorRef.current.focus();
     }
   }, [formErrors]);
 
