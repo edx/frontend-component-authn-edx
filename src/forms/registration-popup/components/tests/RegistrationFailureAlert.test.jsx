@@ -92,6 +92,9 @@ describe('RegistrationFailure', () => {
   };
 
   const initialState = {
+    login: {
+      isLoginSSOIntent: false,
+    },
     register: {
       registrationResult: { success: false, redirectUrl: '' },
       registrationError: {},

@@ -27,6 +27,8 @@ export const SocialAuthButton = forwardRef((props, ref) => {
   const { provider, isLoginForm, inverseTextColor } = props;
   const { formatMessage } = useIntl();
 
+  const registrationFields = useSelector(state => state.register.registrationFields);
+
   if (!provider) {
     return null;
   }
@@ -41,6 +43,9 @@ export const SocialAuthButton = forwardRef((props, ref) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // setting marketingEmailOptIn state in local storage to preserve user marketing opt-in
+    // choice in case of SSO auto registratioon
+    localStorage.setItem('marketingEmailOptIn', registrationFields?.marketingEmailOptIn);
     const url = e.currentTarget.dataset.providerUrl;
     window.location.href = getConfig().LMS_BASE_URL + url;
   };

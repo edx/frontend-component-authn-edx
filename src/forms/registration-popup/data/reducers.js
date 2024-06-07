@@ -16,6 +16,7 @@ export const registerInitialState = {
   validationState: DEFAULT_STATE,
   registrationError: {},
   registrationResult: {},
+  registrationFields: { marketingEmailOptIn: true },
   userPipelineDataLoaded: false,
   validationApiRateLimited: false,
   validations: null,
@@ -61,6 +62,9 @@ export const registerSlice = createSlice({
       delete registrationErrorTemp[payload];
       state.registrationError = registrationErrorTemp;
     },
+    setRegistrationFields: (state, { payload }) => {
+      state.registrationFields = payload;
+    },
   },
 });
 
@@ -69,6 +73,7 @@ export const {
   registerUserSuccess,
   registerUserFailed,
   setUserPipelineDataLoaded,
+  setRegistrationFields,
   fetchRealtimeValidations,
   fetchRealtimeValidationsSuccess,
   fetchRealtimeValidationsFailed,

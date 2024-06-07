@@ -20,9 +20,24 @@ jest.mock('@edx/frontend-platform', () => ({
 }));
 
 describe('SocialAuthButton', () => {
-  const intlWrapper = children => (
-    <IntlProvider locale="en">{children}</IntlProvider>
+  let store = {};
+
+  const reduxWrapper = children => (
+    <IntlProvider locale="en">
+      <MemoryRouter>
+        <Provider store={store}>{children}</Provider>
+      </MemoryRouter>
+    </IntlProvider>
   );
+
+  const initialState = {
+    register: {
+      registrationFields: {},
+    },
+  };
+  beforeEach(() => {
+    store = mockStore(initialState);
+  });
 
   const provider = {
     id: 'google',
@@ -32,21 +47,21 @@ describe('SocialAuthButton', () => {
   };
 
   it('renders with default props for Sign In', () => {
-    const { getByText } = render(intlWrapper(
+    const { getByText } = render(reduxWrapper(
       <SocialAuthButton provider={provider} isLoginForm />,
     ));
     expect(getByText('Sign in with Google')).toBeTruthy();
   });
 
   it('renders with default props for Sign Up', () => {
-    const { getByText } = render(intlWrapper(
+    const { getByText } = render(reduxWrapper(
       <SocialAuthButton provider={provider} isLoginForm={false} />,
     ));
     expect(getByText('Sign up with Google')).toBeTruthy();
   });
 
   it('renders with inverse text color', () => {
-    const { container } = render(intlWrapper(
+    const { container } = render(reduxWrapper(
       <SocialAuthButton provider={provider} isLoginForm inverseTextColor />,
     ));
     const button = container.querySelector('.social-auth-button_google');
@@ -54,7 +69,7 @@ describe('SocialAuthButton', () => {
   });
 
   it('calls handleSubmit on button click', () => {
-    const { getByText } = render(intlWrapper(
+    const { getByText } = render(reduxWrapper(
       <SocialAuthButton provider={provider} isLoginForm />,
     ));
 
@@ -110,6 +125,9 @@ describe('SocialAuthProviders', () => {
           },
         ],
       },
+    },
+    register: {
+      registrationFields: {},
     },
   };
   beforeEach(() => {

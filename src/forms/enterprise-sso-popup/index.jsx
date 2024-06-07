@@ -22,7 +22,7 @@ const EnterpriseSSO = (props) => {
   const { formatMessage } = useIntl();
   const dispatch = useDispatch();
   const { provider } = props;
-  const inverseTextColor = WHITE_TEXT_COLOR_PROVIDERS.includes(provider.name);
+  const inverseTextColor = WHITE_TEXT_COLOR_PROVIDERS.includes(provider?.name);
 
   const handleClick = (e, url) => {
     e.preventDefault();

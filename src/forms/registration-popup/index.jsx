@@ -9,7 +9,12 @@ import {
 
 import HonorCodeAndPrivacyPolicyMessage from './components/honorCodeAndTOS';
 import RegistrationFailureAlert from './components/RegistrationFailureAlert';
-import { clearRegistrationBackendError, registerUser, setUserPipelineDataLoaded } from './data/reducers';
+import {
+  clearRegistrationBackendError,
+  registerUser,
+  setRegistrationFields,
+  setUserPipelineDataLoaded,
+} from './data/reducers';
 import getBackendValidations from './data/selector';
 import isFormValid from './data/utils';
 import messages from './messages';
@@ -17,7 +22,11 @@ import { setCurrentOpenedForm, setRegisterIntent } from '../../authn-component/d
 import { InlineLink, SocialAuthProviders } from '../../common-ui';
 import {
   COMPLETE_STATE,
-  ENTERPRISE_LOGIN_URL, FORM_SUBMISSION_ERROR, LOGIN_FORM, TPA_AUTHENTICATION_FAILURE,
+  ENTERPRISE_LOGIN_URL,
+  FORM_SUBMISSION_ERROR,
+  LOGIN_FORM,
+  REGISTRATION_FORM,
+  TPA_AUTHENTICATION_FAILURE,
 } from '../../data/constants';
 import './index.scss';
 import { registrationSuccessEvent, trackRegistrationPageEvent } from '../../tracking/trackers/register';
@@ -59,11 +68,11 @@ const RegistrationForm = () => {
   const currentProvider = useSelector(state => state.commonData.thirdPartyAuthContext.currentProvider);
   const pipelineUserDetails = useSelector(state => state.commonData.thirdPartyAuthContext.pipelineUserDetails);
   const registrationError = useSelector(state => state.register.registrationError);
+  const isLoginSSOIntent = useSelector(state => state.login.isLoginSSOIntent);
   const registrationErrorCode = registrationError?.errorCode;
   const backendValidations = useSelector(getBackendValidations);
 
-  // TODO: this value will be decided later based on from where the SSO flow was initiated.
-  const autoSubmitRegForm = currentProvider && thirdPartyAuthApiStatus === COMPLETE_STATE;
+  const autoSubmitRegForm = currentProvider && thirdPartyAuthApiStatus === COMPLETE_STATE && !isLoginSSOIntent;
 
   /**
    * Set the userPipelineDetails data in formFields for only first time
@@ -72,6 +81,8 @@ const RegistrationForm = () => {
     if (!userPipelineDataLoaded && thirdPartyAuthApiStatus === COMPLETE_STATE) {
       if (thirdPartyAuthErrorMessage) {
         setErrorCode(prevState => ({ type: TPA_AUTHENTICATION_FAILURE, count: prevState.count + 1 }));
+        // clear marketingEmailOptIn from local storage if pipeline fails
+        localStorage.removeItem('marketingEmailOptIn');
       }
       if (pipelineUserDetails && Object.keys(pipelineUserDetails).length !== 0) {
         const {
@@ -116,12 +127,19 @@ const RegistrationForm = () => {
     if (registrationError[name]) {
       dispatch(clearRegistrationBackendError(name));
     }
+    // seting marketingEmailOptIn state for SSO authentication flow for register API call
+    if (name === 'marketingEmailOptIn') {
+      dispatch(setRegistrationFields({ [name]: value }));
+    }
     setErrors(prevErrors => ({ ...prevErrors, [name]: '' }));
     setFormFields(prevState => ({ ...prevState, [name]: value }));
   };
 
   useEffect(() => {
     if (registrationResult.success) {
+      // clear local storage
+      localStorage.removeItem('marketingEmailOptIn');
+
       // This event is used by GTM
       registrationSuccessEvent();
     }
@@ -156,6 +174,11 @@ const RegistrationForm = () => {
     if (currentProvider) {
       delete payload.password;
       payload.social_auth_provider = currentProvider;
+
+      if (!isLoginSSOIntent) {
+        delete payload.marketingEmailOptIn;
+        payload.marketingEmailOptIn = localStorage.getItem('marketingEmailOptIn');
+      }
     }
 
     // Validating form data before submitting
@@ -223,6 +246,7 @@ const RegistrationForm = () => {
             )}
             <ThirdPartyAuthAlert
               currentProvider={currentProvider}
+              referrer={REGISTRATION_FORM}
             />
             <div ref={errorRef} tabIndex="-1" aria-live="assertive">
               <RegistrationFailureAlert

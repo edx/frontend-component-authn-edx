@@ -15,7 +15,12 @@ const mockStore = configureStore();
 
 describe('EnterpriseSSO', () => {
   let provider = null;
-  const store = mockStore({});
+  const initialState = {
+    register: {
+      registrationFields: {},
+    },
+  };
+  const store = mockStore(initialState);
 
   const reduxWrapper = children => (
     <IntlProvider locale="en">
