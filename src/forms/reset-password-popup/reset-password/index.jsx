@@ -9,7 +9,7 @@ import {
 import ResetPasswordFailure from './components/ResetPasswordFailure';
 import {
   PASSWORD_RESET, PASSWORD_RESET_ERROR,
-  PASSWORD_VALIDATION_ERROR, TOKEN_STATE,
+  PASSWORD_VALIDATION_ERROR, SUCCESS, TOKEN_STATE,
 } from './data/constants';
 import useGetAuthModeParam from './data/hooks';
 import { resetPassword, validatePassword, validateToken } from './data/reducers';
@@ -132,17 +132,18 @@ const ResetPasswordPage = () => {
     if (authModeToken) {
       dispatch(validateToken(authModeToken));
       return (
-        <div
+        <Container
+          size="lg"
           className="loader-container d-flex flex-column justify-content-center align-items-center my-6 w-100 h-100 text-center"
         >
           <h1 className="loader-heading text-center mb-4">{formatMessage(messages.resetPasswordTokenValidatingHeadingText)}</h1>
           <Spinner animation="border" variant="primary" className="spinner--position-centered" />;
-        </div>
+        </Container>
       );
     }
   } else if (status === PASSWORD_RESET_ERROR || status === PASSWORD_RESET.INVALID_TOKEN) {
     dispatch(setCurrentOpenedForm(FORGOT_PASSWORD_FORM));
-  } else if (status === 'success') {
+  } else if (status === SUCCESS) {
     dispatch(setCurrentOpenedForm(LOGIN_FORM));
   }
   return (

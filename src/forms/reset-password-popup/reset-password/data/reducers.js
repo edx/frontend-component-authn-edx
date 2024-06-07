@@ -15,8 +15,8 @@ export const storeName = 'resetPassword';
 export const REGISTER_SLICE_NAME = 'resetPassword';
 
 export const resetPasswordInitialState = {
-  tokenState: DEFAULT_STATE,
-  submitState: DEFAULT_STATE,
+  tokenValidationState: DEFAULT_STATE,
+  resetPasswordsubmitState: DEFAULT_STATE,
   status: TOKEN_STATE.PENDING,
   token: null,
   errorMsg: null,
@@ -29,30 +29,30 @@ export const resetPasswordSlice = createSlice({
   initialState: resetPasswordInitialState,
   reducers: {
     validateToken: (state) => {
-      state.tokenState = PENDING_STATE;
+      state.tokenValidationState = PENDING_STATE;
       state.status = PENDING_STATE;
     },
     validateTokenSuccess: (state, { payload }) => {
-      state.tokenState = COMPLETE_STATE;
+      state.tokenValidationState = COMPLETE_STATE;
       state.status = TOKEN_STATE.VALID;
       state.token = payload;
     },
     validateTokenFailed: (state, { payload }) => {
       state.status = PASSWORD_RESET_ERROR;
-      state.tokenState = DEFAULT_STATE;
+      state.tokenValidationState = DEFAULT_STATE;
       state.tokenError = payload;
     },
     resetPassword: (state) => {
       state.status = PENDING_STATE;
-      state.tokenState = PENDING_STATE;
+      state.resetPasswordsubmitState = PENDING_STATE;
     },
     resetPasswordSuccess: (state) => {
       state.status = SUCCESS;
-      state.submitState = COMPLETE_STATE;
+      state.resetPasswordsubmitState = COMPLETE_STATE;
     },
     resetPasswordFailure: (state, { payload }) => {
       state.status = payload.status;
-      state.submitState = FAILURE_STATE;
+      state.resetPasswordsubmitState = FAILURE_STATE;
       state.errorMsg = payload.errorMsg;
     },
     validatePassword: (state) => {

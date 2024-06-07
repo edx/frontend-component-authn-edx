@@ -74,6 +74,9 @@ export const AuthnComponent = ({
     if (currentForm === RESET_PASSWORD_FORM && resetPasswordTokenStatus === TOKEN_STATE.PENDING) {
       setHasCloseButton(false);
     }
+    if (currentForm === RESET_PASSWORD_FORM && resetPasswordTokenStatus !== TOKEN_STATE.PENDING) {
+      setHasCloseButton(true);
+    }
   }, [currentForm, resetPasswordTokenStatus, loginErrorCode]);
 
   useEffect(() => {

@@ -15,16 +15,16 @@ const ResetPasswordFailure = (props) => {
   let errorMessage = null;
   switch (errorCode) {
     case PASSWORD_RESET.FORBIDDEN_REQUEST:
-      errorMessage = formatMessage(messages['rate.limit.error']);
+      errorMessage = formatMessage(messages.rateLimitError);
       break;
     case PASSWORD_RESET.INTERNAL_SERVER_ERROR:
-      errorMessage = formatMessage(messages['internal.server.error']);
+      errorMessage = formatMessage(messages.internalServerError);
       break;
     case PASSWORD_VALIDATION_ERROR:
       errorMessage = errorMsg;
      break;
     case FORM_SUBMISSION_ERROR:
-      errorMessage = formatMessage(messages['reset.password.form.submission.error']);
+      errorMessage = formatMessage(messages.resetPasswordFormSubmissionError);
       break;
     default:
       break;
