@@ -28,13 +28,13 @@
   },
   "author": "edX",
   "license": "AGPL-3.0",
-  "homepage": "https://github.com/openedx/frontend-component-authn-edx#readme",
+  "homepage": "https://github.com/edx/frontend-component-authn-edx#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/openedx/frontend-component-authn-edx.git"
+    "url": "git+https://github.com/edx/frontend-component-authn-edx.git"
   },
   "bugs": {
-    "url": "https://github.com/openedx/frontend-component-authn-edx/issues"
+    "url": "https://github.com/edx/frontend-component-authn-edx/issues"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "1.2.36",
