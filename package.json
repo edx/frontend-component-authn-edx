@@ -1,14 +1,11 @@
 {
   "name": "@edx/frontend-component-authn-edx",
-  "version": "0.1.0",
+  "version": "1.0.0-semantically-released",
   "description": "Authentication related forms for edX",
   "main": "index.js",
   "publishConfig": {
     "access": "public"
   },
-  "files": [
-    "/dist"
-  ],
   "scripts": {
     "build": "make build",
     "i18n_extract": "fedx-scripts formatjs extract",
