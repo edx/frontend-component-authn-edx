@@ -2,7 +2,7 @@
   "name": "@edx/frontend-component-authn-edx",
   "version": "0.1.0",
   "description": "Authentication related forms for edX",
-  "main": "dist/index.js",
+  "main": "index.js",
   "publishConfig": {
     "access": "public"
   },

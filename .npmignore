@@ -1,0 +1,14 @@
+__mocks__
+babel.config.js
+codecov.yml
+commitlint.config.js
+coverage
+jest.config.js
+Makefile
+renovate.json
+.eslintignore
+.eslintrc.js
+.nvmrc
+src/**/*.test.js
+src/**/tests
+src/**/setupTest.js
