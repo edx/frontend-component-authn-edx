@@ -159,32 +159,6 @@ const messages = defineMessages({
                     + 'Thank you for helping us keep your data safe.',
     description: 'Error message for non-compliant password',
   },
-  // Account Activation Strings
-  accountActivationSuccessMessageTitle: {
-    id: 'account.activation.success.message.title',
-    defaultMessage: 'Success! You have activated your account.',
-    description: 'Account Activation success message title',
-  },
-  accountActivationSuccessMessage: {
-    id: 'account.activation.success.message',
-    defaultMessage: 'You will now receive email updates and alerts from us related to the courses you are enrolled in. Sign in to continue.',
-    description: 'Message show to learners when their account has been activated successfully',
-  },
-  accountActivationInfoMessage: {
-    id: 'account.activation.info.message',
-    defaultMessage: 'This account has already been activated.',
-    description: 'Message shown when learner account has already been activated',
-  },
-  accountActivationErrorMessageTitle: {
-    id: 'account.activation.error.message.title',
-    defaultMessage: 'Your account could not be activated',
-    description: 'Account Activation error message title',
-  },
-  accountActivationSupportLink: {
-    id: 'account.activation.support.link',
-    defaultMessage: 'contact support',
-    description: 'Link text used in account activation error message to go to learner help center',
-  },
   // Email Confirmation Strings
   accountConfirmationSuccessMessageTitle: {
     id: 'account.confirmation.success.message.title',
@@ -205,6 +179,11 @@ const messages = defineMessages({
     id: 'account.confirmation.error.message.title',
     defaultMessage: 'Your email could not be confirmed',
     description: 'Account verification error message title',
+  },
+  accountConfirmationSupportLink: {
+    id: 'account.confirmation.support.link',
+    defaultMessage: 'contact support',
+    description: 'Link text used in account confirmation error message to go to learner help center',
   },
 });
 
