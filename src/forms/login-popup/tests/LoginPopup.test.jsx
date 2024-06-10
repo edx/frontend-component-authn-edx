@@ -52,6 +52,9 @@ describe('LoginForm Test', () => {
       loginResult: { success: false, redirectUrl: '' },
       loginError: {},
     },
+    register: {
+      registrationFields: {},
+    },
     commonData: {
       currentForm: '',
       thirdPartyAuthContext: {

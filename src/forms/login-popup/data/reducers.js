@@ -18,6 +18,7 @@ export const LOGIN_SLICE_NAME = 'login';
 
 export const loginInitialState = {
   submitState: DEFAULT_STATE,
+  isLoginSSOIntent: false,
   loginError: {},
   loginResult: {},
   showResetPasswordSuccessBanner: false,
@@ -55,6 +56,9 @@ export const loginSlice = createSlice({
       state.loginError = {};
       state.submitState = DEFAULT_STATE;
     },
+    setLoginSSOIntent: (state) => {
+      state.isLoginSSOIntent = true;
+    },
   },
 });
 
@@ -64,6 +68,7 @@ export const {
   loginUserSuccess,
   loginUserFailed,
   setShowPasswordResetBanner,
+  setLoginSSOIntent,
 } = loginSlice.actions;
 
 export default loginSlice.reducer;

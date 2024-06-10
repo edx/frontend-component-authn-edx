@@ -13,7 +13,7 @@ import AccountActivationMessage from './components/AccountActivationMessage';
 import LoginFailureAlert from './components/LoginFailureAlert';
 import { NUDGE_PASSWORD_CHANGE, REQUIRE_PASSWORD_CHANGE } from './data/constants';
 import useGetActivationMessage from './data/hooks';
-import { loginUser } from './data/reducers';
+import { loginUser, setLoginSSOIntent } from './data/reducers';
 import messages from './messages';
 import { setCurrentOpenedForm } from '../../authn-component/data/reducers';
 import { InlineLink, SocialAuthProviders } from '../../common-ui';
@@ -114,6 +114,12 @@ const LoginForm = () => {
       }));
     }
   }, [thirdPartyAuthErrorMessage]);
+
+  useEffect(() => {
+    if (currentProvider) {
+      dispatch(setLoginSSOIntent());
+    }
+  }, [dispatch, currentProvider]);
 
   const validateFormFields = (payload) => {
     const { emailOrUsername, password } = payload;

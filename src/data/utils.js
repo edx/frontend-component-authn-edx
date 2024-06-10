@@ -21,14 +21,16 @@ const getAllPossibleQueryParams = (locationURl = null) => {
   );
 };
 
-export const deleteQueryParam = (param) => {
+export const deleteQueryParams = (params) => {
   const queryParams = getAllPossibleQueryParams();
 
-  if (queryParams[param]) {
-    const url = new URL(window.location.href);
-    url.searchParams.delete(param);
-    window.history.replaceState(window.history.state, '', url.href);
-  }
+  params.forEach((param) => {
+    if (queryParams[param]) {
+      const url = new URL(window.location.href);
+      url.searchParams.delete(param);
+      window.history.replaceState(window.history.state, '', url.href);
+    }
+  });
 };
 
 export default getAllPossibleQueryParams;

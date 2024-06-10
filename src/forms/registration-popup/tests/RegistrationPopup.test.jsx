@@ -60,6 +60,9 @@ describe('RegistrationForm Test', () => {
       registrationError: {},
       registrationResult: {},
     },
+    login: {
+      isLoginSSOIntent: false,
+    },
     commonData: {
       thirdPartyAuthApiStatus: DEFAULT_STATE,
       thirdPartyAuthContext: {

@@ -3,7 +3,7 @@ import React from 'react';
 import { ModalDialog } from '@openedx/paragon';
 import PropTypes from 'prop-types';
 
-import { deleteQueryParam } from '../data/utils';
+import { deleteQueryParams } from '../data/utils';
 import './index.scss';
 
 /**
@@ -19,7 +19,7 @@ const BaseContainer = ({
   children, close, hasCloseButton, isOpen, size,
 }) => {
   const handleOnClose = () => {
-    deleteQueryParam('authMode');
+    deleteQueryParams(['authMode', 'tpa_hint']);
     close();
   };
 
