@@ -25,7 +25,7 @@ const BaseContainer = ({
   size = 'lg',
 }) => {
   const handleOnClose = () => {
-    deleteQueryParams(['authMode', 'tpa_hint']);
+    deleteQueryParams(['authMode', 'tpa_hint', 'password_reset_token']);
     close();
   };
 
