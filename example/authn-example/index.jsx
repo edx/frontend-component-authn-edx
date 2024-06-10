@@ -21,11 +21,11 @@ const AuthnExampleContainer = () => {
   const queryParam = getAllPossibleQueryParams();
 
   useEffect(() => {
-    if (window.location.pathname === '/login') {
+    if (queryParam?.authMode === 'Login') {
       setSignInFormOpen();
-    } else if (window.location.pathname === '/register') {
+    } else if (queryParam?.authMode === 'Register') {
       setSignUpFormOpen();
-    } else if (queryParam?.authMode) {
+    } else if (queryParam?.authMode === 'PasswordResetConfirm') {
       setResetPasswordFormOpen();
     }
   }, [setSignInFormOpen, setSignUpFormOpen, setResetPasswordFormOpen, queryParam?.authMode]);

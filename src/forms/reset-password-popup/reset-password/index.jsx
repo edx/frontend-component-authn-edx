@@ -12,11 +12,10 @@ import {
   PASSWORD_RESET, PASSWORD_RESET_ERROR,
   PASSWORD_VALIDATION_ERROR, SUCCESS, TOKEN_STATE,
 } from './data/constants';
-import useGetAuthModeParam from './data/hooks';
 import { resetPassword, validatePassword, validateToken } from './data/reducers';
 import { setCurrentOpenedForm } from '../../../authn-component/data/reducers';
 import {
-  DEFAULT_STATE, FORGOT_PASSWORD_FORM, FORM_SUBMISSION_ERROR, LOGIN_FORM,
+  DEFAULT_STATE, FORGOT_PASSWORD_FORM, FORM_SUBMISSION_ERROR, LOGIN_FORM, PENDING_STATE,
 } from '../../../data/constants';
 import { useDispatch, useSelector } from '../../../data/storeHooks';
 import getAllPossibleQueryParams from '../../../data/utils';
@@ -37,7 +36,7 @@ const ResetPasswordPage = () => {
   const dispatch = useDispatch();
 
   const queryParams = useMemo(() => getAllPossibleQueryParams(), []);
-  const authModeToken = useGetAuthModeParam();
+  const passwordResetToken = queryParams?.password_reset_token;
 
   // const ResetPasswordPage = ({ errorMsg = null }) => {
   const { formatMessage } = useIntl();
@@ -62,6 +61,12 @@ const ResetPasswordPage = () => {
   };
 
   useEffect(() => {
+    if (passwordResetToken) {
+      dispatch(validateToken(passwordResetToken));
+    }
+  }, [dispatch, passwordResetToken]);
+
+  useEffect(() => {
     setFormErrors((preState) => ({
       ...preState,
       newPassword: backendValidationError || '',
@@ -76,9 +81,7 @@ const ResetPasswordPage = () => {
 
   useEffect(() => {
     if (formErrors && Object.keys(formErrors).length > 0 && errorRef.current) {
-      setTimeout(() => {
-        errorRef.current.focus();
-      }, 100);
+      errorRef.current.focus();
     }
   }, [formErrors]);
 
@@ -142,30 +145,32 @@ const ResetPasswordPage = () => {
         new_password2: confirmPassword,
       };
       const params = queryParams;
-      dispatch(resetPassword({ formPayload, token: authModeToken, params }));
+      dispatch(resetPassword({ formPayload, token: passwordResetToken, params }));
     } else {
       setErrorCode(FORM_SUBMISSION_ERROR);
     }
   };
 
-  if (status === TOKEN_STATE.PENDING) {
-    if (authModeToken) {
-      dispatch(validateToken(authModeToken));
-      return (
-        <Container
-          size="lg"
-          className="loader-container d-flex flex-column justify-content-center align-items-center my-6 w-100 h-100 text-center"
-        >
-          <h1 className="loader-heading text-center mb-4">{formatMessage(messages.resetPasswordTokenValidatingHeadingText)}</h1>
-          <Spinner animation="border" variant="primary" className="spinner--position-centered" />;
-        </Container>
-      );
-    }
-  } else if (status === PASSWORD_RESET_ERROR || status === PASSWORD_RESET.INVALID_TOKEN) {
+  if (!passwordResetToken) {
+    dispatch(setCurrentOpenedForm(FORGOT_PASSWORD_FORM));
+  }
+
+  if (status === TOKEN_STATE.PENDING || status === PENDING_STATE) {
+    return (
+      <Container
+        size="lg"
+        className="loader-container d-flex flex-column justify-content-center align-items-center my-6 w-100 h-100 text-center"
+      >
+        <h1 className="loader-heading text-center mb-4">{formatMessage(messages.resetPasswordTokenValidatingHeadingText)}</h1>
+        <Spinner animation="border" variant="primary" className="spinner--position-centered" />;
+      </Container>
+    );
+  } if (status === PASSWORD_RESET_ERROR || status === PASSWORD_RESET.INVALID_TOKEN) {
     dispatch(setCurrentOpenedForm(FORGOT_PASSWORD_FORM));
   } else if (status === SUCCESS) {
     dispatch(setCurrentOpenedForm(LOGIN_FORM));
   }
+
   return (
     <Container size="lg" className="authn__popup-container overflow-auto">
       <ResetPasswordHeader />
