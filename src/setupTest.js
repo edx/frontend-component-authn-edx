@@ -8,6 +8,10 @@ class MockLoggingService {
 
   logError = jest.fn();
 }
+jest.mock('@edx/frontend-platform/analytics', () => ({
+  sendTrackEvent: jest.fn(),
+  sendPageEvent: jest.fn(),
+}));
 
 export default function initializeMockLogging() {
   const loggingService = configureLogging(MockLoggingService, {
