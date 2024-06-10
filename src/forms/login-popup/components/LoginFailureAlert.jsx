@@ -30,7 +30,7 @@ import messages from '../messages';
 
 const LoginFailureAlert = (props) => {
   const { formatMessage } = useIntl();
-  const { context = {}, errorCode } = props;
+  const { context = {}, errorCode, errorRef } = props;
 
   if (!errorCode || errorCode === TPA_AUTHENTICATION_FAILURE) {
     return null;
@@ -137,7 +137,7 @@ const LoginFailureAlert = (props) => {
   }
 
   return (
-    <Alert id="login-failure-alert" className="mb-4" variant="danger">
+    <Alert id="login-failure-alert" className="mb-4" variant="danger" ref={errorRef} tabIndex="-1" aria-live="assertive">
       {formatMessage(messages.loginFailureHeaderTitle)} { errorMessage }
     </Alert>
   );
@@ -156,6 +156,10 @@ LoginFailureAlert.propTypes = {
     email: PropTypes.string,
   }),
   errorCode: PropTypes.string.isRequired,
+  errorRef: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+  ]),
 };
 
 export default LoginFailureAlert;

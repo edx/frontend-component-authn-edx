@@ -24,6 +24,7 @@ const RegistrationFailureMessage = ({
   context = {
     errorMessage: null,
   }, errorCode,
+  errorRef,
 }) => {
   const { formatMessage } = useIntl();
 
@@ -51,7 +52,7 @@ const RegistrationFailureMessage = ({
   }
 
   return (
-    <Alert id="registration-failure-alert" className="mb-5" variant="danger">
+    <Alert id="registration-failure-alert" className="mb-5" variant="danger" ref={errorRef} tabIndex="-1" aria-live="assertive">
       <p>{errorMessage}</p>
     </Alert>
   );
@@ -63,6 +64,10 @@ RegistrationFailureMessage.propTypes = {
     errorMessage: PropTypes.string,
   }),
   errorCode: PropTypes.string.isRequired,
+  errorRef: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+  ]),
 };
 
 export default RegistrationFailureMessage;

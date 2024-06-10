@@ -17,6 +17,7 @@ import messages from './messages';
 import { setCurrentOpenedForm } from '../../authn-component/data/reducers';
 import { InlineLink, SocialAuthProviders } from '../../common-ui';
 import {
+  COMPLETE_STATE,
   ENTERPRISE_LOGIN_URL,
   FORGOT_PASSWORD_FORM,
   INVALID_FORM,
@@ -49,11 +50,14 @@ const LoginForm = () => {
   const queryParams = useMemo(() => getAllPossibleQueryParams(), []);
 
   const emailOrUsernameRef = useRef(null);
+  const errorRef = useRef(null);
   const socialAuthnButtonRef = useRef(null);
 
   const loginResult = useSelector(state => state.login.loginResult);
   const loginErrorCode = useSelector(state => state.login.loginError?.errorCode);
   const loginErrorContext = useSelector(state => state.login.loginError?.errorContext);
+  const providers = useSelector(state => state.commonData.thirdPartyAuthContext?.providers);
+  const thirdPartyAuthApiStatus = useSelector(state => state.commonData.thirdPartyAuthApiStatus);
   const registerIntent = useSelector(state => state.commonData.registerIntent);
   const submitState = useSelector(state => state.login.submitState);
   const currentProvider = useSelector(state => state.commonData.thirdPartyAuthContext.currentProvider);
@@ -79,17 +83,20 @@ const LoginForm = () => {
   }, []);
 
   useEffect(() => {
-    const focusInterval = setInterval(() => {
-      if (socialAuthnButtonRef.current) {
+    if (thirdPartyAuthApiStatus === COMPLETE_STATE) {
+      if (providers.length > 0) {
         socialAuthnButtonRef.current.focus();
-        clearInterval(focusInterval);
       } else if (emailOrUsernameRef.current) {
         emailOrUsernameRef.current.focus();
       }
-    }, 100);
+    }
+  }, [thirdPartyAuthApiStatus, providers]);
 
-    return () => clearInterval(focusInterval);
-  }, []);
+  useEffect(() => {
+    if (Object.keys(formErrors).length > 0 && Object.values(formErrors)[0]) {
+      errorRef.current.focus();
+    }
+  }, [formErrors]);
 
   useEffect(() => {
     if (loginErrorCode) {
@@ -202,6 +209,7 @@ const LoginForm = () => {
       <LoginFailureAlert
         errorCode={errorCode.type}
         context={errorCode.context}
+        errorRef={errorRef}
       />
       {showResetPasswordSuccessBanner && <ResetPasswordSuccess />}
       <ThirdPartyAuthAlert

@@ -74,13 +74,13 @@ const ResetPasswordPage = () => {
   }, [backendValidationError]);
 
   useEffect(() => {
-    if (newPasswordRef.current) {
+    if (status === TOKEN_STATE.VALID && newPasswordRef.current) {
       newPasswordRef.current.focus();
     }
-  }, []);
+  }, [status]);
 
   useEffect(() => {
-    if (formErrors && Object.keys(formErrors).length > 0 && errorRef.current) {
+    if (Object.keys(formErrors).length > 0 && Object.values(formErrors)[0]) {
       errorRef.current.focus();
     }
   }, [formErrors]);

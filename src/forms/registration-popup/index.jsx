@@ -70,6 +70,7 @@ const RegistrationForm = () => {
   const thirdPartyAuthApiStatus = useSelector(state => state.commonData.thirdPartyAuthApiStatus);
   const thirdPartyAuthErrorMessage = useSelector(state => state.commonData.thirdPartyAuthContext.errorMessage);
   const finishAuthUrl = useSelector(state => state.commonData.thirdPartyAuthContext.finishAuthUrl);
+  const providers = useSelector(state => state.commonData.thirdPartyAuthContext?.providers);
   const currentProvider = useSelector(state => state.commonData.thirdPartyAuthContext.currentProvider);
   const pipelineUserDetails = useSelector(state => state.commonData.thirdPartyAuthContext.pipelineUserDetails);
   const registrationError = useSelector(state => state.register.registrationError);
@@ -107,20 +108,17 @@ const RegistrationForm = () => {
   ]);
 
   useEffect(() => {
-    const focusInterval = setInterval(() => {
-      if (socialAuthnButtonRef.current) {
+    if (thirdPartyAuthApiStatus === COMPLETE_STATE) {
+      if (providers.length > 0) {
         socialAuthnButtonRef.current.focus();
-        clearInterval(focusInterval);
       } else if (emailRef.current) {
         emailRef.current.focus();
       }
-    }, 100);
-
-    return () => clearInterval(focusInterval);
-  }, []);
+    }
+  }, [thirdPartyAuthApiStatus, providers]);
 
   useEffect(() => {
-    if (errors && Object.keys(errors).length > 0 && errorRef.current) {
+    if (Object.keys(errors).length > 0 && Object.values(errors)[0] && errorRef.current) {
       errorRef.current.focus();
     }
   }, [errors]);
@@ -255,13 +253,12 @@ const RegistrationForm = () => {
               currentProvider={currentProvider}
               referrer={REGISTRATION_FORM}
             />
-            <div ref={errorRef} tabIndex="-1" aria-live="assertive">
-              <RegistrationFailureAlert
-                errorCode={errorCode.type}
-                failureCount={errorCode.count}
-                context={{ provider: currentProvider, errorMessage: thirdPartyAuthErrorMessage }}
-              />
-            </div>
+            <RegistrationFailureAlert
+              errorRef={errorRef}
+              errorCode={errorCode.type}
+              failureCount={errorCode.count}
+              context={{ provider: currentProvider, errorMessage: thirdPartyAuthErrorMessage }}
+            />
 
             <Form id="registration-form" name="registration-form" className="d-flex flex-column my-4">
               <EmailField

@@ -12,8 +12,9 @@ import { PASSWORD_RESET } from '../reset-password/data/constants';
  * Component responsible for showing error alert based on forgot password request status.
  * @param {string} emailError
  * @param {string} status
+ * @param {object} errorRef
  */
-const ForgotPasswordFailureAlert = ({ emailError = '', status = '' }) => {
+const ForgotPasswordFailureAlert = ({ emailError = '', status = '', errorRef }) => {
   const { formatMessage } = useIntl();
   let message = '';
 
@@ -36,7 +37,14 @@ const ForgotPasswordFailureAlert = ({ emailError = '', status = '' }) => {
   }
 
   return message ? (
-    <Alert id="forgot-password-failure-alert" className="mb-4" variant="danger">
+    <Alert
+      id="forgot-password-failure-alert"
+      className="mb-4"
+      variant="danger"
+      ref={errorRef}
+      tabIndex="-1"
+      aria-live="assertive"
+    >
       <p>{message}</p>
     </Alert>
   ) : null;
@@ -45,6 +53,10 @@ const ForgotPasswordFailureAlert = ({ emailError = '', status = '' }) => {
 ForgotPasswordFailureAlert.propTypes = {
   emailError: PropTypes.string,
   status: PropTypes.string,
+  errorRef: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+  ]),
 };
 
 export default ForgotPasswordFailureAlert;
