@@ -5,10 +5,6 @@ import { render } from '@testing-library/react';
 
 import ThirdPartyAuthAlert from '../ThirdPartyAuthAlert';
 
-jest.mock('@edx/frontend-platform', () => ({
-  getConfig: jest.fn(() => ({ SITE_NAME: 'edX' })),
-}));
-
 describe('ThirdPartyAuthAlert', () => {
   const mockCurrentProvider = 'Google';
   const mockPlatformName = 'edX';

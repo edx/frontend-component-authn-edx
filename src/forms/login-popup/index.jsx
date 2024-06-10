@@ -1,7 +1,6 @@
 import React, {
   useEffect, useMemo, useRef, useState,
 } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 
 import { getConfig, snakeCaseObject } from '@edx/frontend-platform';
 import { useIntl } from '@edx/frontend-platform/i18n';
@@ -24,6 +23,7 @@ import {
   REGISTRATION_FORM,
   TPA_AUTHENTICATION_FAILURE,
 } from '../../data/constants';
+import { useDispatch, useSelector } from '../../data/storeHooks';
 import getAllPossibleQueryParams from '../../data/utils';
 import {
   trackForgotPasswordLinkClick, trackInstitutionLoginLinkClick, trackLoginPageEvent,

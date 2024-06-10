@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 
 import { getConfig } from '@edx/frontend-platform';
 import { useIntl } from '@edx/frontend-platform/i18n';
@@ -14,6 +13,7 @@ import ForgotPasswordSuccess from './ForgotPasswordSuccess';
 import { setCurrentOpenedForm } from '../../../authn-component/data/reducers';
 import { InlineLink } from '../../../common-ui';
 import { COMPLETE_STATE, LOGIN_FORM } from '../../../data/constants';
+import { useDispatch, useSelector } from '../../../data/storeHooks';
 import {
   forgotPasswordPageViewedEvent,
   trackForgotPasswordPageEvent,

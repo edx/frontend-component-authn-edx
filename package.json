@@ -34,6 +34,7 @@
     "url": "https://github.com/edx/frontend-component-authn-edx/issues"
   },
   "dependencies": {
+    "@edx/brand-edx.org": "^2.0.4",
     "@fortawesome/fontawesome-svg-core": "1.2.36",
     "@fortawesome/free-brands-svg-icons": "5.15.4",
     "@fortawesome/free-regular-svg-icons": "5.15.4",
@@ -64,7 +65,6 @@
     "reselect": "^5.1.0"
   },
   "devDependencies": {
-    "@edx/brand": "npm:@edx/brand-edx.org@2.1.2",
     "@edx/browserslist-config": "^1.1.1",
     "@edx/frontend-build": "13.0.0",
     "@edx/frontend-platform": "7.1.2",

@@ -5,6 +5,7 @@ import { injectIntl, IntlProvider } from '@edx/frontend-platform/i18n';
 import { fireEvent, render } from '@testing-library/react';
 import configureStore from 'redux-mock-store';
 
+import { AuthnContext } from '../../../data/storeHooks';
 import { clearRegistrationBackendError } from '../../registration-popup/data/reducers';
 import { NameField } from '../index';
 
@@ -17,7 +18,7 @@ describe('NameField', () => {
 
   const reduxWrapper = children => (
     <IntlProvider locale="en">
-      <Provider store={store}>{children}</Provider>
+      <Provider context={AuthnContext} store={store}>{children}</Provider>
     </IntlProvider>
   );
 

@@ -12,6 +12,7 @@ export const commonDataStoreName = 'commonData';
 export const COMMON_DATA_SLICE_NAME = 'commonData';
 
 export const commonDataInitialState = {
+  onboardingComponentContext: {},
   currentForm: REGISTRATION_FORM,
   thirdPartyAuthApiStatus: DEFAULT_STATE,
   registerIntent: false,
@@ -31,6 +32,9 @@ export const commonDataSlice = createSlice({
   name: COMMON_DATA_SLICE_NAME,
   initialState: commonDataInitialState,
   reducers: {
+    setOnboardingComponentContext: (state, { payload: componentContext }) => {
+      state.onboardingComponentContext = componentContext;
+    },
     getThirdPartyAuthContext: (state) => {
       state.thirdPartyAuthApiStatus = PENDING_STATE;
     },
@@ -53,6 +57,7 @@ export const commonDataSlice = createSlice({
 });
 
 export const {
+  setOnboardingComponentContext,
   getThirdPartyAuthContext,
   getThirdPartyAuthContextSuccess,
   getThirdPartyAuthContextFailed,

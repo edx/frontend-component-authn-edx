@@ -18,6 +18,7 @@ export const PROGRESSIVE_PROFILING_SLICE_NAME = 'progressiveProfiling';
 
 export const progressiveProfilingInitialState = {
   submitState: DEFAULT_STATE,
+  redirectUrl: '',
 };
 
 export const progressiveProfilingSlice = createSlice({
@@ -33,6 +34,9 @@ export const progressiveProfilingSlice = createSlice({
     saveUserProfileFailure: (state) => {
       state.submitState = FAILURE_STATE;
     },
+    setProgressiveProfilingRedirectUrl: (state, { payload: redirectUrl }) => {
+      state.redirectUrl = redirectUrl;
+    },
   },
 });
 
@@ -40,6 +44,7 @@ export const {
   saveUserProfile,
   saveUserProfileSuccess,
   saveUserProfileFailure,
+  setProgressiveProfilingRedirectUrl,
 } = progressiveProfilingSlice.actions;
 
 export default progressiveProfilingSlice.reducer;

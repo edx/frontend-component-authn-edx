@@ -1,12 +1,12 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 
-import { getConfig } from '@edx/frontend-platform';
 import { injectIntl, IntlProvider } from '@edx/frontend-platform/i18n';
 import { fireEvent, render } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import configureStore from 'redux-mock-store';
 
+import { AuthnContext } from '../../../data/storeHooks';
 import { clearRegistrationBackendError, fetchRealtimeValidations } from '../../registration-popup/data/reducers';
 import { EmailField } from '../index';
 
@@ -35,7 +35,7 @@ describe('EmailField', () => {
 
   const reduxWrapper = children => (
     <IntlProvider locale="en">
-      <Provider store={store}>{children}</Provider>
+      <Provider context={AuthnContext} store={store}>{children}</Provider>
     </IntlProvider>
   );
 
@@ -187,7 +187,7 @@ describe('EmailField', () => {
           ...initialState.register,
           registrationError: {
             errorCode: 'duplicate-email',
-            email: [{ userMessage: `This email is already associated with an existing or previous ${getConfig().SITE_NAME} account` }],
+            email: [{ userMessage: 'This email is already associated with an existing or previous edX account' }],
           },
         },
       });

@@ -1,7 +1,6 @@
 import React, {
   useEffect, useMemo, useRef, useState,
 } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
@@ -19,6 +18,7 @@ import { setCurrentOpenedForm } from '../../../authn-component/data/reducers';
 import {
   DEFAULT_STATE, FORGOT_PASSWORD_FORM, FORM_SUBMISSION_ERROR, LOGIN_FORM,
 } from '../../../data/constants';
+import { useDispatch, useSelector } from '../../../data/storeHooks';
 import getAllPossibleQueryParams from '../../../data/utils';
 import { trackResettPasswordPageEvent } from '../../../tracking/trackers/reset-password';
 import { PasswordField } from '../../fields';
@@ -39,6 +39,7 @@ const ResetPasswordPage = () => {
   const queryParams = useMemo(() => getAllPossibleQueryParams(), []);
   const authModeToken = useGetAuthModeParam();
 
+  // const ResetPasswordPage = ({ errorMsg = null }) => {
   const { formatMessage } = useIntl();
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');

@@ -18,6 +18,7 @@ import {
   PROGRESSIVE_PROFILING_FORM,
   REGISTRATION_FORM,
 } from '../../data/constants';
+import { AuthnContext } from '../../data/storeHooks';
 import useSubjectList from '../../forms/progressive-profiling-popup/data/hooks/useSubjectList';
 import { getThirdPartyAuthContext, setCurrentOpenedForm } from '../data/reducers';
 import { AuthnComponent, SignInComponent, SignUpComponent } from '../index';
@@ -39,6 +40,7 @@ jest.mock('@edx/frontend-platform/analytics', () => ({
 jest.mock('@edx/frontend-platform/i18n', () => ({
   ...jest.requireActual('@edx/frontend-platform/i18n'),
   getLocale: jest.fn(),
+  getMessages: jest.fn(),
 }));
 jest.mock('../../forms/progressive-profiling-popup/data/hooks/useSubjectList', () => jest.fn());
 
@@ -48,7 +50,7 @@ describe('AuthnComponent Test', () => {
   const reduxWrapper = children => (
     <IntlProvider locale="en">
       <MemoryRouter>
-        <Provider store={store}>{children}</Provider>
+        <Provider context={AuthnContext} store={store}>{children}</Provider>
       </MemoryRouter>
     </IntlProvider>
   );
@@ -77,13 +79,18 @@ describe('AuthnComponent Test', () => {
   beforeEach(() => {
     store = mockStore(initialState);
     mergeConfig({
-      AUTHN_TOS_AND_HONOR_CODE_LINK: process.env.AUTHN_TOS_AND_HONOR_CODE_LINK,
-      AUTHN_PRIVACY_POLICY_LINK: process.env.AUTHN_PRIVACY_POLICY_LINK,
+      TOS_AND_HONOR_CODE: process.env.TOS_AND_HONOR_CODE,
+      PRIVACY_POLICY: process.env.PRIVACY_POLICY,
       INFO_EMAIL: process.env.INFO_EMAIL,
     });
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   describe('SignInComponent', () => {
+    const IntlSignInComponent = injectIntl(SignInComponent);
     beforeEach(() => {
       store = mockStore({
         ...initialState,
@@ -94,23 +101,29 @@ describe('AuthnComponent Test', () => {
       });
     });
 
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+
     it('renders login form when rendering SignInComponent', () => {
       // It also tests that component is rendered only when isOpen is true
       const { getByTestId } = render(reduxWrapper(
-        <SignInComponent isOpen close={() => {}} />,
+        <IntlSignInComponent isOpen close={() => {}} />,
       ));
       expect(getByTestId('sign-in-heading')).toBeTruthy();
     });
 
     it('does not render when isOpen is false', () => {
       const { queryByTestId } = render(reduxWrapper(
-        <SignInComponent isOpen={false} close={() => {}} />,
+        <IntlSignInComponent isOpen={false} close={() => {}} />,
       ));
       expect(queryByTestId('sign-in-heading')).toBeFalsy();
     });
   });
 
   describe('SignUpComponent', () => {
+    const IntlSignUpComponent = injectIntl(SignUpComponent);
+
     beforeEach(() => {
       store = mockStore({
         ...initialState,
@@ -121,17 +134,21 @@ describe('AuthnComponent Test', () => {
       });
     });
 
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+
     it('renders registration form when rendering SignUpComponent', () => {
       // It also tests that component is rendered only when isOpen is true
       const { getByTestId } = render(reduxWrapper(
-        <SignUpComponent isOpen close={() => {}} />,
+        <IntlSignUpComponent isOpen close={() => {}} />,
       ));
       expect(getByTestId('sign-up-heading')).toBeTruthy();
     });
 
     it('does not render when isOpen is false', () => {
       const { queryByTestId } = render(reduxWrapper(
-        <SignUpComponent isOpen={false} close={() => {}} />,
+        <IntlSignUpComponent isOpen={false} close={() => {}} />,
       ));
       expect(queryByTestId('sign-up-heading')).toBeFalsy();
     });

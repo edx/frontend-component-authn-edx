@@ -1,5 +1,4 @@
 import React, { forwardRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
@@ -12,6 +11,7 @@ import PropTypes from 'prop-types';
 
 import messages from './messages';
 import validatePasswordField from './validator';
+import { useDispatch, useSelector } from '../../../data/storeHooks';
 import { LETTER_REGEX, NUMBER_REGEX } from '../../registration-popup/data/constants';
 import { clearRegistrationBackendError, fetchRealtimeValidations } from '../../registration-popup/data/reducers';
 import './index.scss';
@@ -32,20 +32,21 @@ const PasswordField = forwardRef((props, ref) => {
 
   const validationApiRateLimited = useSelector(state => state.register?.validationApiRateLimited);
   const {
-    errorMessage,
+    errorMessage = '',
     name,
     dataTestId,
     value,
     handleChange,
-    handleErrorChange,
+    handleErrorChange = null,
     floatingLabel,
-    showPasswordTooltip,
+    handleBlur = () => {},
+    showPasswordTooltip = true,
   } = props;
 
   const [isPasswordHidden, setHiddenTrue, setHiddenFalse] = useToggle(true);
   const [showPasswordRequirements, setShowPasswordRequirements] = useState(false);
 
-  const handleBlur = (e) => {
+  const handleOnBlur = (e) => {
     const { name: fieldName, value: fieldValue } = e.target;
     if (fieldName === props.name && e.relatedTarget?.name === 'passwordIcon') {
       return; // Do not run validations on password icon click
@@ -57,8 +58,8 @@ const PasswordField = forwardRef((props, ref) => {
       passwordValue = props.value;
     }
 
-    if (props.handleBlur) {
-      props.handleBlur({
+    if (handleBlur) {
+      handleBlur({
         target: {
           name: props.name,
           value: passwordValue,
@@ -86,7 +87,7 @@ const PasswordField = forwardRef((props, ref) => {
       props.handleFocus(e);
     }
     if (handleErrorChange) {
-      props.handleErrorChange('password', '');
+      handleErrorChange('password', '');
       dispatch(clearRegistrationBackendError('password'));
     }
     setShowPasswordRequirements(showPasswordTooltip && true);
@@ -97,7 +98,7 @@ const PasswordField = forwardRef((props, ref) => {
       name="passwordIcon"
       src={VisibilityOff}
       onFocus={handleFocus}
-      onBlur={handleBlur}
+      onBlur={handleOnBlur}
       iconAs={Icon}
       onClick={setHiddenTrue}
       size="sm"
@@ -111,7 +112,7 @@ const PasswordField = forwardRef((props, ref) => {
       name="passwordIcon"
       src={Visibility}
       onFocus={handleFocus}
-      onBlur={handleBlur}
+      onBlur={handleOnBlur}
       iconAs={Icon}
       onClick={setHiddenFalse}
       size="sm"
@@ -157,7 +158,7 @@ const PasswordField = forwardRef((props, ref) => {
           value={value}
           onChange={handleChange}
           onFocus={handleFocus}
-          onBlur={handleBlur}
+          onBlur={handleOnBlur}
           autoComplete="current-password"
           trailingElement={isPasswordHidden ? ShowButton : HideButton}
           floatingLabel={floatingLabel}
@@ -215,18 +216,11 @@ PasswordField.propTypes = {
   value: PropTypes.string.isRequired,
   handleChange: PropTypes.func.isRequired,
   handleBlur: PropTypes.func,
-  handleErrorChange: PropTypes.func.isRequired,
+  handleErrorChange: PropTypes.func,
   handleFocus: PropTypes.func.isRequired,
   errorMessage: PropTypes.string,
   floatingLabel: PropTypes.string.isRequired,
   showPasswordTooltip: PropTypes.bool,
-};
-
-PasswordField.defaultProps = {
-  errorMessage: '',
-  dataTestId: '',
-  showPasswordTooltip: true,
-  handleBlur: () => {},
 };
 
 export default PasswordField;

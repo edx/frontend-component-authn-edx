@@ -1,7 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 
-import { getConfig, mergeConfig } from '@edx/frontend-platform';
+import { getConfig } from '@edx/frontend-platform';
 import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
 import { getLocale, injectIntl, IntlProvider } from '@edx/frontend-platform/i18n';
 import { fireEvent, render, screen } from '@testing-library/react';
@@ -11,6 +11,7 @@ import configureStore from 'redux-mock-store';
 import useSubjectList from './data/hooks/useSubjectList';
 import { saveUserProfile } from './data/reducers';
 import { DEFAULT_STATE } from '../../data/constants';
+import { AuthnContext } from '../../data/storeHooks';
 
 import ProgressiveProfilingForm from './index';
 
@@ -26,6 +27,7 @@ getAuthenticatedUser.mockReturnValue({ userId: 3, username: 'abc123', name: 'Tes
 jest.mock('@edx/frontend-platform/i18n', () => ({
   ...jest.requireActual('@edx/frontend-platform/i18n'),
   getLocale: jest.fn(),
+  getMessages: jest.fn(),
 }));
 
 jest.mock('./data/hooks/useSubjectList', () => jest.fn());
@@ -40,7 +42,7 @@ describe('ProgressiveProfilingForm Test', () => {
   const reduxWrapper = children => (
     <IntlProvider locale="en">
       <MemoryRouter>
-        <Provider store={store}>{children}</Provider>
+        <Provider context={AuthnContext} store={store}>{children}</Provider>
       </MemoryRouter>
     </IntlProvider>
   );
@@ -76,6 +78,10 @@ describe('ProgressiveProfilingForm Test', () => {
       },
       subjectsLoading: false,
     });
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('should render progressive profiling form', () => {
@@ -241,19 +247,23 @@ describe('ProgressiveProfilingForm Test', () => {
     expect(countryInput.value).toEqual('United States of America');
   });
 
-  it('should redirect to dashboard on skip button click', () => {
-    mergeConfig({
-      BASE_URL: 'http://localhost:18000',
+  it('should redirect to redirect url on skip button click', () => {
+    store = mockStore({
+      ...initialState,
+      progressiveProfiling: {
+        redirectUrl: 'http://example.com',
+      },
     });
+
     delete window.location;
     window.location = {
       assign: jest.fn().mockImplementation((value) => { window.location.href = value; }),
-      href: getConfig().BASE_URL,
+      href: getConfig().LMS_BASE_URL,
     };
     const { container } = render(reduxWrapper(<IntlProgressiveProfilingForm />));
     const submitButton = container.querySelector('#skip-optional-fields');
 
     fireEvent.click(submitButton);
-    expect(window.location.href).toEqual(getConfig().BASE_URL);
+    expect(window.location.href).toEqual('http://example.com');
   });
 });

@@ -244,12 +244,10 @@ describe('LoginFailureAlert', () => {
 
   it('should show error message if third party authentication failed', () => {
     const lmsBaseUrl = 'http://example.com';
-    const platformName = 'edX';
     const errorMsg = 'Error: Third party authenticated failed.';
 
     mergeConfig({
       LMS_BASE_URL: lmsBaseUrl,
-      SITE_NAME: platformName,
     });
 
     props = {

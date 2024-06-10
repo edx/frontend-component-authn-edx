@@ -7,20 +7,23 @@ import { act } from 'react-dom/test-utils';
 import { MemoryRouter } from 'react-router-dom';
 import configureStore from 'redux-mock-store';
 
+import { AuthnContext } from '../../../data/storeHooks';
 import { fetchRealtimeValidations } from '../../registration-popup/data/reducers';
 
 import PasswordField from './index';
 
+const IntlPasswordField = injectIntl(PasswordField);
+
 describe('PasswordField', () => {
   const mockStore = configureStore();
-  const IntlPasswordField = injectIntl(PasswordField);
+
   let props = {};
   let store = {};
 
   const reduxWrapper = children => (
     <IntlProvider locale="en">
       <MemoryRouter>
-        <Provider store={store}>{children}</Provider>
+        <Provider context={AuthnContext} store={store}>{children}</Provider>
       </MemoryRouter>
     </IntlProvider>
   );
@@ -40,6 +43,10 @@ describe('PasswordField', () => {
       handleFocus: jest.fn(),
       handleChange: jest.fn(),
     };
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('should show/hide password on icon click', () => {

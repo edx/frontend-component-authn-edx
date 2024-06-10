@@ -18,8 +18,8 @@ const messages = defineMessages({
   },
   TPAAuthenticationFailure: {
     id: 'tpa.authentication.failure',
-    defaultMessage: 'We are sorry, you are not authorized to access {platform_name} via this channel. '
-        + 'Please contact your learning administrator or manager in order to access {platform_name}.'
+    defaultMessage: 'We are sorry, you are not authorized to access edX via this channel. '
+        + 'Please contact your learning administrator or manager in order to access edX.'
         + '{lineBreak}{lineBreak}Error Details:{lineBreak}{errorMessage}',
     description: 'Error message third party authentication pipeline fails',
   },

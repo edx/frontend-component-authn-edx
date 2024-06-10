@@ -1,10 +1,10 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
 
 import { useIntl } from '@edx/frontend-platform/i18n';
 import PropTypes from 'prop-types';
 
 import validateName from './validator';
+import { useDispatch } from '../../../data/storeHooks';
 import { clearRegistrationBackendError } from '../../registration-popup/data/reducers';
 import TextField from '../text-field';
 
@@ -24,6 +24,7 @@ const NameField = (props) => {
 
   const {
     handleErrorChange,
+    errorMessage = '',
   } = props;
 
   const handleOnBlur = (e) => {
@@ -43,14 +44,11 @@ const NameField = (props) => {
   return (
     <TextField
       {...props}
+      errorMessage={errorMessage}
       handleBlur={handleOnBlur}
       handleFocus={handleOnFocus}
     />
   );
-};
-
-NameField.defaultProps = {
-  errorMessage: '',
 };
 
 NameField.propTypes = {

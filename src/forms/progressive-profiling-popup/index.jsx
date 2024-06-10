@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 
 import { getConfig, snakeCaseObject } from '@edx/frontend-platform';
 import {
@@ -19,6 +18,7 @@ import languageCookieValue from './data/utils';
 import messages from './messages';
 import { setCurrentOpenedForm } from '../../authn-component/data/reducers';
 import { COMPLETE_STATE, LOGIN_FORM } from '../../data/constants';
+import { useDispatch, useSelector } from '../../data/storeHooks';
 import {
   trackProgressiveProfilingPageEvent,
   trackProgressiveProfilingSkipLinkClickEvent,
@@ -40,12 +40,15 @@ const ProgressiveProfilingForm = () => {
   const dispatch = useDispatch();
 
   const { subjectsList, subjectsLoading } = useSubjectsList();
+  const countryList = useMemo(() => getCountryList(getLocale()), []);
+
   const submitState = useSelector(state => state.progressiveProfiling.submitState);
+  const redirectUrl = useSelector(state => state.progressiveProfiling.redirectUrl);
+
   const authContextCountryCode = useSelector(state => state.commonData.thirdPartyAuthContext.countryCode);
   const finishAuthUrl = useSelector(state => state.commonData.thirdPartyAuthContext.finishAuthUrl);
+
   const authenticatedUser = useSelector(state => state.register.registrationResult.authenticatedUser);
-  const redirectUrl = useSelector(state => state.register.registrationResult.redirectUrl);
-  const countryList = useMemo(() => getCountryList(getLocale()), []);
 
   const [formData, setFormData] = useState({});
   const [formErrors, setFormErrors] = useState({});
@@ -141,7 +144,7 @@ const ProgressiveProfilingForm = () => {
   const handleSkip = (e) => {
     e.preventDefault();
     trackProgressiveProfilingSkipLinkClickEvent();
-    window.location.href = getConfig().LMS_BASE_URL;
+    window.location.href = redirectUrl;
   };
 
   return (

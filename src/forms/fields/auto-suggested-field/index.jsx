@@ -24,15 +24,18 @@ import messages from '../../progressive-profiling-popup/messages';
 const AutoSuggestField = (props) => {
   const {
     name,
-    label,
+    label = '',
     placeholder,
-    feedBack,
-    errorMessage,
+    feedBack = '',
+    errorMessage = '',
     options,
-    selectedOption,
-    leadingElement,
+    selectedOption = {
+      value: '',
+      displayText: '',
+    },
+    leadingElement = '',
     onChangeHandler,
-    onFocusHandler,
+    onFocusHandler = () => {},
   } = props;
   const { formatMessage } = useIntl();
   const [value, setValue] = useState({});
@@ -126,18 +129,6 @@ AutoSuggestField.propTypes = {
     displayText: PropTypes.string,
     value: PropTypes.string,
   }),
-};
-
-AutoSuggestField.defaultProps = {
-  onFocusHandler: () => {},
-  errorMessage: '',
-  feedBack: '',
-  label: '',
-  leadingElement: null,
-  selectedOption: {
-    value: '',
-    displayText: '',
-  },
 };
 
 export default AutoSuggestField;

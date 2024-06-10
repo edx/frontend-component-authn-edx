@@ -12,11 +12,17 @@ import './index.scss';
  * @param {boolean} isOpen - Required. Whether to open the modal window.
  * @param {function} close - Required. Is used to the modal window.
  * @param {React.node} children - Required. The login or registration form.
+ * @param {boolean} hasCloseButton - Optional. Denotes whether modal should have close button or not.
+ * @param {string} size - Optional. Specifies size of modal.
  *
  * @returns {JSX.Element} The rendered login or registration form modal.
  */
 const BaseContainer = ({
-  children, close, hasCloseButton, isOpen, size,
+  children,
+  close,
+  hasCloseButton = true,
+  isOpen,
+  size = 'lg',
 }) => {
   const handleOnClose = () => {
     deleteQueryParams(['authMode', 'tpa_hint']);
@@ -48,11 +54,6 @@ BaseContainer.propTypes = {
   close: PropTypes.func.isRequired,
   size: PropTypes.string,
   hasCloseButton: PropTypes.bool,
-};
-
-BaseContainer.defaultProps = {
-  size: 'lg',
-  hasCloseButton: true,
 };
 
 export default BaseContainer;

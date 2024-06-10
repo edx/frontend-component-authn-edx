@@ -11,6 +11,7 @@ import { setCurrentOpenedForm } from '../../../authn-component/data/reducers';
 import {
   COMPLETE_STATE, DEFAULT_STATE, LOGIN_FORM,
 } from '../../../data/constants';
+import { AuthnContext } from '../../../data/storeHooks';
 import { clearRegistrationBackendError, registerUser, setUserPipelineDataLoaded } from '../data/reducers';
 import * as utils from '../data/utils';
 import RegistrationForm from '../index';
@@ -44,7 +45,7 @@ describe('RegistrationForm Test', () => {
   const reduxWrapper = children => (
     <IntlProvider locale="en">
       <MemoryRouter>
-        <Provider store={store}>{children}</Provider>
+        <Provider context={AuthnContext} store={store}>{children}</Provider>
       </MemoryRouter>
     </IntlProvider>
   );
@@ -71,9 +72,13 @@ describe('RegistrationForm Test', () => {
   beforeEach(() => {
     store = mockStore(initialState);
     mergeConfig({
-      AUTHN_TOS_AND_HONOR_CODE_LINK: process.env.AUTHN_TOS_AND_HONOR_CODE_LINK,
-      AUTHN_PRIVACY_POLICY_LINK: process.env.AUTHN_PRIVACY_POLICY_LINK,
+      TOS_AND_HONOR_CODE: process.env.TOS_AND_HONOR_CODE,
+      PRIVACY_POLICY: process.env.PRIVACY_POLICY,
     });
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   // ******** test registration form submission ********
@@ -155,7 +160,7 @@ describe('RegistrationForm Test', () => {
   });
 
   it('should set errors with validations returned by registration api', () => {
-    const emailError = `This email is already associated with an existing or previous ${getConfig().SITE_NAME} account`;
+    const emailError = 'This email is already associated with an existing or previous edX account';
     store = mockStore({
       ...initialState,
       register: {
@@ -165,7 +170,7 @@ describe('RegistrationForm Test', () => {
         },
       },
     });
-    const { container } = render(reduxWrapper(<IntlProvider locale="en"><IntlRegistrationForm /></IntlProvider>));
+    const { container } = render(reduxWrapper(<IntlRegistrationForm />));
     const emailFeedback = container.querySelector('div[feedback-for="email"]');
 
     expect(emailFeedback.textContent).toContain(emailError);

@@ -20,7 +20,7 @@ const HonorCodeAndPrivacyPolicyMessage = () => {
         TOSAndHonorCode: (
           <Hyperlink
             className="text-white registration-form__tos-and-privacy-policy__link"
-            destination={getConfig().AUTHN_TOS_AND_HONOR_CODE_LINK}
+            destination={getConfig().TOS_AND_HONOR_CODE}
             target="_blank"
             showLaunchIcon={false}
             isInline
@@ -31,7 +31,7 @@ const HonorCodeAndPrivacyPolicyMessage = () => {
         privacyPolicy: (
           <Hyperlink
             className="text-white registration-form__tos-and-privacy-policy__link"
-            destination={getConfig().AUTHN_PRIVACY_POLICY_LINK}
+            destination={getConfig().PRIVACY_POLICY}
             target="_blank"
             showLaunchIcon={false}
             isInline

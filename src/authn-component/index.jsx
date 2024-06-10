@@ -1,14 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 
-import { AppProvider } from '@edx/frontend-platform/react';
 import { Spinner } from '@openedx/paragon';
 import PropTypes from 'prop-types';
 
-import { getThirdPartyAuthContext, setCurrentOpenedForm } from './data/reducers';
+import { getThirdPartyAuthContext, setCurrentOpenedForm, setOnboardingComponentContext } from './data/reducers';
 import validateContextData from './data/utils';
 import BaseContainer from '../base-container';
-import store from '../data/configureStore';
+import AuthnProvider from '../data/authnProvider';
 import {
   ENTERPRISE_LOGIN,
   FORGOT_PASSWORD_FORM,
@@ -19,6 +17,7 @@ import {
   RESET_PASSWORD_FORM,
   VALID_FORMS,
 } from '../data/constants';
+import { useDispatch, useSelector } from '../data/storeHooks';
 import getAllPossibleQueryParams from '../data/utils';
 import {
   ForgotPasswordForm,
@@ -42,7 +41,7 @@ import { TOKEN_STATE } from '../forms/reset-password-popup/reset-password/data/c
  * @returns {JSX.Element} The rendered component containing the login or registration form.
  */
 export const AuthnComponent = ({
-  isOpen, close, context, formToRender,
+  isOpen, close, context = null, formToRender,
 }) => {
   const dispatch = useDispatch();
   const queryParams = useMemo(() => getAllPossibleQueryParams(), []);
@@ -93,6 +92,7 @@ export const AuthnComponent = ({
     if (context) {
       validatedContext = validateContextData(context);
     }
+    dispatch(setOnboardingComponentContext(validatedContext));
     dispatch(getThirdPartyAuthContext({ ...validatedContext, ...queryParams }));
   }, [context, dispatch, queryParams]);
 
@@ -146,24 +146,18 @@ AuthnComponent.propTypes = {
     enrollment_action: PropTypes.string,
     email_opt_in: PropTypes.bool,
   }),
-  formToRender: PropTypes.oneOf(VALID_FORMS),
-};
-
-AuthnComponent.defaultProps = {
-  context: null,
-  formToRender: REGISTRATION_FORM,
+  formToRender: PropTypes.oneOf(VALID_FORMS).isRequired,
 };
 
 /**
  * Higher Order Component that wraps AuthnComponent with AppProvider.
  */
 const AuthnComponentWithProvider = (props) => {
-  const { isOpen } = props;
-  if (isOpen) {
+  if (props.isOpen) {
     return (
-      <AppProvider store={store}>
+      <AuthnProvider>
         <AuthnComponent {...props} />
-      </AppProvider>
+      </AuthnProvider>
     );
   }
 
@@ -179,11 +173,7 @@ AuthnComponentWithProvider.propTypes = {
     email_opt_in: PropTypes.bool,
   }),
   formToRender: PropTypes.oneOf(VALID_FORMS),
-};
-
-AuthnComponentWithProvider.defaultProps = {
-  context: null,
-  formToRender: REGISTRATION_FORM,
+  locale: PropTypes.string,
 };
 
 /**
@@ -203,7 +193,7 @@ export const SignInComponent = (props) => (
  * @returns {JSX.Element} The rendered sign-up component.
  */
 export const SignUpComponent = (props) => (
-  <AuthnComponentWithProvider {...props} />
+  <AuthnComponentWithProvider {...props} formToRender={REGISTRATION_FORM} />
 );
 
 /**
