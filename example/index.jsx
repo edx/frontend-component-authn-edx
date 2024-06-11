@@ -28,6 +28,7 @@ initialize({
         TOS_AND_HONOR_CODE: process.env.TOS_AND_HONOR_CODE || '',
         PRIVACY_POLICY: process.env.PRIVACY_POLICY || '',
         INFO_EMAIL: process.env.INFO_EMAIL || '',
+        USER_RETENTION_COOKIE_NAME: process.env.USER_RETENTION_COOKIE_NAME || '',
       });
     },
   },

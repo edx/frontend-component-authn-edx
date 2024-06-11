@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { setCurrentOpenedForm } from '../../authn-component/data/reducers';
 import { PROGRESSIVE_PROFILING_FORM } from '../../data/constants';
 import { useDispatch } from '../../data/storeHooks';
+import { setCookie } from '../../data/utils';
 import {
   setProgressiveProfilingRedirectUrl,
 } from '../progressive-profiling-popup/data/reducers';
@@ -46,6 +47,9 @@ const AuthenticatedRedirection = ({
 
     // Redirect to Progressive Profiling after successful registration
     if (redirectToProgressiveProfilingForm) {
+      // TODO: Do we still need this cookie?
+      setCookie('van-504-returning-user', true);
+
       dispatch(setProgressiveProfilingRedirectUrl(finalRedirectUrl));
       dispatch(setCurrentOpenedForm(PROGRESSIVE_PROFILING_FORM));
       return null;
