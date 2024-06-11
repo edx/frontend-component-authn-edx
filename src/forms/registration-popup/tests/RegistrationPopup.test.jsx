@@ -74,6 +74,7 @@ describe('RegistrationForm Test', () => {
     mergeConfig({
       TOS_AND_HONOR_CODE: process.env.TOS_AND_HONOR_CODE,
       PRIVACY_POLICY: process.env.PRIVACY_POLICY,
+      USER_RETENTION_COOKIE_NAME: 'authn-returning-user',
     });
   });
 
@@ -369,5 +370,20 @@ describe('RegistrationForm Test', () => {
     const { container } = render(reduxWrapper(<IntlRegistrationForm />));
 
     expect(container.querySelector('#SSO-failure-alert').textContent).toContain(errorMsg);
+  });
+
+  it('should check user retention cookie', () => {
+    store = mockStore({
+      ...initialState,
+      register: {
+        ...initialState.register,
+        registrationResult: {
+          success: true,
+        },
+      },
+    });
+
+    render(reduxWrapper(<IntlRegistrationForm />));
+    expect(document.cookie).toMatch(`${getConfig().USER_RETENTION_COOKIE_NAME}=true`);
   });
 });

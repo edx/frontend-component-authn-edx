@@ -31,7 +31,7 @@ import {
 } from '../../data/constants';
 import { useDispatch, useSelector } from '../../data/storeHooks';
 import './index.scss';
-import getAllPossibleQueryParams from '../../data/utils';
+import getAllPossibleQueryParams, { setCookie } from '../../data/utils';
 import { registrationSuccessEvent, trackRegistrationPageEvent } from '../../tracking/trackers/register';
 import AuthenticatedRedirection from '../common-components/AuthenticatedRedirection';
 import SSOFailureAlert from '../common-components/SSOFailureAlert';
@@ -145,6 +145,9 @@ const RegistrationForm = () => {
 
       // This event is used by GTM
       registrationSuccessEvent();
+
+      // This is used by the "User Retention Rate Event" on GTM
+      setCookie(getConfig().USER_RETENTION_COOKIE_NAME, true);
     }
   }, [registrationResult]);
 
