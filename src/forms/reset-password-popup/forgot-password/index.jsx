@@ -94,9 +94,7 @@ const ForgotPasswordForm = () => {
   return (
     <Container size="lg" className="authn__popup-container overflow-auto">
       <ResetPasswordHeader />
-      <div ref={errorRef} tabIndex="-1" aria-live="assertive">
-        <ForgotPasswordFailureAlert emailError={formErrors} status={status} />
-      </div>
+      <ForgotPasswordFailureAlert emailError={formErrors} status={status} errorRef={errorRef} />
       {loginErrorCode === REQUIRE_PASSWORD_CHANGE && (
         <p data-testid="require-password-change-message">{formatMessage(messages.vulnerablePasswordBlockedMessage)}</p>
       )}
