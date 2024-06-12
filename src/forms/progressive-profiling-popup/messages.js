@@ -33,7 +33,7 @@ const messages = defineMessages({
   },
   progressiveProfilingCountryFieldErrorMessage: {
     id: 'progressive.profiling.country.field.error.message',
-    defaultMessage: 'Country must match with an option available in the dropdown',
+    defaultMessage: 'Select a valid option',
     description: 'Error text appers on the country field when country is not selected and the user submit the form',
   },
   progressiveProfilingDataCollectionTitle: {
