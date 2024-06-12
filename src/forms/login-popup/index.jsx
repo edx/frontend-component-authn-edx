@@ -19,6 +19,7 @@ import { InlineLink, SocialAuthProviders } from '../../common-ui';
 import {
   COMPLETE_STATE,
   ENTERPRISE_LOGIN_URL,
+  FAILURE_STATE,
   FORGOT_PASSWORD_FORM,
   INVALID_FORM,
   REGISTRATION_FORM,
@@ -50,7 +51,6 @@ const LoginForm = () => {
   const queryParams = useMemo(() => getAllPossibleQueryParams(), []);
 
   const emailOrUsernameRef = useRef(null);
-  const errorRef = useRef(null);
   const socialAuthnButtonRef = useRef(null);
 
   const loginResult = useSelector(state => state.login.loginResult);
@@ -84,19 +84,15 @@ const LoginForm = () => {
 
   useEffect(() => {
     if (thirdPartyAuthApiStatus === COMPLETE_STATE) {
-      if (providers.length > 0) {
+      if (providers.length > 0 && socialAuthnButtonRef.current) {
         socialAuthnButtonRef.current.focus();
       } else if (emailOrUsernameRef.current) {
         emailOrUsernameRef.current.focus();
       }
+    } else if (thirdPartyAuthApiStatus === FAILURE_STATE) {
+      emailOrUsernameRef.current.focus();
     }
   }, [thirdPartyAuthApiStatus, providers]);
-
-  useEffect(() => {
-    if (Object.keys(formErrors).length > 0 && Object.values(formErrors)[0]) {
-      errorRef.current.focus();
-    }
-  }, [formErrors]);
 
   useEffect(() => {
     if (loginErrorCode) {
@@ -209,7 +205,6 @@ const LoginForm = () => {
       <LoginFailureAlert
         errorCode={errorCode.type}
         context={errorCode.context}
-        errorRef={errorRef}
       />
       {showResetPasswordSuccessBanner && <ResetPasswordSuccess />}
       <ThirdPartyAuthAlert

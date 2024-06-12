@@ -24,6 +24,7 @@ import { InlineLink, SocialAuthProviders } from '../../common-ui';
 import {
   COMPLETE_STATE,
   ENTERPRISE_LOGIN_URL,
+  FAILURE_STATE,
   FORM_SUBMISSION_ERROR,
   LOGIN_FORM,
   REGISTRATION_FORM,
@@ -60,7 +61,6 @@ const RegistrationForm = () => {
 
   const emailRef = useRef(null);
   const socialAuthnButtonRef = useRef(null);
-  const errorRef = useRef(null);
   const queryParams = useMemo(() => getAllPossibleQueryParams(), []);
 
   const registrationResult = useSelector(state => state.register.registrationResult);
@@ -109,19 +109,15 @@ const RegistrationForm = () => {
 
   useEffect(() => {
     if (thirdPartyAuthApiStatus === COMPLETE_STATE) {
-      if (providers.length > 0) {
+      if (providers.length > 0 && socialAuthnButtonRef.current) {
         socialAuthnButtonRef.current.focus();
       } else if (emailRef.current) {
         emailRef.current.focus();
       }
+    } else if (thirdPartyAuthApiStatus === FAILURE_STATE) {
+      emailRef.current.focus();
     }
   }, [thirdPartyAuthApiStatus, providers]);
-
-  useEffect(() => {
-    if (Object.keys(errors).length > 0 && Object.values(errors)[0] && errorRef.current) {
-      errorRef.current.focus();
-    }
-  }, [errors]);
 
   const handleOnChange = (event) => {
     const { name } = event.target;
@@ -257,7 +253,6 @@ const RegistrationForm = () => {
               referrer={REGISTRATION_FORM}
             />
             <RegistrationFailureAlert
-              errorRef={errorRef}
               errorCode={errorCode.type}
               failureCount={errorCode.count}
               context={{ provider: currentProvider, errorMessage: thirdPartyAuthErrorMessage }}
