@@ -34,6 +34,7 @@ const BaseContainer = ({
       isOpen={isOpen}
       onClose={handleOnClose}
       size={size}
+      isBlocking
       variant="default"
       title="authn-component"
       className="bg-light-200 authn-component__modal"
