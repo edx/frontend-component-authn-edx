@@ -5,7 +5,7 @@ import React, {
 import { getConfig, snakeCaseObject } from '@edx/frontend-platform';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
-  Button, Container, Form, Spinner,
+  Container, Form, Spinner, StatefulButton,
 } from '@openedx/paragon';
 
 import HonorCodeAndPrivacyPolicyMessage from './components/honorCodeAndTOS';
@@ -77,6 +77,7 @@ const RegistrationForm = () => {
   const isLoginSSOIntent = useSelector(state => state.login.isLoginSSOIntent);
   const registrationErrorCode = registrationError?.errorCode;
   const backendValidations = useSelector(getBackendValidations);
+  const submitState = useSelector(state => state.register.submitState);
 
   const autoSubmitRegForm = currentProvider && thirdPartyAuthApiStatus === COMPLETE_STATE && !isLoginSSOIntent;
 
@@ -294,17 +295,21 @@ const RegistrationForm = () => {
                 handleChange={handleOnChange}
               />
               <div className="d-flex flex-column my-4">
-                <Button
+                <StatefulButton
                   id="register-user"
                   name="register-user"
-                  variant="primary"
                   type="submit"
-                  className="align-self-end"
+                  variant="primary"
+                  className="align-self-end registration-form__submit-btn__width"
+                  state={submitState}
+                  labels={{
+                    default: formatMessage(messages.registrationFormCreateAccountButton),
+                    pending: '',
+                  }}
                   onClick={handleSubmit}
                   onMouseDown={(e) => e.preventDefault()}
-                >
-                  {formatMessage(messages.registrationFormCreateAccountButton)}
-                </Button>
+                />
+
               </div>
             </Form>
             <div>
