@@ -7,7 +7,7 @@ import { MemoryRouter } from 'react-router-dom';
 import configureStore from 'redux-mock-store';
 
 import { setCurrentOpenedForm } from '../../../../authn-component/data/reducers';
-import { COMPLETE_STATE, LOGIN_FORM } from '../../../../data/constants';
+import { COMPLETE_STATE, DEFAULT_STATE, LOGIN_FORM } from '../../../../data/constants';
 import { AuthnContext } from '../../../../data/storeHooks';
 import { NUDGE_PASSWORD_CHANGE, REQUIRE_PASSWORD_CHANGE } from '../../../login-popup/data/constants';
 import { loginErrorClear } from '../../../login-popup/data/reducers';
@@ -24,7 +24,7 @@ const initialState = {
     },
   },
   forgotPassword: {
-    status: '',
+    status: DEFAULT_STATE,
   },
 };
 
@@ -189,6 +189,9 @@ describe('ForgotPasswordPage', () => {
         loginError: {
           errorCode: REQUIRE_PASSWORD_CHANGE,
         },
+      },
+      forgotPassword: {
+        status: DEFAULT_STATE,
       },
     });
 
