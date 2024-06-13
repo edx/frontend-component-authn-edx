@@ -28,7 +28,7 @@ import {
 import { useDispatch, useSelector } from '../../data/storeHooks';
 import getAllPossibleQueryParams from '../../data/utils';
 import {
-  trackForgotPasswordLinkClick, trackInstitutionLoginLinkClick, trackLoginPageEvent,
+  trackForgotPasswordLinkClick, trackLoginPageEvent,
 } from '../../tracking/trackers/login';
 import AuthenticatedRedirection from '../common-components/AuthenticatedRedirection';
 import SSOFailureAlert from '../common-components/SSOFailureAlert';
@@ -264,7 +264,6 @@ const LoginForm = () => {
         />
         <InlineLink
           destination={getConfig().LMS_BASE_URL + ENTERPRISE_LOGIN_URL}
-          onClick={trackInstitutionLoginLinkClick}
           linkHelpText={formatMessage(messages.loginFormSchoolAndOrganizationHelpText)}
           linkText={formatMessage(messages.loginFormSchoolAndOrganizationLink)}
         />

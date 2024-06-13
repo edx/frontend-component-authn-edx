@@ -3,7 +3,6 @@ import {
   categories,
   eventNames,
   trackForgotPasswordLinkClick,
-  trackInstitutionLoginLinkClick,
   trackLoginPageEvent,
   trackLoginPageViewed,
 } from '../login';
@@ -43,19 +42,6 @@ describe('Tracking Functions', () => {
     expect(createPageEventTracker).toHaveBeenCalledWith(
       eventNames.loginAndRegistration,
       'login',
-    );
-  });
-
-  it('trackInstitutionLoginLinkClick function', () => {
-    trackInstitutionLoginLinkClick();
-
-    expect(createEventTracker).toHaveBeenCalledWith(
-      eventNames.institutionLoginFormToggled,
-      { category: categories.userEngagement },
-    );
-    expect(createEventTracker).toHaveBeenCalledWith(
-      eventNames.loginAndRegistration,
-      { category: categories.userEngagement, page_name: 'login' },
     );
   });
 });
