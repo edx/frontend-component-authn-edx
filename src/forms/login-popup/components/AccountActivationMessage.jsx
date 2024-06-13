@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import { getConfig } from '@edx/frontend-platform';
 import { FormattedMessage, useIntl } from '@edx/frontend-platform/i18n';
@@ -19,10 +19,7 @@ import messages from '../messages';
 const AccountActivationMessage = ({ messageType = null }) => {
   const { formatMessage } = useIntl();
 
-  if (!messageType) {
-    return null;
-  }
-
+  const alertRef = useRef(null);
   const variant = messageType === ACCOUNT_ACTIVATION_MESSAGE.ERROR ? 'danger' : messageType;
   const iconMapping = {
     [ACCOUNT_ACTIVATION_MESSAGE.SUCCESS]: CheckCircle,
@@ -63,12 +60,20 @@ const AccountActivationMessage = ({ messageType = null }) => {
       break;
   }
 
+  useEffect(() => {
+    if (alertRef.current) {
+      alertRef.current.focus();
+    }
+  }, []);
+
   return activationMessage ? (
     <Alert
       id="account-activation-message"
       className="mb-5"
       variant={variant}
       icon={iconMapping[messageType]}
+      ref={alertRef}
+      tabIndex="0"
     >
       {heading && <Alert.Heading>{heading}</Alert.Heading>}
       {activationMessage}
