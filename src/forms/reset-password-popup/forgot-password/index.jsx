@@ -130,7 +130,7 @@ const ForgotPasswordForm = () => {
             name="reset-password-user"
             type="submit"
             variant="primary"
-            className="align-self-end"
+            className="align-self-end forgot-password-form__submit-btn__width"
             state={status}
             labels={{
               default: formatMessage(messages.resetPasswordFormSubmitButton),
