@@ -16,6 +16,7 @@ import messages from '../../progressive-profiling-popup/messages';
  * Auto Suggest field wrapper. It accepts following handlers
  * - handleChange for setting value on change
  * - onFocusHandler for clearing error state
+ * - onBlurHandler for setting error on null value
  *
  * It is responsible for
  * - Auto populating progressive profiling fields
@@ -36,6 +37,7 @@ const AutoSuggestField = (props) => {
     leadingElement = '',
     onChangeHandler,
     onFocusHandler = () => {},
+    onBlurHandler = () => {},
   } = props;
   const { formatMessage } = useIntl();
   const [value, setValue] = useState({});
@@ -47,7 +49,7 @@ const AutoSuggestField = (props) => {
     ) {
       setValue({
         ...value,
-        country: {
+        [name]: {
           userProvidedText: selectedOption?.displayText,
           selectionValue: selectedOption?.value,
           selectionId: selectedOption?.value,
@@ -61,7 +63,7 @@ const AutoSuggestField = (props) => {
       ...value,
       [fieldName]: e,
     });
-    onChangeHandler({ target: { name, value: e.selectionId } });
+    onChangeHandler({ target: { name, value: e.selectionId, text: e.userProvidedText } });
   };
 
   const getFieldOptions = (fieldName, fieldOptions) => fieldOptions.map(option => {
@@ -93,6 +95,7 @@ const AutoSuggestField = (props) => {
         className={classNames({ 'form-field-error': errorMessage })}
         onChange={(e) => { handleOnChange(e, name); }}
         onFocus={() => { onFocusHandler({ target: { name, value: '' } }); }}
+        onBlur={() => { onBlurHandler({ target: { name, value: value[name] ? value[name].selectionId : '' } }); }}
       >
         {getFieldOptions(name, options)}
       </FormAutosuggest>
@@ -125,6 +128,7 @@ AutoSuggestField.propTypes = {
   leadingElement: PropTypes.node,
   onChangeHandler: PropTypes.func.isRequired,
   onFocusHandler: PropTypes.func,
+  onBlurHandler: PropTypes.func,
   selectedOption: PropTypes.shape({
     displayText: PropTypes.string,
     value: PropTypes.string,
