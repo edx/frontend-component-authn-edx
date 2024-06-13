@@ -12,7 +12,7 @@ import ForgotPasswordFailureAlert from './ForgotPasswordFailureAlert';
 import ForgotPasswordSuccess from './ForgotPasswordSuccess';
 import { setCurrentOpenedForm } from '../../../authn-component/data/reducers';
 import { InlineLink } from '../../../common-ui';
-import { COMPLETE_STATE, LOGIN_FORM } from '../../../data/constants';
+import { COMPLETE_STATE, DEFAULT_STATE, LOGIN_FORM } from '../../../data/constants';
 import { useDispatch, useSelector } from '../../../data/storeHooks';
 import {
   forgotPasswordPageViewedEvent,
@@ -94,7 +94,7 @@ const ForgotPasswordForm = () => {
     <Container size="lg" className="authn__popup-container overflow-auto">
       <ResetPasswordHeader />
       <ForgotPasswordFailureAlert emailError={formErrors} status={status} />
-      {loginErrorCode === REQUIRE_PASSWORD_CHANGE && (
+      {status === DEFAULT_STATE && loginErrorCode === REQUIRE_PASSWORD_CHANGE && (
         <p
           aria-live="assertive"
           tabIndex="-1"
@@ -104,7 +104,7 @@ const ForgotPasswordForm = () => {
           {formatMessage(messages.vulnerablePasswordBlockedMessage)}
         </p>
       )}
-      {loginErrorCode === NUDGE_PASSWORD_CHANGE && (
+      {status === DEFAULT_STATE && loginErrorCode === NUDGE_PASSWORD_CHANGE && (
         <p
           tabIndex="-1"
           aria-live="assertive"
