@@ -15,6 +15,7 @@ $icon-and-text-gap: 15px;
 .authn-component__modal .social-auth-button_google {
   gap: $icon-and-text-gap !important;
   margin-top: 0 !important;
+  background-color: $white !important;
 }
 
 .authn-component__modal .social-auth-button_apple {
