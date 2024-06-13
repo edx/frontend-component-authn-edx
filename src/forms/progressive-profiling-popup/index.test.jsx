@@ -217,7 +217,7 @@ describe('ProgressiveProfilingForm Test', () => {
         extended_profile: [],
       },
     };
-    const expectedError = 'Country must match with an option available in the dropdown';
+    const expectedError = 'Select a valid option';
 
     const { container, getByText } = render(reduxWrapper(<IntlProgressiveProfilingForm />));
     const countryInput = container.querySelector('#country');
@@ -240,7 +240,6 @@ describe('ProgressiveProfilingForm Test', () => {
         },
       },
     });
-    store.dispatch = jest.fn(store.dispatch);
     const { container } = render(reduxWrapper(<IntlProgressiveProfilingForm />));
 
     const countryInput = container.querySelector('#country');
@@ -261,9 +260,36 @@ describe('ProgressiveProfilingForm Test', () => {
       href: getConfig().LMS_BASE_URL,
     };
     const { container } = render(reduxWrapper(<IntlProgressiveProfilingForm />));
-    const submitButton = container.querySelector('#skip-optional-fields');
 
-    fireEvent.click(submitButton);
+    const countryInput = container.querySelector('#country');
+    fireEvent.click(countryInput);
+    const countryDropdownItem = container.querySelector('.dropdown-item');
+    fireEvent.click(countryDropdownItem);
+
+    const skipButton = container.querySelector('#skip-optional-fields');
+    fireEvent.click(skipButton);
+
     expect(window.location.href).toEqual('http://example.com');
+  });
+
+  it('should not redirect on skip button click if country not selected', () => {
+    store = mockStore({
+      ...initialState,
+      progressiveProfiling: {
+        redirectUrl: 'http://example.com',
+      },
+    });
+
+    delete window.location;
+    window.location = {
+      assign: jest.fn().mockImplementation((value) => { window.location.href = value; }),
+      href: getConfig().LMS_BASE_URL,
+    };
+    const { container } = render(reduxWrapper(<IntlProgressiveProfilingForm />));
+
+    const skipButton = container.querySelector('#skip-optional-fields');
+    fireEvent.click(skipButton);
+
+    expect(window.location.href).not.toEqual('http://example.com');
   });
 });

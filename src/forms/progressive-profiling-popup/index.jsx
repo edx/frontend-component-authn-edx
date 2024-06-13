@@ -63,15 +63,16 @@ const ProgressiveProfilingForm = () => {
     }
 
     if (!countryCode) {
+      setFormErrors({ country: formatMessage(messages.progressiveProfilingCountryFieldErrorMessage) });
       return;
     }
     const userCountry = countryList.find((country) => country.code === countryCode);
     if (userCountry?.code !== '' && autoFilledCountry.value === '') {
       setAutoFilledCountry({ value: userCountry?.code, displayText: userCountry?.name });
       // set formData state for auto populated country field to pass into payload
-      setFormData({ ...formData, country: userCountry?.code });
+      setFormData({ country: userCountry?.code });
     }
-  }, [authContextCountryCode, autoFilledCountry, countryList, formData]);
+  }, [authContextCountryCode, autoFilledCountry, countryList, formatMessage]);
 
   useEffect(() => {
     if (authenticatedUser === null) {
@@ -93,7 +94,13 @@ const ProgressiveProfilingForm = () => {
   };
 
   const handleSelect = (e) => {
-    const { name, value } = e.target;
+    const { name, value, text } = e.target;
+
+    if (text === '') {
+      setFormErrors({ ...formErrors, [name]: formatMessage(messages.progressiveProfilingCountryFieldErrorMessage) });
+    } else if (value) {
+      setFormErrors({ ...formErrors, [name]: '' });
+    }
     setFormData({ ...formData, [name]: value });
   };
 
@@ -105,6 +112,14 @@ const ProgressiveProfilingForm = () => {
   const onFieldFocus = (e) => {
     const { name, value } = e.target;
     setFormErrors({ ...formErrors, [name]: value });
+  };
+
+  const onFieldBlur = (e) => {
+    const { name, value } = e.target;
+
+    if (value === '') {
+      setFormErrors({ ...formErrors, [name]: formatMessage(messages.progressiveProfilingCountryFieldErrorMessage) });
+    }
   };
 
   const handleSubmit = (e) => {
@@ -143,6 +158,10 @@ const ProgressiveProfilingForm = () => {
 
   const handleSkip = (e) => {
     e.preventDefault();
+
+    if (hasFormErrors()) {
+      return;
+    }
     trackProgressiveProfilingSkipLinkClickEvent();
     window.location.href = redirectUrl;
   };
@@ -182,6 +201,7 @@ const ProgressiveProfilingForm = () => {
             errorMessage={formErrors?.country}
             onChangeHandler={handleSelect}
             onFocusHandler={onFieldFocus}
+            onBlurHandler={onFieldBlur}
           />
         </Form.Group>
         <h3 className="mb-2.5">

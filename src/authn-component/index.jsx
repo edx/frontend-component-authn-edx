@@ -119,8 +119,8 @@ export const AuthnComponent = ({
   };
 
   const getSpinner = () => (
-    <div className="w-100 text-center" data-testid="tpa-spinner">
-      <Spinner animation="border" variant="primary" />
+    <div className="w-100 text-center p-5" data-testid="tpa-spinner">
+      <Spinner className="m-5" animation="border" variant="primary" />
     </div>
   );
 

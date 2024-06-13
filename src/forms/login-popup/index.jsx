@@ -83,16 +83,16 @@ const LoginForm = () => {
   }, []);
 
   useEffect(() => {
-    if (thirdPartyAuthApiStatus === COMPLETE_STATE) {
+    if (thirdPartyAuthApiStatus === COMPLETE_STATE && accountActivation === null) {
       if (providers.length > 0 && socialAuthnButtonRef.current) {
         socialAuthnButtonRef.current.focus();
       } else if (emailOrUsernameRef.current) {
         emailOrUsernameRef.current.focus();
       }
-    } else if (thirdPartyAuthApiStatus === FAILURE_STATE) {
+    } else if (thirdPartyAuthApiStatus === FAILURE_STATE && accountActivation === null) {
       emailOrUsernameRef.current.focus();
     }
-  }, [thirdPartyAuthApiStatus, providers]);
+  }, [accountActivation, thirdPartyAuthApiStatus, providers]);
 
   useEffect(() => {
     if (loginErrorCode) {
@@ -189,6 +189,7 @@ const LoginForm = () => {
         {formatMessage(messages.loginFormHeading1)}
       </h1>
       <hr className="heading-separator my-3 my-sm-4" />
+      {accountActivation && <AccountActivationMessage messageType={accountActivation} />}
       <SSOFailureAlert
         errorCode={errorCode.type}
         context={errorCode.context}
@@ -209,9 +210,6 @@ const LoginForm = () => {
       {showResetPasswordSuccessBanner && <ResetPasswordSuccess />}
       <ThirdPartyAuthAlert
         currentProvider={currentProvider}
-      />
-      <AccountActivationMessage
-        messageType={accountActivation}
       />
       <Form id="login-form" name="login-form" className="my-3 my-sm-4">
         <EmailOrUsernameField
