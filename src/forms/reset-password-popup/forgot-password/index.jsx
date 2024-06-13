@@ -40,7 +40,8 @@ const ForgotPasswordForm = () => {
   const [isSuccess, setIsSuccess] = useState(false);
 
   const emailRef = useRef(null);
-  const errorRef = useRef(null);
+  const nudgePasswordChangeRef = useRef(null);
+  const requirePasswordChangeRef = useRef(null);
 
   useEffect(() => {
     forgotPasswordPageViewedEvent();
@@ -68,16 +69,14 @@ const ForgotPasswordForm = () => {
   }, [status]);
 
   useEffect(() => {
-    if (emailRef.current) {
+    if (loginErrorCode === NUDGE_PASSWORD_CHANGE && nudgePasswordChangeRef.current) {
+      nudgePasswordChangeRef.current.focus();
+    } else if (loginErrorCode === REQUIRE_PASSWORD_CHANGE && requirePasswordChangeRef.current) {
+      requirePasswordChangeRef.current.focus();
+    } else {
       emailRef.current.focus();
     }
-  }, []);
-
-  useEffect(() => {
-    if (formErrors && errorRef.current) {
-      errorRef.current.focus();
-    }
-  }, [formErrors]);
+  }, [loginErrorCode]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -94,12 +93,25 @@ const ForgotPasswordForm = () => {
   return (
     <Container size="lg" className="authn__popup-container overflow-auto">
       <ResetPasswordHeader />
-      <ForgotPasswordFailureAlert emailError={formErrors} status={status} errorRef={errorRef} />
+      <ForgotPasswordFailureAlert emailError={formErrors} status={status} />
       {loginErrorCode === REQUIRE_PASSWORD_CHANGE && (
-        <p data-testid="require-password-change-message">{formatMessage(messages.vulnerablePasswordBlockedMessage)}</p>
+        <p
+          aria-live="assertive"
+          tabIndex="-1"
+          ref={requirePasswordChangeRef}
+          data-testid="require-password-change-message"
+        >
+          {formatMessage(messages.vulnerablePasswordBlockedMessage)}
+        </p>
       )}
       {loginErrorCode === NUDGE_PASSWORD_CHANGE && (
-        <p data-testid="nudge-password-change-message">{formatMessage(messages.vulnerablePasswordWarnedMessage)}</p>
+        <p
+          tabIndex="-1"
+          aria-live="assertive"
+          ref={nudgePasswordChangeRef}
+          data-testid="nudge-password-change-message"
+        >{formatMessage(messages.vulnerablePasswordWarnedMessage)}
+        </p>
       )}
       {!isSuccess && (
         <Form id="forgot-password-form" name="reset-password-form" className="d-flex flex-column">
@@ -148,7 +160,7 @@ const ForgotPasswordForm = () => {
         <ForgotPasswordSuccess email={formFields.email} />
       )}
       <div className="text-center mt-4.5">
-        {(loginErrorCode !== REQUIRE_PASSWORD_CHANGE) && (
+        {loginErrorCode !== REQUIRE_PASSWORD_CHANGE && (
           <Button
             id="reset-password-back-to-login"
             name="reset-password-back-to-login"

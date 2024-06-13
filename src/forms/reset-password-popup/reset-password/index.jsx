@@ -46,7 +46,6 @@ const ResetPasswordPage = () => {
   const [errorCode, setErrorCode] = useState(null);
 
   const newPasswordRef = useRef(null);
-  const errorRef = useRef(null);
 
   const status = useSelector(state => state.resetPassword.status);
   const errorMsg = useSelector(state => state.resetPassword?.errorMsg);
@@ -78,12 +77,6 @@ const ResetPasswordPage = () => {
       newPasswordRef.current.focus();
     }
   }, [status]);
-
-  useEffect(() => {
-    if (Object.keys(formErrors).length > 0 && Object.values(formErrors)[0]) {
-      errorRef.current.focus();
-    }
-  }, [formErrors]);
 
   useEffect(() => {
     trackResettPasswordPageEvent();
@@ -174,9 +167,7 @@ const ResetPasswordPage = () => {
   return (
     <Container size="lg" className="authn__popup-container overflow-auto">
       <ResetPasswordHeader />
-      <div ref={errorRef} tabIndex="-1" aria-live="assertive">
-        <ResetPasswordFailure errorCode={errorCode} errorMsg={errorMsg} />
-      </div>
+      <ResetPasswordFailure errorCode={errorCode} errorMsg={errorMsg} />
       <div className="text-gray-800 mb-4">{formatMessage(messages.enterConfirmPasswordMessage)}</div>
       <Form id="set-reset-password-form" name="set-reset-password-form" className="d-flex flex-column">
         <PasswordField

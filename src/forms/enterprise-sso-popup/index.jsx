@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import { getConfig } from '@edx/frontend-platform';
 import { useIntl } from '@edx/frontend-platform/i18n';
@@ -30,6 +30,12 @@ const EnterpriseSSO = (props) => {
     },
   } = props;
   const inverseTextColor = WHITE_TEXT_COLOR_PROVIDERS.includes(provider.name);
+  const buttonRef = useRef(null);
+  useEffect(() => {
+    if (buttonRef.current) {
+      buttonRef.current.focus();
+    }
+  }, []);
 
   const handleClick = (e, url) => {
     e.preventDefault();
@@ -50,6 +56,7 @@ const EnterpriseSSO = (props) => {
             provider={provider}
             isLoginForm
             inverseTextColor={inverseTextColor}
+            ref={buttonRef}
           />
         ) : (
           <Button
@@ -58,6 +65,7 @@ const EnterpriseSSO = (props) => {
             variant="inverse-primary"
             className="w-100 text-black-50 d-flex flex-row justify-content-start align-items-center pl-3"
             onClick={(e) => handleClick(e, provider.loginUrl)}
+            ref={buttonRef}
           >
             <div className="btn-tpa__font-container" aria-hidden="true">
               <Icon className="h-75" src={Login} />
