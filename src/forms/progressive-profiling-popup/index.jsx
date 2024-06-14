@@ -14,11 +14,11 @@ import { Language } from '@openedx/paragon/icons';
 import { extendedProfileFields, optionalFieldsData } from './data/constants';
 import useSubjectsList from './data/hooks/useSubjectList';
 import { saveUserProfile } from './data/reducers';
-import languageCookieValue from './data/utils';
 import messages from './messages';
 import { setCurrentOpenedForm } from '../../authn-component/data/reducers';
 import { COMPLETE_STATE, LOGIN_FORM } from '../../data/constants';
 import { useDispatch, useSelector } from '../../data/storeHooks';
+import { getCountryCookieValue } from '../../data/utils';
 import {
   trackProgressiveProfilingPageEvent,
   trackProgressiveProfilingSkipLinkClickEvent,
@@ -39,15 +39,14 @@ const ProgressiveProfilingForm = () => {
   const { formatMessage } = useIntl();
   const dispatch = useDispatch();
 
+  const countryCookieValue = getCountryCookieValue();
   const { subjectsList, subjectsLoading } = useSubjectsList();
   const countryList = useMemo(() => getCountryList(getLocale()), []);
 
   const submitState = useSelector(state => state.progressiveProfiling.submitState);
   const redirectUrl = useSelector(state => state.progressiveProfiling.redirectUrl);
-
   const authContextCountryCode = useSelector(state => state.commonData.thirdPartyAuthContext.countryCode);
   const finishAuthUrl = useSelector(state => state.commonData.thirdPartyAuthContext.finishAuthUrl);
-
   const authenticatedUser = useSelector(state => state.register.registrationResult.authenticatedUser);
 
   const [formData, setFormData] = useState({});
@@ -56,14 +55,13 @@ const ProgressiveProfilingForm = () => {
 
   useEffect(() => {
     let countryCode = null;
-    if (languageCookieValue) {
-      countryCode = languageCookieValue;
-    } else {
+    if (countryCookieValue) {
+      countryCode = countryCookieValue;
+    } else if (authContextCountryCode) {
       countryCode = authContextCountryCode;
     }
 
     if (!countryCode) {
-      setFormErrors({ country: formatMessage(messages.progressiveProfilingCountryFieldErrorMessage) });
       return;
     }
     const userCountry = countryList.find((country) => country.code === countryCode);
@@ -72,7 +70,7 @@ const ProgressiveProfilingForm = () => {
       // set formData state for auto populated country field to pass into payload
       setFormData({ country: userCountry?.code });
     }
-  }, [authContextCountryCode, autoFilledCountry, countryList, formatMessage]);
+  }, [authContextCountryCode, autoFilledCountry, countryCookieValue, countryList, formatMessage]);
 
   useEffect(() => {
     if (authenticatedUser === null) {
@@ -159,11 +157,16 @@ const ProgressiveProfilingForm = () => {
   const handleSkip = (e) => {
     e.preventDefault();
 
-    if (hasFormErrors()) {
-      return;
+    const hasCountry = !!countryCookieValue || !!authContextCountryCode;
+    if (hasFormErrors() && !hasCountry) {
+      setFormErrors({ ...formErrors, country: formatMessage(messages.progressiveProfilingCountryFieldErrorMessage) });
+    } else if (!hasFormErrors() && !hasCountry) {
+      // TODO update error message copy here if user has no country value set in the backend and wants to skip this form
+      setFormErrors({ ...formErrors, country: formatMessage(messages.progressiveProfilingCountryFieldErrorMessage) });
+    } else if (hasCountry) {
+      trackProgressiveProfilingSkipLinkClickEvent();
+      window.location.href = redirectUrl;
     }
-    trackProgressiveProfilingSkipLinkClickEvent();
-    window.location.href = redirectUrl;
   };
 
   return (

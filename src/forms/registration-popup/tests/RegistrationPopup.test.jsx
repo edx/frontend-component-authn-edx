@@ -6,6 +6,7 @@ import { injectIntl, IntlProvider } from '@edx/frontend-platform/i18n';
 import { fireEvent, render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import configureStore from 'redux-mock-store';
+import Cookies from 'universal-cookie';
 
 import { setCurrentOpenedForm } from '../../../authn-component/data/reducers';
 import {
@@ -75,6 +76,7 @@ describe('RegistrationForm Test', () => {
       TOS_AND_HONOR_CODE: process.env.TOS_AND_HONOR_CODE,
       PRIVACY_POLICY: process.env.PRIVACY_POLICY,
       USER_RETENTION_COOKIE_NAME: 'authn-returning-user',
+      ONBOARDING_COMPONENT_ENV: process.env.ONBOARDING_COMPONENT_ENV,
     });
   });
 
@@ -92,6 +94,38 @@ describe('RegistrationForm Test', () => {
       marketing_email_opt_in: true,
       honor_code: true,
       terms_of_service: true,
+    };
+    const { container } = render(reduxWrapper(<IntlRegistrationForm />));
+
+    const emailInput = container.querySelector('#email');
+    fireEvent.change(emailInput, { target: { value: payload.email, name: 'email' } });
+
+    const nameInput = container.querySelector('#name');
+    const passwordInput = container.querySelector('#password');
+    const registerButton = container.querySelector('#register-user');
+    fireEvent.change(nameInput, { target: { value: payload.name, name: 'name' } });
+    fireEvent.change(passwordInput, { target: { value: payload.password, name: 'password' } });
+    fireEvent.click(registerButton);
+
+    expect(store.dispatch).toHaveBeenCalledWith(registerUser(payload));
+  });
+
+  it('should submit form with country code', async () => {
+    // Mock Cookies class
+    jest.mock('universal-cookie');
+
+    const cookie = new Cookies();
+    cookie.set(`${getConfig().ONBOARDING_COMPONENT_ENV}-edx-cf-loc`, 'US');
+
+    store.dispatch = jest.fn(store.dispatch);
+    const payload = {
+      email: 'test@example.com',
+      name: 'test',
+      password: 'test-password12',
+      marketing_email_opt_in: true,
+      honor_code: true,
+      terms_of_service: true,
+      country: 'US',
     };
     const { container } = render(reduxWrapper(<IntlRegistrationForm />));
 
