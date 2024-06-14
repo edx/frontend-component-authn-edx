@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { ModalDialog } from '@openedx/paragon';
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
 import { deleteQueryParams } from '../data/utils';
@@ -37,7 +38,12 @@ const BaseContainer = ({
       isBlocking
       variant="default"
       title="authn-component"
-      className="bg-light-200 authn-component__modal"
+      className={classNames(
+        'bg-light-200 authn-component__modal',
+        {
+          'authn-component__modal-full-height': size === 'fullscreen',
+        },
+      )}
       hasCloseButton={hasCloseButton}
     >
       <ModalDialog.Body className="modal-body-container p-0">

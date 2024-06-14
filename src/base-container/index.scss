@@ -4,6 +4,10 @@
   max-height: 98vh !important;
 }
 
+.authn-component__modal-full-height {
+  max-height: 100vh !important;
+}
+
 @media (max-width: 375px) {
   .authn-component__modal {
     max-height: 100vh !important;
