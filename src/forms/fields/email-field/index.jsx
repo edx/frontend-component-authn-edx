@@ -31,6 +31,7 @@ const EmailField = forwardRef((props, ref) => {
     floatingLabel,
     errorMessage = '',
     handleErrorChange = () => {},
+    validateEmailFromBackend = true,
   } = props;
 
   const validationApiRateLimited = useSelector(state => state.register?.validationApiRateLimited);
@@ -44,7 +45,7 @@ const EmailField = forwardRef((props, ref) => {
 
     if (fieldError) {
       handleErrorChange('email', fieldError);
-    } else if (!validationApiRateLimited) {
+    } else if (!validationApiRateLimited && validateEmailFromBackend) {
       dispatch(fetchRealtimeValidations({ email: fieldValue }));
     }
   };
@@ -136,6 +137,7 @@ EmailField.propTypes = {
   floatingLabel: PropTypes.string.isRequired,
   errorMessage: PropTypes.string,
   isRegistration: PropTypes.bool,
+  validateEmailFromBackend: PropTypes.bool,
 };
 
 export default EmailField;

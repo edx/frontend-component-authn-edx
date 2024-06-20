@@ -51,7 +51,7 @@ const ResetPasswordPage = () => {
   const errorMsg = useSelector(state => state.resetPassword?.errorMsg);
   const backendValidationError = useSelector(state => state.resetPassword?.backendValidationError);
 
-  const validatePasswordFromBackend = async (password) => {
+  const validatePasswordFromBackend = (password) => {
     const payload = {
       reset_password_page: true,
       password,
@@ -82,14 +82,14 @@ const ResetPasswordPage = () => {
     trackResettPasswordPageEvent();
   }, []);
 
-  const validateInput = (name, value) => {
+  const validateInput = (name, value, shouldValidateFromBackend = true) => {
     switch (name) {
       case 'newPassword':
        if (!value) {
          formErrors.newPassword = formatMessage(messages.passwordRequiredMessage);
        } else if (!LETTER_REGEX.test(value) || !NUMBER_REGEX.test(value) || value.length < 8) {
          formErrors.newPassword = formatMessage(messages.passwordValidationMessage);
-       } else {
+       } else if (shouldValidateFromBackend) {
          validatePasswordFromBackend(value);
        }
         break;
@@ -130,7 +130,7 @@ const ResetPasswordPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const isPasswordValid = validateInput('newPassword', newPassword);
+    const isPasswordValid = validateInput('newPassword', newPassword, false);
     const isPasswordConfirmed = validateInput('confirmPassword', confirmPassword);
     if (isPasswordValid && isPasswordConfirmed) {
       const formPayload = {

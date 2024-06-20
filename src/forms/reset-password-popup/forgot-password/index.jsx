@@ -123,6 +123,7 @@ const ForgotPasswordForm = () => {
             errorMessage={formErrors}
             floatingLabel={formatMessage(messages.forgotPasswordFormEmailFieldLabel)}
             isRegistration={false}
+            validateEmailFromBackend={false}
             ref={emailRef}
           />
           <StatefulButton
