@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
 import { getConfig, snakeCaseObject } from '@edx/frontend-platform';
+import { identifyAuthenticatedUser } from '@edx/frontend-platform/analytics';
 import {
   AxiosJwtAuthService,
   configure as configureAuth,
@@ -79,6 +80,7 @@ const ProgressiveProfilingForm = () => {
       dispatch(setCurrentOpenedForm(LOGIN_FORM));
     }
     if (authenticatedUser?.userId) {
+      identifyAuthenticatedUser(authenticatedUser?.userId);
       configureAuth(AxiosJwtAuthService, { config: getConfig() });
       trackProgressiveProfilingPageViewed();
     }
