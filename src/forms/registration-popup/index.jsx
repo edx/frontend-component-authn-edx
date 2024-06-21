@@ -19,7 +19,7 @@ import {
 import getBackendValidations from './data/selector';
 import isFormValid from './data/utils';
 import messages from './messages';
-import { setCurrentOpenedForm, setRegisterIntent } from '../../authn-component/data/reducers';
+import { setCurrentOpenedForm } from '../../authn-component/data/reducers';
 import { InlineLink, SocialAuthProviders } from '../../common-ui';
 import {
   COMPLETE_STATE,
@@ -330,7 +330,6 @@ const RegistrationForm = () => {
                 onClick={() => {
                   trackLoginFormToggled();
                   dispatch(setCurrentOpenedForm(LOGIN_FORM));
-                  dispatch(setRegisterIntent());
                 }}
                 linkHelpText={formatMessage(messages.registrationFormAlreadyHaveAccountText)}
                 linkText={formatMessage(messages.registrationFormSignInLink)}
