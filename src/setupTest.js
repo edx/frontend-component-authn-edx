@@ -11,6 +11,7 @@ class MockLoggingService {
 jest.mock('@edx/frontend-platform/analytics', () => ({
   sendTrackEvent: jest.fn(),
   sendPageEvent: jest.fn(),
+  identifyAuthenticatedUser: jest.fn(),
 }));
 
 export default function initializeMockLogging() {

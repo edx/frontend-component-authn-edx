@@ -20,7 +20,7 @@ describe('Tracking Functions', () => {
     trackProgressiveProfilingSkipLinkClick();
 
     expect(createEventTracker).toHaveBeenCalledWith(
-      eventNames.ProgressiveProfilingSkipLinkClick,
+      eventNames.progressiveProfilingSkipLinkClick,
       {},
     );
   });

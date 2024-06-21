@@ -1,11 +1,13 @@
-import { categories } from '@edx/frontend-component-authn-edx/tracking/trackers/login';
-
 import { createEventTracker, createPageEventTracker } from '../../data/segment/utils';
 
 export const eventNames = {
   loginAndRegistration: 'login_and_registration',
   registrationSuccess: 'edx.bi.user.account.registered.client',
   loginFormToggled: 'edx.bi.login_form.toggled',
+};
+
+export const categories = {
+  userEngagement: 'user-engagement',
 };
 
 // Event tracker for successful registration

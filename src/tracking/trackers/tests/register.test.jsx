@@ -20,7 +20,7 @@ describe('Tracking Functions', () => {
     trackRegistrationSuccess();
 
     expect(createEventTracker).toHaveBeenCalledWith(
-      eventNames.RegistrationSuccess,
+      eventNames.registrationSuccess,
       {},
     );
   });
