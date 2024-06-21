@@ -20,9 +20,9 @@ import { setCurrentOpenedForm } from '../../authn-component/data/reducers';
 import { COMPLETE_STATE, LOGIN_FORM } from '../../data/constants';
 import { useDispatch, useSelector } from '../../data/storeHooks';
 import {
-  trackProgressiveProfilingPageEvent,
-  trackProgressiveProfilingSkipLinkClickEvent,
-  trackProgressiveProfilinSubmitClickEvent,
+  trackProgressiveProfilingPageViewed,
+  trackProgressiveProfilingSkipLinkClick,
+  trackProgressiveProfilingSubmitClick,
 } from '../../tracking/trackers/progressive-profiling';
 import AuthenticatedRedirection from '../common-components/AuthenticatedRedirection';
 import AutoSuggestField from '../fields/auto-suggested-field';
@@ -80,7 +80,7 @@ const ProgressiveProfilingForm = () => {
     }
     if (authenticatedUser?.userId) {
       configureAuth(AxiosJwtAuthService, { config: getConfig() });
-      trackProgressiveProfilingPageEvent();
+      trackProgressiveProfilingPageViewed();
     }
   }, [authenticatedUser, dispatch]);
 
@@ -152,7 +152,7 @@ const ProgressiveProfilingForm = () => {
         ...formData,
       },
     };
-    trackProgressiveProfilinSubmitClickEvent(eventProperties);
+    trackProgressiveProfilingSubmitClick(eventProperties);
     dispatch(saveUserProfile(snakeCaseObject(payload)));
   };
 
@@ -162,7 +162,7 @@ const ProgressiveProfilingForm = () => {
     if (hasFormErrors()) {
       return;
     }
-    trackProgressiveProfilingSkipLinkClickEvent();
+    trackProgressiveProfilingSkipLinkClick();
     window.location.href = redirectUrl;
   };
 

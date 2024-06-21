@@ -4,6 +4,6 @@ export const eventNames = {
   loginAndRegistration: 'login_and_registration',
 };
 
-export const trackResettPasswordPageEvent = () => {
+export const trackResetPasswordPageViewed = () => {
   createPageEventTracker(eventNames.loginAndRegistration, 'reset-password')();
 };

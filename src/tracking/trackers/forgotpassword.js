@@ -2,7 +2,7 @@ import { createEventTracker, createPageEventTracker } from '../../data/segment/u
 
 export const eventNames = {
   loginAndRegistration: 'login_and_registration',
-  forgotPasswordPageViewd: 'edx.bi.password_reset_form.viewed',
+  forgotPasswordPageViewed: 'edx.bi.password_reset_form.viewed',
 };
 
 export const categories = {
@@ -10,8 +10,8 @@ export const categories = {
 };
 
 // Event tracker for forgot password page viewed
-export const forgotPasswordPageViewedEvent = () => createEventTracker(
-  eventNames.forgotPasswordPageViewd,
+export const trackForgotPasswordPageViewed = () => createEventTracker(
+  eventNames.forgotPasswordPageViewed,
   {
     category: categories.userEngagement,
   },

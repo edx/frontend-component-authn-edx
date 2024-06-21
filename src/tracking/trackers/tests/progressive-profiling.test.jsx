@@ -1,8 +1,8 @@
 import { createEventTracker, createPageEventTracker } from '../../../data/segment/utils';
 import {
   eventNames,
-  trackProgressiveProfilingPageEvent,
-  trackProgressiveProfilingSkipLinkClickEvent,
+  trackProgressiveProfilingPageViewed,
+  trackProgressiveProfilingSkipLinkClick,
 } from '../progressive-profiling';
 
 // Mock createEventTracker function
@@ -17,7 +17,7 @@ describe('Tracking Functions', () => {
   });
 
   it('should fire trackProgressiveProfilingSkipLinkClickEvent', () => {
-    trackProgressiveProfilingSkipLinkClickEvent();
+    trackProgressiveProfilingSkipLinkClick();
 
     expect(createEventTracker).toHaveBeenCalledWith(
       eventNames.ProgressiveProfilingSkipLinkClick,
@@ -26,7 +26,7 @@ describe('Tracking Functions', () => {
   });
 
   it('should fire trackProgressiveProfilingPageEvent', () => {
-    trackProgressiveProfilingPageEvent();
+    trackProgressiveProfilingPageViewed();
 
     expect(createPageEventTracker).toHaveBeenCalledWith(
       eventNames.loginAndRegistration,

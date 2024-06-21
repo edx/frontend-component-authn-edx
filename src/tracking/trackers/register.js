@@ -2,16 +2,16 @@ import { createEventTracker, createPageEventTracker } from '../../data/segment/u
 
 export const eventNames = {
   loginAndRegistration: 'login_and_registration',
-  RegistrationSuccess: 'edx.bi.user.account.registered.client',
+  registrationSuccess: 'edx.bi.user.account.registered.client',
 };
 
 // Event tracker for successful registration
-export const registrationSuccessEvent = () => createEventTracker(
-  eventNames.RegistrationSuccess,
+export const trackRegistrationSuccess = () => createEventTracker(
+  eventNames.registrationSuccess,
   {},
 )();
 
 // Tracks the progressive profiling page event.
-export const trackRegistrationPageEvent = () => {
+export const trackRegistrationPageViewed = () => {
   createPageEventTracker(eventNames.loginAndRegistration, 'register')();
 };

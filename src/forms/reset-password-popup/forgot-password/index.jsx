@@ -15,8 +15,8 @@ import { InlineLink } from '../../../common-ui';
 import { COMPLETE_STATE, DEFAULT_STATE, LOGIN_FORM } from '../../../data/constants';
 import { useDispatch, useSelector } from '../../../data/storeHooks';
 import {
-  forgotPasswordPageViewedEvent,
   trackForgotPasswordPageEvent,
+  trackForgotPasswordPageViewed,
 } from '../../../tracking/trackers/forgotpassword';
 import EmailField from '../../fields/email-field';
 import { NUDGE_PASSWORD_CHANGE, REQUIRE_PASSWORD_CHANGE } from '../../login-popup/data/constants';
@@ -44,7 +44,7 @@ const ForgotPasswordForm = () => {
   const requirePasswordChangeRef = useRef(null);
 
   useEffect(() => {
-    forgotPasswordPageViewedEvent();
+    trackForgotPasswordPageViewed();
     trackForgotPasswordPageEvent();
   }, []);
 

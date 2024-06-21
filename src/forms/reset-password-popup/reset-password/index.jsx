@@ -19,7 +19,7 @@ import {
 } from '../../../data/constants';
 import { useDispatch, useSelector } from '../../../data/storeHooks';
 import getAllPossibleQueryParams from '../../../data/utils';
-import { trackResettPasswordPageEvent } from '../../../tracking/trackers/reset-password';
+import { trackResetPasswordPageViewed } from '../../../tracking/trackers/reset-password';
 import { PasswordField } from '../../fields';
 import messages from '../messages';
 import ResetPasswordHeader from '../ResetPasswordHeader';
@@ -79,7 +79,7 @@ const ResetPasswordPage = () => {
   }, [status]);
 
   useEffect(() => {
-    trackResettPasswordPageEvent();
+    trackResetPasswordPageViewed();
   }, []);
 
   const validateInput = (name, value, shouldValidateFromBackend = true) => {
