@@ -62,6 +62,10 @@ export const registerSlice = createSlice({
       delete registrationErrorTemp[payload];
       state.registrationError = registrationErrorTemp;
     },
+    clearAllRegistrationErrors: (state) => {
+      state.registrationError = {};
+      state.validations = null;
+    },
     setRegistrationFields: (state, { payload }) => {
       state.registrationFields = payload;
     },
@@ -77,6 +81,7 @@ export const {
   fetchRealtimeValidations,
   fetchRealtimeValidationsSuccess,
   fetchRealtimeValidationsFailed,
+  clearAllRegistrationErrors,
   clearRegistrationBackendError,
 } = registerSlice.actions;
 
