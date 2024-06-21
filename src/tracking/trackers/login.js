@@ -3,6 +3,7 @@ import { createEventTracker, createPageEventTracker } from '../../data/segment/u
 export const eventNames = {
   forgotPasswordLinkClicked: 'edx.bi.password-reset_form.toggled',
   loginAndRegistration: 'login_and_registration',
+  registerFormToggled: 'edx.bi.register_form.toggled',
 };
 
 export const categories = {
@@ -18,4 +19,12 @@ export const trackForgotPasswordLinkClick = () => createEventTracker(
 // Tracks the login page event.
 export const trackLoginPageViewed = () => {
   createPageEventTracker(eventNames.loginAndRegistration, 'login')();
+};
+
+// Tracks the progressive profiling page event.
+export const trackRegisterFormToggled = () => {
+  createEventTracker(
+    eventNames.registerFormToggled,
+    { category: categories.userEngagement },
+  )();
 };

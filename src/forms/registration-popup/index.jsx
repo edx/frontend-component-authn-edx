@@ -33,7 +33,11 @@ import {
 import { useDispatch, useSelector } from '../../data/storeHooks';
 import './index.scss';
 import getAllPossibleQueryParams, { setCookie } from '../../data/utils';
-import { trackRegistrationPageViewed, trackRegistrationSuccess } from '../../tracking/trackers/register';
+import {
+  trackLoginFormToggled,
+  trackRegistrationPageViewed,
+  trackRegistrationSuccess,
+} from '../../tracking/trackers/register';
 import AuthenticatedRedirection from '../common-components/AuthenticatedRedirection';
 import SSOFailureAlert from '../common-components/SSOFailureAlert';
 import ThirdPartyAuthAlert from '../common-components/ThirdPartyAuthAlert';
@@ -316,6 +320,7 @@ const RegistrationForm = () => {
               <InlineLink
                 className="mb-2"
                 onClick={() => {
+                  trackLoginFormToggled();
                   dispatch(setCurrentOpenedForm(LOGIN_FORM));
                   dispatch(setRegisterIntent());
                 }}

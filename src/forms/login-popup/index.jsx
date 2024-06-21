@@ -28,7 +28,7 @@ import {
 import { useDispatch, useSelector } from '../../data/storeHooks';
 import getAllPossibleQueryParams from '../../data/utils';
 import {
-  trackForgotPasswordLinkClick, trackLoginPageViewed,
+  trackForgotPasswordLinkClick, trackLoginPageViewed, trackRegisterFormToggled,
 } from '../../tracking/trackers/login';
 import AuthenticatedRedirection from '../common-components/AuthenticatedRedirection';
 import SSOFailureAlert from '../common-components/SSOFailureAlert';
@@ -256,7 +256,10 @@ const LoginForm = () => {
       <div>
         <InlineLink
           className="mb-2"
-          onClick={() => dispatch(setCurrentOpenedForm(REGISTRATION_FORM))}
+          onClick={() => {
+            trackRegisterFormToggled();
+            dispatch(setCurrentOpenedForm(REGISTRATION_FORM));
+          }}
           linkHelpText={formatMessage(messages.loginFormRegistrationHelpText)}
           linkText={formatMessage(messages.loginFormRegistrationLink)}
         />
