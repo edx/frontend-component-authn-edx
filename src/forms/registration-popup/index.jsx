@@ -57,6 +57,8 @@ const RegistrationForm = () => {
   const { formatMessage } = useIntl();
   const dispatch = useDispatch();
 
+  const [formStartTime, setFormStartTime] = useState(null);
+
   const [formFields, setFormFields] = useState({
     name: '', email: '', password: '', marketingEmailOptIn: true,
   });
@@ -153,8 +155,11 @@ const RegistrationForm = () => {
   }, [registrationResult]);
 
   useEffect(() => {
-    trackRegistrationPageViewed();
-  }, []);
+    if (!formStartTime) {
+      trackRegistrationPageViewed();
+      setFormStartTime(Date.now());
+    }
+  }, [formStartTime]);
 
   useEffect(() => {
     if (backendValidations) {
@@ -176,6 +181,7 @@ const RegistrationForm = () => {
   };
 
   const handleUserRegistration = () => {
+    const totalRegistrationTime = (Date.now() - formStartTime) / 1000;
     let payload = { ...formFields, honor_code: true, terms_of_service: true };
 
     if (currentProvider) {
@@ -201,7 +207,9 @@ const RegistrationForm = () => {
       return;
     }
 
-    payload = { ...onboardingComponentContext, ...queryParams, ...payload };
+    payload = {
+      ...onboardingComponentContext, ...queryParams, ...payload, totalRegistrationTime,
+    };
     payload = snakeCaseObject(payload);
     dispatch(registerUser(payload));
   };
