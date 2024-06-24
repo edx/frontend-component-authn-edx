@@ -6,6 +6,7 @@ import { identifyAuthenticatedUser } from '@edx/frontend-platform/analytics';
 import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
 import { getLocale, injectIntl, IntlProvider } from '@edx/frontend-platform/i18n';
 import { fireEvent, render, screen } from '@testing-library/react';
+import { act } from 'react-dom/test-utils';
 import { MemoryRouter } from 'react-router-dom';
 import configureStore from 'redux-mock-store';
 
@@ -254,7 +255,7 @@ describe('ProgressiveProfilingForm Test', () => {
     expect(countryInput.value).toEqual('United States of America');
   });
 
-  it('should redirect to redirect url on skip button click', () => {
+  it('should redirect to redirect url on skip button click', async () => {
     store = mockStore({
       ...initialState,
       progressiveProfiling: {
@@ -275,7 +276,11 @@ describe('ProgressiveProfilingForm Test', () => {
     fireEvent.click(countryDropdownItem);
 
     const skipButton = container.querySelector('#skip-optional-fields');
-    fireEvent.click(skipButton);
+    jest.useFakeTimers();
+    await act(async () => {
+      fireEvent.click(skipButton);
+      jest.runAllTimers();
+    });
 
     expect(window.location.href).toEqual('http://example.com');
   });

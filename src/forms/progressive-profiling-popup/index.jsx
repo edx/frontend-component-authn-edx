@@ -164,8 +164,9 @@ const ProgressiveProfilingForm = () => {
     if (hasFormErrors()) {
       return;
     }
-    trackProgressiveProfilingSkipLinkClick();
-    window.location.href = redirectUrl;
+
+    // link tracker
+    trackProgressiveProfilingSkipLinkClick(redirectUrl)(e);
   };
 
   return (
@@ -174,6 +175,7 @@ const ProgressiveProfilingForm = () => {
         success={submitState === COMPLETE_STATE}
         redirectUrl={redirectUrl}
         finishAuthUrl={finishAuthUrl}
+        isLinkTracked
       />
       <h1
         className="display-1 font-italic text-center mb-4"

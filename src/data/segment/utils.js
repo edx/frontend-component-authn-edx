@@ -1,6 +1,8 @@
 /* eslint-disable import/prefer-default-export */
 import { sendPageEvent, sendTrackEvent } from '@edx/frontend-platform/analytics';
 
+export const LINK_TIMEOUT = 300;
+
 /**
  * Creates an event tracker function that sends a tracking event with the given name and options.
  *
@@ -25,3 +27,9 @@ export const createPageEventTracker = (name, options = null) => () => sendPageEv
   options,
   { app_name: 'onboarding_component' },
 );
+
+export const createLinkTracker = (tracker, href) => (e) => {
+  e.preventDefault();
+  tracker();
+  return setTimeout(() => { window.location.href = href; }, LINK_TIMEOUT);
+};

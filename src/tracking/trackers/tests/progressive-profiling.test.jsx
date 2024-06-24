@@ -9,6 +9,7 @@ import {
 jest.mock('../../../data/segment/utils', () => ({
   createEventTracker: jest.fn().mockImplementation(() => jest.fn()),
   createPageEventTracker: jest.fn().mockImplementation(() => jest.fn()),
+  createLinkTracker: jest.fn().mockImplementation(() => jest.fn()),
 }));
 
 describe('Tracking Functions', () => {
