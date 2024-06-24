@@ -5,7 +5,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import {
-  COMPLETE_STATE, DEFAULT_STATE, FAILURE_STATE, PENDING_STATE, REGISTRATION_FORM,
+  COMPLETE_STATE, DEFAULT_STATE, FAILURE_STATE, PENDING_STATE,
 } from '../../data/constants';
 
 export const commonDataStoreName = 'commonData';
@@ -13,7 +13,7 @@ export const COMMON_DATA_SLICE_NAME = 'commonData';
 
 export const commonDataInitialState = {
   onboardingComponentContext: {},
-  currentForm: REGISTRATION_FORM,
+  currentForm: null,
   thirdPartyAuthApiStatus: DEFAULT_STATE,
   thirdPartyAuthContext: {
     autoSubmitRegForm: false,
