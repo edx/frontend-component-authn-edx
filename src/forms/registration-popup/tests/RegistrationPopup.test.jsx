@@ -113,6 +113,7 @@ describe('RegistrationForm Test', () => {
   });
 
   it('should submit form with country code', async () => {
+    jest.spyOn(global.Date, 'now').mockImplementation(() => 0);
     // Mock Cookies class
     jest.mock('universal-cookie');
 
@@ -128,6 +129,7 @@ describe('RegistrationForm Test', () => {
       honor_code: true,
       terms_of_service: true,
       country: 'US',
+      total_registration_time: 0,
     };
     const { container } = render(reduxWrapper(<IntlRegistrationForm />));
 
