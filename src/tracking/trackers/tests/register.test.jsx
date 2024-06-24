@@ -1,8 +1,8 @@
 import { createEventTracker, createPageEventTracker } from '../../../data/segment/utils';
 import {
   eventNames,
-  registrationSuccessEvent,
-  trackRegistrationPageEvent,
+  trackRegistrationPageViewed,
+  trackRegistrationSuccess,
 } from '../register';
 
 // Mock createEventTracker function
@@ -17,16 +17,16 @@ describe('Tracking Functions', () => {
   });
 
   it('should fire registrationSuccessEvent', () => {
-    registrationSuccessEvent();
+    trackRegistrationSuccess();
 
     expect(createEventTracker).toHaveBeenCalledWith(
-      eventNames.RegistrationSuccess,
+      eventNames.registrationSuccess,
       {},
     );
   });
 
   it('should fire trackRegistrationPageEvent', () => {
-    trackRegistrationPageEvent();
+    trackRegistrationPageViewed();
 
     expect(createPageEventTracker).toHaveBeenCalledWith(
       eventNames.loginAndRegistration,

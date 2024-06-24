@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import { setCurrentOpenedForm } from '../../authn-component/data/reducers';
 import { PROGRESSIVE_PROFILING_FORM } from '../../data/constants';
+import { LINK_TIMEOUT } from '../../data/segment/utils';
 import { useDispatch } from '../../data/storeHooks';
 import { setCookie } from '../../data/utils';
 import {
@@ -29,6 +30,7 @@ const AuthenticatedRedirection = ({
   redirectUrl = '',
   redirectToProgressiveProfilingForm = false,
   success = false,
+  isLinkTracked = false,
 }) => {
   const dispatch = useDispatch();
 
@@ -55,7 +57,11 @@ const AuthenticatedRedirection = ({
       return null;
     }
 
-    window.location.href = finalRedirectUrl;
+    if (isLinkTracked) {
+      setTimeout(() => { window.location.href = finalRedirectUrl; }, LINK_TIMEOUT);
+    } else {
+      window.location.href = finalRedirectUrl;
+    }
   }
 
   return null;
@@ -66,6 +72,7 @@ AuthenticatedRedirection.propTypes = {
   success: PropTypes.bool,
   redirectUrl: PropTypes.string,
   redirectToProgressiveProfilingForm: PropTypes.bool,
+  isLinkTracked: PropTypes.bool,
 };
 
 export default AuthenticatedRedirection;

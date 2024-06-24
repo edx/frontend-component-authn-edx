@@ -28,7 +28,7 @@ import {
 import { useDispatch, useSelector } from '../../data/storeHooks';
 import getAllPossibleQueryParams from '../../data/utils';
 import {
-  trackForgotPasswordLinkClick, trackLoginPageEvent,
+  trackForgotPasswordLinkClick, trackLoginPageViewed, trackRegisterFormToggled,
 } from '../../tracking/trackers/login';
 import AuthenticatedRedirection from '../common-components/AuthenticatedRedirection';
 import SSOFailureAlert from '../common-components/SSOFailureAlert';
@@ -58,7 +58,6 @@ const LoginForm = () => {
   const loginErrorContext = useSelector(state => state.login.loginError?.errorContext);
   const providers = useSelector(state => state.commonData.thirdPartyAuthContext?.providers);
   const thirdPartyAuthApiStatus = useSelector(state => state.commonData.thirdPartyAuthApiStatus);
-  const registerIntent = useSelector(state => state.commonData.registerIntent);
   const submitState = useSelector(state => state.login.submitState);
   const currentProvider = useSelector(state => state.commonData.thirdPartyAuthContext.currentProvider);
   const thirdPartyAuthErrorMessage = useSelector(state => state.commonData.thirdPartyAuthContext.errorMessage);
@@ -79,7 +78,7 @@ const LoginForm = () => {
   const [errorCode, setErrorCode] = useState({ type: '', context: {} });
 
   useEffect(() => {
-    trackLoginPageEvent();
+    trackLoginPageViewed();
   }, []);
 
   useEffect(() => {
@@ -170,7 +169,6 @@ const LoginForm = () => {
     const payload = {
       ...snakeCaseObject(formFields),
       ...queryParams,
-      register_intent: registerIntent,
     };
     dispatch(loginUser(payload));
   };
@@ -256,7 +254,10 @@ const LoginForm = () => {
       <div>
         <InlineLink
           className="mb-2"
-          onClick={() => dispatch(setCurrentOpenedForm(REGISTRATION_FORM))}
+          onClick={() => {
+            trackRegisterFormToggled();
+            dispatch(setCurrentOpenedForm(REGISTRATION_FORM));
+          }}
           linkHelpText={formatMessage(messages.loginFormRegistrationHelpText)}
           linkText={formatMessage(messages.loginFormRegistrationLink)}
         />

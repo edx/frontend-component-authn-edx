@@ -1,7 +1,7 @@
 import { createPageEventTracker } from '../../../data/segment/utils';
 import {
   eventNames,
-  trackResettPasswordPageEvent,
+  trackResetPasswordPageViewed,
 } from '../reset-password';
 
 // Mock createEventTracker function
@@ -16,7 +16,7 @@ describe('Tracking Functions', () => {
   });
 
   it('should fire trackResettPasswordPageEvent', () => {
-    trackResettPasswordPageEvent();
+    trackResetPasswordPageViewed();
 
     expect(createPageEventTracker).toHaveBeenCalledWith(
       eventNames.loginAndRegistration,

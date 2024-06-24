@@ -19,7 +19,7 @@ import {
 import getBackendValidations from './data/selector';
 import isFormValid from './data/utils';
 import messages from './messages';
-import { setCurrentOpenedForm, setRegisterIntent } from '../../authn-component/data/reducers';
+import { setCurrentOpenedForm } from '../../authn-component/data/reducers';
 import { InlineLink, SocialAuthProviders } from '../../common-ui';
 import {
   COMPLETE_STATE,
@@ -33,7 +33,11 @@ import {
 import { useDispatch, useSelector } from '../../data/storeHooks';
 import './index.scss';
 import getAllPossibleQueryParams, { getCountryCookieValue, setCookie } from '../../data/utils';
-import { registrationSuccessEvent, trackRegistrationPageEvent } from '../../tracking/trackers/register';
+import {
+  trackLoginFormToggled,
+  trackRegistrationPageViewed,
+  trackRegistrationSuccess,
+} from '../../tracking/trackers/register';
 import AuthenticatedRedirection from '../common-components/AuthenticatedRedirection';
 import SSOFailureAlert from '../common-components/SSOFailureAlert';
 import ThirdPartyAuthAlert from '../common-components/ThirdPartyAuthAlert';
@@ -52,6 +56,8 @@ import {
 const RegistrationForm = () => {
   const { formatMessage } = useIntl();
   const dispatch = useDispatch();
+
+  const [formStartTime, setFormStartTime] = useState(null);
 
   const [formFields, setFormFields] = useState({
     name: '', email: '', password: '', marketingEmailOptIn: true,
@@ -142,7 +148,7 @@ const RegistrationForm = () => {
       localStorage.removeItem('marketingEmailOptIn');
 
       // This event is used by GTM
-      registrationSuccessEvent();
+      trackRegistrationSuccess();
 
       // This is used by the "User Retention Rate Event" on GTM
       setCookie(getConfig().USER_RETENTION_COOKIE_NAME, true);
@@ -150,8 +156,11 @@ const RegistrationForm = () => {
   }, [registrationResult]);
 
   useEffect(() => {
-    trackRegistrationPageEvent();
-  }, []);
+    if (!formStartTime) {
+      trackRegistrationPageViewed();
+      setFormStartTime(Date.now());
+    }
+  }, [formStartTime]);
 
   useEffect(() => {
     if (backendValidations) {
@@ -173,6 +182,7 @@ const RegistrationForm = () => {
   };
 
   const handleUserRegistration = () => {
+    const totalRegistrationTime = (Date.now() - formStartTime) / 1000;
     const userCountryCode = getCountryCookieValue();
     let payload = { ...formFields, honor_code: true, terms_of_service: true };
 
@@ -206,7 +216,9 @@ const RegistrationForm = () => {
       return;
     }
 
-    payload = { ...onboardingComponentContext, ...queryParams, ...payload };
+    payload = {
+      ...onboardingComponentContext, ...queryParams, ...payload, totalRegistrationTime,
+    };
     payload = snakeCaseObject(payload);
     dispatch(registerUser(payload));
   };
@@ -325,8 +337,8 @@ const RegistrationForm = () => {
               <InlineLink
                 className="mb-2"
                 onClick={() => {
+                  trackLoginFormToggled();
                   dispatch(setCurrentOpenedForm(LOGIN_FORM));
-                  dispatch(setRegisterIntent());
                 }}
                 linkHelpText={formatMessage(messages.registrationFormAlreadyHaveAccountText)}
                 linkText={formatMessage(messages.registrationFormSignInLink)}

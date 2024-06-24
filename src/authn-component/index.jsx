@@ -115,7 +115,7 @@ export const AuthnComponent = ({
     if (currentForm === RESET_PASSWORD_FORM) {
       return <ResetPasswordForm />;
     }
-    return <RegistrationForm />;
+    return null;
   };
 
   const getSpinner = () => (

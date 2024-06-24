@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
 import { getConfig, snakeCaseObject } from '@edx/frontend-platform';
+import { identifyAuthenticatedUser } from '@edx/frontend-platform/analytics';
 import {
   AxiosJwtAuthService,
   configure as configureAuth,
@@ -20,9 +21,9 @@ import { COMPLETE_STATE, LOGIN_FORM } from '../../data/constants';
 import { useDispatch, useSelector } from '../../data/storeHooks';
 import { getCountryCookieValue } from '../../data/utils';
 import {
-  trackProgressiveProfilingPageEvent,
-  trackProgressiveProfilingSkipLinkClickEvent,
-  trackProgressiveProfilinSubmitClickEvent,
+  trackProgressiveProfilingPageViewed,
+  trackProgressiveProfilingSkipLinkClick,
+  trackProgressiveProfilingSubmitClick,
 } from '../../tracking/trackers/progressive-profiling';
 import AuthenticatedRedirection from '../common-components/AuthenticatedRedirection';
 import AutoSuggestField from '../fields/auto-suggested-field';
@@ -77,8 +78,9 @@ const ProgressiveProfilingForm = () => {
       dispatch(setCurrentOpenedForm(LOGIN_FORM));
     }
     if (authenticatedUser?.userId) {
+      identifyAuthenticatedUser(authenticatedUser?.userId);
       configureAuth(AxiosJwtAuthService, { config: getConfig() });
-      trackProgressiveProfilingPageEvent();
+      trackProgressiveProfilingPageViewed();
     }
   }, [authenticatedUser, dispatch]);
 
@@ -150,7 +152,7 @@ const ProgressiveProfilingForm = () => {
         ...formData,
       },
     };
-    trackProgressiveProfilinSubmitClickEvent(eventProperties);
+    trackProgressiveProfilingSubmitClick(eventProperties);
     dispatch(saveUserProfile(snakeCaseObject(payload)));
   };
 
@@ -164,8 +166,8 @@ const ProgressiveProfilingForm = () => {
       // TODO update error message copy here if user has no country value set in the backend and wants to skip this form
       setFormErrors({ ...formErrors, country: formatMessage(messages.progressiveProfilingCountryFieldErrorMessage) });
     } else if (hasCountry) {
-      trackProgressiveProfilingSkipLinkClickEvent();
-      window.location.href = redirectUrl;
+      // link tracker
+      trackProgressiveProfilingSkipLinkClick(redirectUrl)(e);
     }
   };
 
@@ -175,6 +177,7 @@ const ProgressiveProfilingForm = () => {
         success={submitState === COMPLETE_STATE}
         redirectUrl={redirectUrl}
         finishAuthUrl={finishAuthUrl}
+        isLinkTracked
       />
       <h1
         className="display-1 font-italic text-center mb-4"

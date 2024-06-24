@@ -1,14 +1,15 @@
 import { createEventTracker, createPageEventTracker } from '../../../data/segment/utils';
 import {
   eventNames,
-  trackProgressiveProfilingPageEvent,
-  trackProgressiveProfilingSkipLinkClickEvent,
+  trackProgressiveProfilingPageViewed,
+  trackProgressiveProfilingSkipLinkClick,
 } from '../progressive-profiling';
 
 // Mock createEventTracker function
 jest.mock('../../../data/segment/utils', () => ({
   createEventTracker: jest.fn().mockImplementation(() => jest.fn()),
   createPageEventTracker: jest.fn().mockImplementation(() => jest.fn()),
+  createLinkTracker: jest.fn().mockImplementation(() => jest.fn()),
 }));
 
 describe('Tracking Functions', () => {
@@ -17,16 +18,16 @@ describe('Tracking Functions', () => {
   });
 
   it('should fire trackProgressiveProfilingSkipLinkClickEvent', () => {
-    trackProgressiveProfilingSkipLinkClickEvent();
+    trackProgressiveProfilingSkipLinkClick();
 
     expect(createEventTracker).toHaveBeenCalledWith(
-      eventNames.ProgressiveProfilingSkipLinkClick,
+      eventNames.progressiveProfilingSkipLinkClick,
       {},
     );
   });
 
   it('should fire trackProgressiveProfilingPageEvent', () => {
-    trackProgressiveProfilingPageEvent();
+    trackProgressiveProfilingPageViewed();
 
     expect(createPageEventTracker).toHaveBeenCalledWith(
       eventNames.loginAndRegistration,

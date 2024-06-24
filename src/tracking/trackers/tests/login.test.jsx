@@ -3,7 +3,6 @@ import {
   categories,
   eventNames,
   trackForgotPasswordLinkClick,
-  trackLoginPageEvent,
   trackLoginPageViewed,
 } from '../login';
 
@@ -27,17 +26,8 @@ describe('Tracking Functions', () => {
     );
   });
 
-  it('trackLoginPageViewed function', () => {
-    trackLoginPageViewed();
-
-    expect(createEventTracker).toHaveBeenCalledWith(
-      eventNames.loginPageViewed,
-      { category: categories.userEngagement },
-    );
-  });
-
   it('trackLoginPageEvent function', () => {
-    trackLoginPageEvent();
+    trackLoginPageViewed();
 
     expect(createPageEventTracker).toHaveBeenCalledWith(
       eventNames.loginAndRegistration,

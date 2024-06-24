@@ -86,6 +86,7 @@ describe('RegistrationForm Test', () => {
 
   // ******** test registration form submission ********
   it('should submit form for valid input', async () => {
+    jest.spyOn(global.Date, 'now').mockImplementation(() => 0);
     store.dispatch = jest.fn(store.dispatch);
     const payload = {
       email: 'test@example.com',
@@ -94,6 +95,7 @@ describe('RegistrationForm Test', () => {
       marketing_email_opt_in: true,
       honor_code: true,
       terms_of_service: true,
+      total_registration_time: 0,
     };
     const { container } = render(reduxWrapper(<IntlRegistrationForm />));
 
@@ -111,6 +113,7 @@ describe('RegistrationForm Test', () => {
   });
 
   it('should submit form with country code', async () => {
+    jest.spyOn(global.Date, 'now').mockImplementation(() => 0);
     // Mock Cookies class
     jest.mock('universal-cookie');
 
@@ -126,6 +129,7 @@ describe('RegistrationForm Test', () => {
       honor_code: true,
       terms_of_service: true,
       country: 'US',
+      total_registration_time: 0,
     };
     const { container } = render(reduxWrapper(<IntlRegistrationForm />));
 

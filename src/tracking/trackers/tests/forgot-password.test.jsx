@@ -2,8 +2,8 @@ import { createEventTracker, createPageEventTracker } from '../../../data/segmen
 import {
   categories,
   eventNames,
-  forgotPasswordPageViewedEvent,
   trackForgotPasswordPageEvent,
+  trackForgotPasswordPageViewed,
 } from '../forgotpassword';
 
 // Mock createEventTracker function
@@ -27,10 +27,10 @@ describe('Tracking Functions', () => {
   });
 
   it('should fire forgotPasswordPageViewedEvent', () => {
-    forgotPasswordPageViewedEvent();
+    trackForgotPasswordPageViewed();
 
     expect(createEventTracker).toHaveBeenCalledWith(
-      eventNames.forgotPasswordPageViewd,
+      eventNames.forgotPasswordPageViewed,
       { category: categories.userEngagement },
     );
   });
