@@ -26,6 +26,7 @@ initialize({
         AUTHN_ALGOLIA_APP_ID: process.env.AUTHN_ALGOLIA_APP_ID || '',
         AUTHN_ALGOLIA_SEARCH_API_KEY: process.env.AUTHN_ALGOLIA_SEARCH_API_KEY || '',
         TOS_AND_HONOR_CODE: process.env.TOS_AND_HONOR_CODE || '',
+        PASSWORD_RESET_SUPPORT_LINK: process.env.PASSWORD_RESET_SUPPORT_LINK || '',
         PRIVACY_POLICY: process.env.PRIVACY_POLICY || '',
         INFO_EMAIL: process.env.INFO_EMAIL || '',
         USER_RETENTION_COOKIE_NAME: process.env.USER_RETENTION_COOKIE_NAME || '',
