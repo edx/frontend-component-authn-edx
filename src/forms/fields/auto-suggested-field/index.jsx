@@ -11,6 +11,8 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
 import messages from '../../progressive-profiling-popup/messages';
+import './index.scss';
+
 
 /**
  * Auto Suggest field wrapper. It accepts following handlers
