@@ -29,6 +29,7 @@ initialize({
         PRIVACY_POLICY: process.env.PRIVACY_POLICY || '',
         INFO_EMAIL: process.env.INFO_EMAIL || '',
         USER_RETENTION_COOKIE_NAME: process.env.USER_RETENTION_COOKIE_NAME || '',
+        ONBOARDING_COMPONENT_ENV: process.env.ONBOARDING_COMPONENT_ENV || '',
       });
     },
   },

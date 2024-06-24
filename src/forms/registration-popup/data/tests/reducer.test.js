@@ -2,7 +2,9 @@ import {
   COMPLETE_STATE, DEFAULT_STATE, PENDING_STATE,
 } from '../../../../data/constants';
 import registerReducer, {
-  clearRegistrationBackendError, fetchRealtimeValidations,
+  clearAllRegistrationErrors,
+  clearRegistrationBackendError,
+  fetchRealtimeValidations,
   fetchRealtimeValidationsFailed,
   fetchRealtimeValidationsSuccess,
   registerInitialState,
@@ -55,5 +57,22 @@ describe('registerSlice reducer', () => {
     }, clearRegistrationBackendError('email'));
 
     expect(nextState.registrationError).toEqual({ errorCode: 'duplicate-email' });
+  });
+
+  it('should handle clearAllRegistrationErrors action', () => {
+    const nextState = registerReducer({
+      ...registerInitialState,
+      registrationError: {
+        email: [
+          {
+            userMessage: 'This email is already associated with an existing or previous edX account',
+          },
+        ],
+        errorCode: 'duplicate-email',
+      },
+
+    }, clearAllRegistrationErrors());
+
+    expect(nextState.registrationError).toEqual({});
   });
 });

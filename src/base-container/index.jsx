@@ -4,7 +4,11 @@ import { ModalDialog } from '@openedx/paragon';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
+import { useDispatch } from '../data/storeHooks';
 import { deleteQueryParams } from '../data/utils';
+import { loginErrorClear } from '../forms/login-popup/data/reducers';
+import { clearAllRegistrationErrors } from '../forms/registration-popup/data/reducers';
+import { forgotPasswordClearStatus } from '../forms/reset-password-popup/forgot-password/data/reducers';
 import './index.scss';
 
 /**
@@ -25,8 +29,13 @@ const BaseContainer = ({
   isOpen,
   size = 'lg',
 }) => {
+  const dispatch = useDispatch();
+
   const handleOnClose = () => {
     deleteQueryParams(['authMode', 'tpa_hint', 'password_reset_token', 'track']);
+    dispatch(forgotPasswordClearStatus());
+    dispatch(loginErrorClear());
+    dispatch(clearAllRegistrationErrors());
     close();
   };
 
