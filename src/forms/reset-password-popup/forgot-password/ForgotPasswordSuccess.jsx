@@ -29,13 +29,13 @@ const ForgotPasswordSuccess = (props) => {
           defaultMessage="We sent an email to {email} with instructions to reset your password.
           If you do not receive a password reset message after 1 minute, verify that you entered
           the correct email address, or check your spam folder. If you need further assistance,
-          visit Help Center contact edX support at {supportLink}."
+          visit {helpCenter}."
           description="Forgot password confirmation message"
           values={{
             email: <span className="data-hj-suppress">{email}</span>,
-            supportLink: (
-              <Alert.Link href={getConfig().INFO_EMAIL} target="_blank">
-                {getConfig().INFO_EMAIL}
+            helpCenter: (
+              <Alert.Link href={getConfig().PASSWORD_RESET_SUPPORT_LINK} target="_blank">
+                {formatMessage(messages.helpCenter)}
               </Alert.Link>
             ),
           }}

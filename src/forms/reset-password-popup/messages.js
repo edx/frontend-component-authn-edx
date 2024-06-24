@@ -68,6 +68,11 @@ const messages = defineMessages({
     defaultMessage: 'Email has been sent',
     description: 'Notification message indicating that an email has been sent',
   },
+  helpCenter: {
+    id: 'help.center',
+    defaultMessage: 'Help Center',
+    description: 'Part of reset password success message.',
+  },
   // validation errors
   passwordRequiredMessage: {
     id: 'password.required.message',

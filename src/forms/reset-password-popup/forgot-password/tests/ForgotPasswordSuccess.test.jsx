@@ -28,7 +28,7 @@ describe('ForgotPasswordFailureAlert Component', () => {
     + 'with instructions to reset your password. If you do not receive a password reset '
     + 'message after 1 minute, verify that you entered the correct email address, or '
     + 'check your spam folder. If you need further assistance, '
-    + 'visit Help Center contact edX support at info@edx.org.';
+    + 'visit Help Center.';
     expect(container.querySelector('#forgot-password-success-msg').textContent).toBe(expectedMessage);
   });
 });
