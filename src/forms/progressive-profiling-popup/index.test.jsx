@@ -258,6 +258,11 @@ describe('ProgressiveProfilingForm Test', () => {
   it('should redirect to redirect url on skip button click', async () => {
     store = mockStore({
       ...initialState,
+      commonData: {
+        thirdPartyAuthContext: {
+          countryCode: 'US',
+        },
+      },
       progressiveProfiling: {
         redirectUrl: 'http://example.com',
       },
@@ -283,6 +288,27 @@ describe('ProgressiveProfilingForm Test', () => {
     });
 
     expect(window.location.href).toEqual('http://example.com');
+  });
+
+  it('should not redirect to redirect url on skip button click if country not set in user profile', () => {
+    store = mockStore({
+      ...initialState,
+      progressiveProfiling: {
+        redirectUrl: 'http://example.com',
+      },
+    });
+
+    delete window.location;
+    window.location = {
+      assign: jest.fn().mockImplementation((value) => { window.location.href = value; }),
+      href: getConfig().LMS_BASE_URL,
+    };
+    const { container } = render(reduxWrapper(<IntlProgressiveProfilingForm />));
+
+    const skipButton = container.querySelector('#skip-optional-fields');
+    fireEvent.click(skipButton);
+
+    expect(window.location.href).not.toEqual('http://example.com');
   });
 
   it('should not redirect on skip button click if country not selected', () => {

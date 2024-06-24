@@ -47,4 +47,10 @@ export const setCookie = (cookieName, cookieValue, cookieExpiry) => {
   }
 };
 
+export const getCountryCookieValue = () => {
+  const cookieName = `${getConfig().ONBOARDING_COMPONENT_ENV}-edx-cf-loc`;
+  const cookies = new Cookies();
+  return cookies.get(cookieName);
+};
+
 export default getAllPossibleQueryParams;
