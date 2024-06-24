@@ -32,7 +32,7 @@ import {
 } from '../../data/constants';
 import { useDispatch, useSelector } from '../../data/storeHooks';
 import './index.scss';
-import getAllPossibleQueryParams, { setCookie } from '../../data/utils';
+import getAllPossibleQueryParams, { getCountryCookieValue, setCookie } from '../../data/utils';
 import { registrationSuccessEvent, trackRegistrationPageEvent } from '../../tracking/trackers/register';
 import AuthenticatedRedirection from '../common-components/AuthenticatedRedirection';
 import SSOFailureAlert from '../common-components/SSOFailureAlert';
@@ -73,6 +73,7 @@ const RegistrationForm = () => {
   const providers = useSelector(state => state.commonData.thirdPartyAuthContext?.providers);
   const currentProvider = useSelector(state => state.commonData.thirdPartyAuthContext.currentProvider);
   const pipelineUserDetails = useSelector(state => state.commonData.thirdPartyAuthContext.pipelineUserDetails);
+  const authContextCountryCode = useSelector(state => state.commonData.thirdPartyAuthContext.countryCode);
   const registrationError = useSelector(state => state.register.registrationError);
   const isLoginSSOIntent = useSelector(state => state.login.isLoginSSOIntent);
   const registrationErrorCode = registrationError?.errorCode;
@@ -172,6 +173,7 @@ const RegistrationForm = () => {
   };
 
   const handleUserRegistration = () => {
+    const userCountryCode = getCountryCookieValue();
     let payload = { ...formFields, honor_code: true, terms_of_service: true };
 
     if (currentProvider) {
@@ -182,6 +184,13 @@ const RegistrationForm = () => {
         delete payload.marketingEmailOptIn;
         payload.marketingEmailOptIn = localStorage.getItem('marketingEmailOptIn');
       }
+    }
+
+    // add country in payload if country cookie value or mfe_context country exists
+    if (userCountryCode) {
+      payload.country = userCountryCode;
+    } else if (authContextCountryCode) {
+      payload.country = authContextCountryCode;
     }
 
     // Validating form data before submitting
