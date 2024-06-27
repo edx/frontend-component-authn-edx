@@ -19,7 +19,6 @@ import {
   REGISTRATION_FORM,
 } from '../../data/constants';
 import { AuthnContext } from '../../data/storeHooks';
-import useSubjectList from '../../forms/progressive-profiling-popup/data/hooks/useSubjectList';
 import { getThirdPartyAuthContext, setCurrentOpenedForm } from '../data/reducers';
 import { AuthnComponent, SignInComponent, SignUpComponent } from '../index';
 
@@ -42,7 +41,6 @@ jest.mock('@edx/frontend-platform/i18n', () => ({
   getLocale: jest.fn(),
   getMessages: jest.fn(),
 }));
-jest.mock('../../forms/progressive-profiling-popup/data/hooks/useSubjectList', () => jest.fn());
 
 describe('AuthnComponent Test', () => {
   let store = {};
@@ -217,15 +215,7 @@ describe('AuthnComponent Test', () => {
     it('renders PROGRESSIVE_PROFILING_FORM form if currentForm=PROGRESSIVE_PROFILING_FORM', () => {
       getLocale.mockImplementation(() => ('en-us'));
       getAuthenticatedUser.mockReturnValue({ userId: 3, username: 'abc123', name: 'Test User' });
-      useSubjectList.mockReturnValue({
-        subjectsList: {
-          options: [
-            { label: 'Computer' },
-            { label: 'Science' },
-          ],
-        },
-        subjectsLoading: false,
-      });
+
       store = mockStore({
         ...initialState,
         commonData: {
@@ -234,6 +224,12 @@ describe('AuthnComponent Test', () => {
         },
         progressiveProfiling: {
           submitState: DEFAULT_STATE,
+          subjectsList: {
+            options: [
+              { label: 'Computer' },
+              { label: 'Science' },
+            ],
+          },
         },
       });
       const { container, getByTestId } = render(reduxWrapper(

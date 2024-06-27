@@ -14,11 +14,16 @@ import {
 import { Language } from '@openedx/paragon/icons';
 
 import { extendedProfileFields, optionalFieldsData } from './data/constants';
-import useSubjectsList from './data/hooks/useSubjectList';
 import { saveUserProfile } from './data/reducers';
 import messages from './messages';
 import { setCurrentOpenedForm } from '../../authn-component/data/reducers';
-import { COMPLETE_STATE, LOGIN_FORM } from '../../data/constants';
+import {
+  COMPLETE_STATE,
+  DEFAULT_STATE,
+  FAILURE_STATE,
+  LOGIN_FORM,
+  PENDING_STATE,
+} from '../../data/constants';
 import { useDispatch, useSelector } from '../../data/storeHooks';
 import { getCountryCookieValue } from '../../data/utils';
 import {
@@ -42,10 +47,10 @@ const ProgressiveProfilingForm = () => {
   const dispatch = useDispatch();
 
   const countryCookieValue = getCountryCookieValue();
-  const { subjectsList, subjectsLoading } = useSubjectsList();
   const countryList = useMemo(() => getCountryList(getLocale()), []);
 
   const submitState = useSelector(state => state.progressiveProfiling.submitState);
+  const subjectsList = useSelector(state => state.progressiveProfiling.subjectsList);
   const redirectUrl = useSelector(state => state.progressiveProfiling.redirectUrl);
   const authContextCountryCode = useSelector(state => state.commonData.thirdPartyAuthContext.countryCode);
   const finishAuthUrl = useSelector(state => state.commonData.thirdPartyAuthContext.finishAuthUrl);
@@ -54,6 +59,7 @@ const ProgressiveProfilingForm = () => {
   const [formData, setFormData] = useState({});
   const [formErrors, setFormErrors] = useState({});
   const [autoFilledCountry, setAutoFilledCountry] = useState({ value: '', displayText: '' });
+  const [skipButtonState, setSkipButtonState] = useState(DEFAULT_STATE);
 
   useEffect(() => {
     let countryCode = null;
@@ -160,12 +166,18 @@ const ProgressiveProfilingForm = () => {
   const handleSkip = (e) => {
     e.preventDefault();
 
+    setSkipButtonState(PENDING_STATE);
     const hasCountry = !!countryCookieValue || !!authContextCountryCode;
+
     if (hasFormErrors() && !hasCountry) {
       setFormErrors({ ...formErrors, country: formatMessage(messages.progressiveProfilingCountryFieldErrorMessage) });
+      setSkipButtonState(FAILURE_STATE);
     } else if (!hasFormErrors() && !hasCountry) {
-      // TODO update error message copy here if user has no country value set in the backend and wants to skip this form
-      setFormErrors({ ...formErrors, country: formatMessage(messages.progressiveProfilingCountryFieldErrorMessage) });
+      setFormErrors({
+        ...formErrors,
+        country: formatMessage(messages.progressiveProfilingCountryFieldBlockingErrorMessage),
+      });
+      setSkipButtonState(FAILURE_STATE);
     } else if (hasCountry) {
       // link tracker
       trackProgressiveProfilingSkipLinkClick(redirectUrl)(e);
@@ -219,7 +231,7 @@ const ProgressiveProfilingForm = () => {
             name="subject"
             placeholder={formatMessage(messages.progressiveProfilingSubjectFieldPlaceholder)}
             label={formatMessage(messages.progressiveProfilingSubjectFieldLabel)}
-            options={subjectsLoading ? [] : subjectsList.options}
+            options={subjectsList?.options}
             onChangeHandler={handleSelect}
           />
         </Form.Group>
@@ -271,10 +283,13 @@ const ProgressiveProfilingForm = () => {
           <StatefulButton
             id="skip-optional-fields"
             name="skip-optional-fields"
+            className="authn-progressive-profiling-skip-button"
             type="submit"
             variant="outline-dark"
+            state={skipButtonState}
             labels={{
               default: formatMessage(messages.progressiveProfilingSkipForNowButtonText),
+              pending: '',
             }}
             onClick={handleSkip}
             onMouseDown={(e) => e.preventDefault()}
