@@ -66,6 +66,7 @@ const RegistrationForm = () => {
   const [errorCode, setErrorCode] = useState({ type: '', count: 0 });
 
   const emailRef = useRef(null);
+  const registerErrorAlertRef = useRef(null);
   const socialAuthnButtonRef = useRef(null);
   const queryParams = useMemo(() => getAllPossibleQueryParams(), []);
 
@@ -87,6 +88,12 @@ const RegistrationForm = () => {
   const submitState = useSelector(state => state.register.submitState);
 
   const autoSubmitRegForm = currentProvider && thirdPartyAuthApiStatus === COMPLETE_STATE && !isLoginSSOIntent;
+
+  const moveScrollToTop = () => {
+    if (registerErrorAlertRef?.current?.scrollIntoView) {
+      registerErrorAlertRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+  };
 
   /**
    * Set the userPipelineDetails data in formFields for only first time
@@ -171,6 +178,7 @@ const RegistrationForm = () => {
   useEffect(() => {
     if (registrationErrorCode) {
       setErrorCode(prevState => ({ type: registrationErrorCode, count: prevState.count + 1 }));
+      moveScrollToTop();
     }
   }, [registrationErrorCode]);
 
@@ -213,6 +221,7 @@ const RegistrationForm = () => {
 
     if (!isValid) {
       setErrorCode(prevState => ({ type: FORM_SUBMISSION_ERROR, count: prevState.count + 1 }));
+      moveScrollToTop();
       return;
     }
 
@@ -270,16 +279,18 @@ const RegistrationForm = () => {
                 </div>
               </>
             )}
+
             <ThirdPartyAuthAlert
               currentProvider={currentProvider}
               referrer={REGISTRATION_FORM}
             />
-            <RegistrationFailureAlert
-              errorCode={errorCode.type}
-              failureCount={errorCode.count}
-              context={{ provider: currentProvider, errorMessage: thirdPartyAuthErrorMessage }}
-            />
-
+            <div ref={registerErrorAlertRef}>
+              <RegistrationFailureAlert
+                errorCode={errorCode.type}
+                failureCount={errorCode.count}
+                context={{ provider: currentProvider, errorMessage: thirdPartyAuthErrorMessage }}
+              />
+            </div>
             <Form id="registration-form" name="registration-form" className="d-flex flex-column my-4">
               <EmailField
                 name="email"
