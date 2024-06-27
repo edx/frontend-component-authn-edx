@@ -47,6 +47,8 @@ import {
   NameField,
   PasswordField,
 } from '../fields';
+import useSubjectsList from '../progressive-profiling-popup/data/hooks/useSubjectList';
+import { setSubjectsList } from '../progressive-profiling-popup/data/reducers';
 
 /**
  * RegisterForm component for handling user registration.
@@ -69,6 +71,7 @@ const RegistrationForm = () => {
   const registerErrorAlertRef = useRef(null);
   const socialAuthnButtonRef = useRef(null);
   const queryParams = useMemo(() => getAllPossibleQueryParams(), []);
+  const { subjectsList, subjectsLoading } = useSubjectsList();
 
   const registrationResult = useSelector(state => state.register.registrationResult);
   const userPipelineDataLoaded = useSelector(state => state.register.userPipelineDataLoaded);
@@ -133,6 +136,13 @@ const RegistrationForm = () => {
       emailRef.current.focus();
     }
   }, [thirdPartyAuthApiStatus, providers]);
+
+  useEffect(() => {
+    if (!subjectsLoading) {
+      dispatch(setSubjectsList(subjectsList));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, subjectsLoading]);
 
   const handleOnChange = (event) => {
     const { name } = event.target;
