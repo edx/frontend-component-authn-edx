@@ -31,8 +31,8 @@ import {
   TPA_AUTHENTICATION_FAILURE,
 } from '../../data/constants';
 import { useDispatch, useSelector } from '../../data/storeHooks';
+import getAllPossibleQueryParams, { getCountryCookieValue, moveScrollToTop, setCookie } from '../../data/utils';
 import './index.scss';
-import getAllPossibleQueryParams, { getCountryCookieValue, setCookie } from '../../data/utils';
 import {
   trackLoginFormToggled,
   trackRegistrationPageViewed,
@@ -91,12 +91,6 @@ const RegistrationForm = () => {
   const submitState = useSelector(state => state.register.submitState);
 
   const autoSubmitRegForm = currentProvider && thirdPartyAuthApiStatus === COMPLETE_STATE && !isLoginSSOIntent;
-
-  const moveScrollToTop = () => {
-    if (registerErrorAlertRef?.current?.scrollIntoView) {
-      registerErrorAlertRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
-    }
-  };
 
   /**
    * Set the userPipelineDetails data in formFields for only first time
@@ -188,7 +182,7 @@ const RegistrationForm = () => {
   useEffect(() => {
     if (registrationErrorCode) {
       setErrorCode(prevState => ({ type: registrationErrorCode, count: prevState.count + 1 }));
-      moveScrollToTop();
+      moveScrollToTop(registerErrorAlertRef);
     }
   }, [registrationErrorCode]);
 
@@ -231,7 +225,7 @@ const RegistrationForm = () => {
 
     if (!isValid) {
       setErrorCode(prevState => ({ type: FORM_SUBMISSION_ERROR, count: prevState.count + 1 }));
-      moveScrollToTop();
+      moveScrollToTop(registerErrorAlertRef);
       return;
     }
 

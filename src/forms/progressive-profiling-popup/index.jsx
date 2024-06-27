@@ -1,4 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, {
+  useEffect, useMemo, useRef, useState,
+} from 'react';
 
 import { getConfig, snakeCaseObject } from '@edx/frontend-platform';
 import { identifyAuthenticatedUser } from '@edx/frontend-platform/analytics';
@@ -25,7 +27,7 @@ import {
   PENDING_STATE,
 } from '../../data/constants';
 import { useDispatch, useSelector } from '../../data/storeHooks';
-import { getCountryCookieValue } from '../../data/utils';
+import { getCountryCookieValue, moveScrollToTop } from '../../data/utils';
 import {
   trackProgressiveProfilingPageViewed,
   trackProgressiveProfilingSkipLinkClick,
@@ -45,6 +47,8 @@ import './index.scss';
 const ProgressiveProfilingForm = () => {
   const { formatMessage } = useIntl();
   const dispatch = useDispatch();
+
+  const progressiveProfilingHeadingRef = useRef(null);
 
   const countryCookieValue = getCountryCookieValue();
   const countryList = useMemo(() => getCountryList(getLocale()), []);
@@ -133,6 +137,7 @@ const ProgressiveProfilingForm = () => {
     e.preventDefault();
 
     if (hasFormErrors()) {
+      moveScrollToTop(progressiveProfilingHeadingRef);
       return;
     }
     const eventProperties = {
@@ -172,12 +177,14 @@ const ProgressiveProfilingForm = () => {
     if (hasFormErrors() && !hasCountry) {
       setFormErrors({ ...formErrors, country: formatMessage(messages.progressiveProfilingCountryFieldErrorMessage) });
       setSkipButtonState(FAILURE_STATE);
+      moveScrollToTop(progressiveProfilingHeadingRef);
     } else if (!hasFormErrors() && !hasCountry) {
       setFormErrors({
         ...formErrors,
         country: formatMessage(messages.progressiveProfilingCountryFieldBlockingErrorMessage),
       });
       setSkipButtonState(FAILURE_STATE);
+      moveScrollToTop(progressiveProfilingHeadingRef);
     } else if (hasCountry) {
       // link tracker
       trackProgressiveProfilingSkipLinkClick(redirectUrl)(e);
@@ -195,6 +202,7 @@ const ProgressiveProfilingForm = () => {
       <h1
         className="display-1 font-italic text-center mb-4"
         data-testid="progressive-profiling-heading"
+        ref={progressiveProfilingHeadingRef}
       >
         {formatMessage(messages.progressiveProfilingFormHeading)}
       </h1>
