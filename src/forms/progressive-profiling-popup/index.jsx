@@ -7,6 +7,7 @@ import {
   configure as configureAuth,
 } from '@edx/frontend-platform/auth';
 import { getCountryList, getLocale, useIntl } from '@edx/frontend-platform/i18n';
+import { getLoggingService } from '@edx/frontend-platform/logging';
 import {
   Container, Form, Icon, StatefulButton,
 } from '@openedx/paragon';
@@ -79,7 +80,7 @@ const ProgressiveProfilingForm = () => {
     }
     if (authenticatedUser?.userId) {
       identifyAuthenticatedUser(authenticatedUser?.userId);
-      configureAuth(AxiosJwtAuthService, { config: getConfig() });
+      configureAuth(AxiosJwtAuthService, { loggingService: getLoggingService(), config: getConfig() });
       trackProgressiveProfilingPageViewed();
     }
   }, [authenticatedUser, dispatch]);

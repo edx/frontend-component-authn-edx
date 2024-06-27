@@ -25,6 +25,10 @@ jest.mock('@edx/frontend-platform/auth', () => ({
   getAuthenticatedUser: jest.fn({}),
 }));
 
+jest.mock('@edx/frontend-platform/logging', () => ({
+  getLoggingService: jest.fn(),
+}));
+
 getAuthenticatedUser.mockReturnValue({ userId: 3, username: 'abc123', name: 'Test User' });
 jest.mock('@edx/frontend-platform/i18n', () => ({
   ...jest.requireActual('@edx/frontend-platform/i18n'),
