@@ -1,10 +1,13 @@
 import React from 'react';
+import { Provider } from 'react-redux';
 
 import { mergeConfig } from '@edx/frontend-platform';
 import { injectIntl, IntlProvider } from '@edx/frontend-platform/i18n';
 import {
   render, screen,
 } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
+import configureStore from 'redux-mock-store';
 
 import LoginFailureAlert from './LoginFailureAlert';
 import {
@@ -13,6 +16,7 @@ import {
   INVALID_FORM,
   TPA_AUTHENTICATION_FAILURE,
 } from '../../../data/constants';
+import { AuthnContext } from '../../../data/storeHooks';
 import SSOFailureAlert from '../../common-components/SSOFailureAlert';
 import {
   ACCOUNT_LOCKED_OUT,
@@ -25,20 +29,30 @@ import {
 
 const IntlLoginFailureAlert = injectIntl(LoginFailureAlert);
 const IntlSSOFailureAlert = injectIntl(SSOFailureAlert);
+const mockStore = configureStore();
 
 describe('LoginFailureAlert', () => {
   let props = {};
+  let store = {};
+
+  const reduxWrapper = children => (
+    <IntlProvider locale="en">
+      <MemoryRouter>
+        <Provider context={AuthnContext} store={store}>{children}</Provider>
+      </MemoryRouter>
+    </IntlProvider>
+  );
+
+  beforeEach(() => {
+    store = mockStore({});
+  });
 
   it('should not render error message if errorCode is not available', () => {
     props = {
       errorCode: '',
     };
 
-    const { container } = render(
-      <IntlProvider locale="en">
-        <IntlLoginFailureAlert {...props} />
-      </IntlProvider>,
-    );
+    const { container } = render(reduxWrapper(<IntlLoginFailureAlert {...props} />));
 
     expect(container.querySelector('#login-failure-alert')).toBeFalsy();
   });
@@ -48,11 +62,7 @@ describe('LoginFailureAlert', () => {
       errorCode: NON_COMPLIANT_PASSWORD_EXCEPTION,
     };
 
-    const { container } = render(
-      <IntlProvider locale="en">
-        <IntlLoginFailureAlert {...props} />
-      </IntlProvider>,
-    );
+    const { container } = render(reduxWrapper(<IntlLoginFailureAlert {...props} />));
 
     const expectedMessage = 'We couldn\'t sign you in. We recently changed our password requirements'
                             + 'Your current password does not meet the new security requirements. We just sent a '
@@ -72,11 +82,7 @@ describe('LoginFailureAlert', () => {
       errorCode: INACTIVE_USER,
     };
 
-    const { container } = render(
-      <IntlProvider locale="en">
-        <IntlLoginFailureAlert {...props} />
-      </IntlProvider>,
-    );
+    const { container } = render(reduxWrapper(<IntlLoginFailureAlert {...props} />));
 
     const expectedMessage = 'We couldn\'t sign you in. In order to sign in, you need to activate your account.'
                             + 'We just sent an activation link to text@example.com. If you do not receive an email, '
@@ -97,11 +103,7 @@ describe('LoginFailureAlert', () => {
       errorCode: FAILED_LOGIN_ATTEMPT,
     };
 
-    const { container } = render(
-      <IntlProvider locale="en">
-        <IntlLoginFailureAlert {...props} />
-      </IntlProvider>,
-    );
+    const { container } = render(reduxWrapper(<IntlLoginFailureAlert {...props} />));
 
     const expectedMessage = 'We couldn\'t sign you in. The username, email or password you entered is incorrect. '
                             + 'You have 3 more sign in attempts before your account is temporarily locked.If you\'ve forgotten your password, click here to reset it.';
@@ -119,11 +121,7 @@ describe('LoginFailureAlert', () => {
       errorCode: INCORRECT_EMAIL_PASSWORD,
     };
 
-    const { container } = render(
-      <IntlProvider locale="en">
-        <IntlLoginFailureAlert {...props} />
-      </IntlProvider>,
-    );
+    const { container } = render(reduxWrapper(<IntlLoginFailureAlert {...props} />));
 
     const expectedMessage = 'We couldn\'t sign you in. The username, email, or password you entered is incorrect. Please try again.';
 
@@ -135,11 +133,7 @@ describe('LoginFailureAlert', () => {
       errorCode: ACCOUNT_LOCKED_OUT,
     };
 
-    const { container } = render(
-      <IntlProvider locale="en">
-        <IntlLoginFailureAlert {...props} />
-      </IntlProvider>,
-    );
+    const { container } = render(reduxWrapper(<IntlLoginFailureAlert {...props} />));
 
     const expectedMessage = 'We couldn\'t sign you in. To protect your account, it\'s been temporarily locked. Try again in 30 minutes.To be on the safe side, you can reset your password before trying again.';
     expect(container.querySelector('#login-failure-alert').textContent).toBe(expectedMessage);
@@ -155,11 +149,7 @@ describe('LoginFailureAlert', () => {
       errorCode: INCORRECT_EMAIL_PASSWORD,
     };
 
-    const { container } = render(
-      <IntlProvider locale="en">
-        <IntlLoginFailureAlert {...props} />
-      </IntlProvider>,
-    );
+    const { container } = render(reduxWrapper(<IntlLoginFailureAlert {...props} />));
 
     const expectedMessage = 'We couldn\'t sign you in. The username, email, or password you entered is incorrect. Please try again or reset your password.';
 
@@ -171,11 +161,7 @@ describe('LoginFailureAlert', () => {
       errorCode: FORBIDDEN_REQUEST,
     };
 
-    const { container } = render(
-      <IntlProvider locale="en">
-        <IntlLoginFailureAlert {...props} />
-      </IntlProvider>,
-    );
+    const { container } = render(reduxWrapper(<IntlLoginFailureAlert {...props} />));
 
     const expectedMessage = 'We couldn\'t sign you in. Too many failed login attempts. Try again later.';
 
@@ -187,11 +173,7 @@ describe('LoginFailureAlert', () => {
       errorCode: INTERNAL_SERVER_ERROR,
     };
 
-    const { container } = render(
-      <IntlProvider locale="en">
-        <IntlLoginFailureAlert {...props} />
-      </IntlProvider>,
-    );
+    const { container } = render(reduxWrapper(<IntlLoginFailureAlert {...props} />));
 
     const expectedMessage = 'We couldn\'t sign you in. An error has occurred. Try refreshing the page, or check your internet connection.';
 
@@ -203,11 +185,7 @@ describe('LoginFailureAlert', () => {
       errorCode: INVALID_FORM,
     };
 
-    const { container } = render(
-      <IntlProvider locale="en">
-        <IntlLoginFailureAlert {...props} />
-      </IntlProvider>,
-    );
+    const { container } = render(reduxWrapper(<IntlLoginFailureAlert {...props} />));
 
     const expectedMessage = 'We couldn\'t sign you in. Please fill in the fields below.';
     expect(container.querySelector('#login-failure-alert').textContent).toBe(expectedMessage);
@@ -228,11 +206,7 @@ describe('LoginFailureAlert', () => {
       errorCode: ALLOWED_DOMAIN_LOGIN_ERROR,
     };
 
-    const { container } = render(
-      <IntlProvider locale="en">
-        <IntlLoginFailureAlert {...props} />
-      </IntlProvider>,
-    );
+    const { container } = render(reduxWrapper(<IntlLoginFailureAlert {...props} />));
 
     const errorMessage = "We couldn't sign you in. As test.com user, You must login with your test.com Google account.";
     const url = 'http://localhost:18000/dashboard/?tpa_hint=google-auth2';
@@ -257,11 +231,7 @@ describe('LoginFailureAlert', () => {
       errorCode: TPA_AUTHENTICATION_FAILURE,
     };
 
-    const { container } = render(
-      <IntlProvider locale="en">
-        <IntlSSOFailureAlert {...props} />
-      </IntlProvider>,
-    );
+    const { container } = render(reduxWrapper(<IntlSSOFailureAlert {...props} />));
 
     expect(container.querySelector('#SSO-failure-alert').textContent).toContain(errorMsg);
   });

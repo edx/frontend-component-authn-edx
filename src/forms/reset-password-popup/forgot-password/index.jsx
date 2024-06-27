@@ -147,10 +147,11 @@ const ForgotPasswordForm = () => {
               destination={getConfig().LOGIN_ISSUE_SUPPORT_LINK}
               linkHelpText={formatMessage(messages.resetPasswordFormNeedHelpText)}
               linkText={formatMessage(messages.resetPasswordFormHelpCenterLink)}
+              targetBlank
             />
             <InlineLink
               className="font-weight-normal small"
-              destination={getConfig().INFO_EMAIL}
+              destination={`mailto:${getConfig().INFO_EMAIL}`}
               linkHelpText={formatMessage(messages.resetPasswordFormAdditionalHelpText)}
               linkText={getConfig().INFO_EMAIL}
             />

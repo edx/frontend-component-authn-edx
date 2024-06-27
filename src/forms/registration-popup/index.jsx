@@ -352,11 +352,13 @@ const RegistrationForm = () => {
           </>
         )}
       </Container>
-      <div className="bg-dark-500">
-        <p className="mb-0 text-white m-auto authn-popup__registration-footer">
-          <HonorCodeAndPrivacyPolicyMessage />
-        </p>
-      </div>
+      {!(autoSubmitRegForm && !errorCode.type) && (
+        <div className="bg-dark-500">
+          <p className="mb-0 text-white m-auto authn-popup__registration-footer">
+            <HonorCodeAndPrivacyPolicyMessage />
+          </p>
+        </div>
+      )}
     </div>
   );
 };
