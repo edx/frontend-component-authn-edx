@@ -21,6 +21,31 @@ const AuthnExampleContainer = () => {
   const queryParam = getAllPossibleQueryParams();
 
   useEffect(() => {
+    const url = new URL(window.location.href);
+    const path = url.pathname;
+
+    if (path === '/login' || path === '/register' || path.startsWith('/password_reset_confirm')) {
+      const searchParams = new URLSearchParams(url.search);
+
+      if (path === '/login') {
+        searchParams.set('authMode', 'Login');
+      } else if (path === '/register') {
+        searchParams.set('authMode', 'Register');
+      } else if (path.startsWith('/password_reset_confirm')) {
+        searchParams.set('authMode', 'PasswordResetConfirm');
+
+        const trimmedPath = window.location.pathname.replace(/\/$/, '');
+        const token = trimmedPath.split('/').pop();
+        searchParams.set('token', token);
+      }
+
+      const redirectUrl = new URL(window.location.origin);
+      redirectUrl.search = searchParams.toString();
+      window.location.href = redirectUrl.toString();
+    }
+  }, []);
+
+  useEffect(() => {
     if (queryParam?.authMode === 'Login') {
       setSignInFormOpen();
     } else if (queryParam?.authMode === 'Register') {
