@@ -24,7 +24,7 @@ const mockStore = configureStore();
 const emptyFieldValidation = {
   name: 'Full name is required',
   email: 'Email is required',
-  password: 'Password needs to include:',
+  password: 'Password criteria has not been met',
 };
 
 const populateRequiredFields = (

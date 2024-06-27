@@ -178,7 +178,7 @@ describe('PasswordField', () => {
     expect(props.handleErrorChange).toHaveBeenCalledTimes(1);
     expect(props.handleErrorChange).toHaveBeenCalledWith(
       'password',
-      'Password needs to include:',
+      'Password criteria has not been met',
     );
   });
 
