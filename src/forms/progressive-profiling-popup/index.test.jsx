@@ -84,14 +84,14 @@ describe('ProgressiveProfilingForm Test', () => {
     jest.clearAllMocks();
   });
 
-  it.skip('should make identify call to segment on progressive profiling page', () => {
+  it('should make identify call to segment on progressive profiling page', () => {
     render(reduxWrapper(<IntlProgressiveProfilingForm />));
 
     expect(identifyAuthenticatedUser).toHaveBeenCalledWith(1);
     expect(identifyAuthenticatedUser).toHaveBeenCalled();
   });
 
-  it.skip('should render progressive profiling form', () => {
+  it('should render progressive profiling form', () => {
     render(reduxWrapper(<IntlProgressiveProfilingForm />));
 
     expect(screen.getByTestId('progressive-profiling-heading')).toBeTruthy();
@@ -102,7 +102,7 @@ describe('ProgressiveProfilingForm Test', () => {
 
   // ******** test progressive profiling form submission ********
 
-  it.skip('should submit form with all form inputs', () => {
+  it('should submit form with all form inputs', () => {
     store.dispatch = jest.fn(store.dispatch);
     const payload = {
       username: 'abc123',
@@ -154,7 +154,7 @@ describe('ProgressiveProfilingForm Test', () => {
     expect(store.dispatch).toHaveBeenCalledWith(saveUserProfile(payload));
   });
 
-  it.skip('should submit form with partial form inputs', () => {
+  it('should submit form with partial form inputs', () => {
     store.dispatch = jest.fn(store.dispatch);
     const payload = {
       username: 'abc123',
@@ -187,7 +187,7 @@ describe('ProgressiveProfilingForm Test', () => {
     expect(store.dispatch).toHaveBeenCalledWith(saveUserProfile(payload));
   });
 
-  it.skip('should not submit form if country is not selected', () => {
+  it('should not submit form if country is not selected', () => {
     store.dispatch = jest.fn(store.dispatch);
     const payload = {
       username: 'abc123',
@@ -214,7 +214,7 @@ describe('ProgressiveProfilingForm Test', () => {
     expect(store.dispatch).not.toHaveBeenCalledWith(saveUserProfile(payload));
   });
 
-  it.skip('should clear country field error message on focus event', () => {
+  it('should clear country field error message on focus event', () => {
     store.dispatch = jest.fn(store.dispatch);
     const payload = {
       username: 'abc123',
@@ -238,7 +238,7 @@ describe('ProgressiveProfilingForm Test', () => {
     expect(container.querySelector('.pgn__form-text-invalid')).toBeFalsy();
   });
 
-  it.skip('should country field auto populated based store countryCode value', () => {
+  it('should country field auto populated based store countryCode value', () => {
     store = mockStore({
       ...initialState,
       commonData: {
@@ -253,7 +253,7 @@ describe('ProgressiveProfilingForm Test', () => {
     expect(countryInput.value).toEqual('United States of America');
   });
 
-  it.skip('should redirect to redirect url on skip button click if user has country field', async () => {
+  it('should redirect to redirect url on skip button click if user has country field', async () => {
     store = mockStore({
       ...initialState,
       commonData: {
@@ -294,7 +294,7 @@ describe('ProgressiveProfilingForm Test', () => {
     expect(window.location.href).toEqual('http://example.com');
   });
 
-  it.skip('should not redirect to redirect url on skip button click if country not set in user profile', () => {
+  it('should not redirect to redirect url on skip button click if country not set in user profile', () => {
     store = mockStore({
       ...initialState,
       progressiveProfiling: {
