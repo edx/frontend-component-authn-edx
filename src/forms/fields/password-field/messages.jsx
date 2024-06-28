@@ -28,7 +28,7 @@ const messages = defineMessages({
   },
   passwordValidationMessage: {
     id: 'password.validation.message',
-    defaultMessage: 'Password needs to include:',
+    defaultMessage: 'Password criteria has not been met',
     description: 'Error message for empty or invalid password',
   },
 });

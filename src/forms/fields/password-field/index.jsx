@@ -45,9 +45,16 @@ const PasswordField = forwardRef((props, ref) => {
 
   const [isPasswordHidden, setHiddenTrue, setHiddenFalse] = useToggle(true);
   const [showPasswordRequirements, setShowPasswordRequirements] = useState(false);
+  const [isFieldFocusOut, setFieldFocusOut] = useState(false);
 
   const handleOnBlur = (e) => {
     const { name: fieldName, value: fieldValue } = e.target;
+
+    if (isFieldFocusOut) {
+      setShowPasswordRequirements(false);
+      setFieldFocusOut(false);
+    }
+
     if (fieldName === props.name && e.relatedTarget?.name === 'passwordIcon') {
       return; // Do not run validations on password icon click
     }
@@ -91,6 +98,12 @@ const PasswordField = forwardRef((props, ref) => {
       dispatch(clearRegistrationBackendError('password'));
     }
     setShowPasswordRequirements(showPasswordTooltip && true);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.shiftKey && e.key === 'Tab') {
+      setFieldFocusOut(true);
+    }
   };
 
   const HideButton = (
@@ -159,6 +172,7 @@ const PasswordField = forwardRef((props, ref) => {
           onChange={handleChange}
           onFocus={handleFocus}
           onBlur={handleOnBlur}
+          onKeyDown={handleKeyDown}
           autoComplete="current-password"
           trailingElement={isPasswordHidden ? ShowButton : HideButton}
           floatingLabel={floatingLabel}
@@ -174,37 +188,6 @@ const PasswordField = forwardRef((props, ref) => {
         >
           {errorMessage}
         </Form.Control.Feedback>
-      )}
-      {errorMessage && showPasswordTooltip && (
-        <>
-          <Form.Control.Feedback
-            key="letter-check"
-            className="form-text-size"
-            hasIcon
-            feedback-for={name}
-            type={LETTER_REGEX.test(props.value) ? 'valid' : 'invalid'}
-          >
-            {formatMessage(messages.oneLetter)}
-          </Form.Control.Feedback>
-          <Form.Control.Feedback
-            key="number-check"
-            className="form-text-size"
-            hasIcon
-            feedback-for={name}
-            type={NUMBER_REGEX.test(props.value) ? 'valid' : 'invalid'}
-          >
-            {formatMessage(messages.oneNumber)}
-          </Form.Control.Feedback>
-          <Form.Control.Feedback
-            key="characters-check"
-            className="form-text-size"
-            hasIcon
-            feedback-for={name}
-            type={props.value.length >= 8 ? 'valid' : 'invalid'}
-          >
-            {formatMessage(messages.eightCharacters)}
-          </Form.Control.Feedback>
-        </>
       )}
     </Form.Group>
   );
