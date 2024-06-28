@@ -11,10 +11,10 @@ import {
 import HonorCodeAndPrivacyPolicyMessage from './components/honorCodeAndTOS';
 import RegistrationFailureAlert from './components/RegistrationFailureAlert';
 import {
+  clearAllRegistrationErrors,
   clearRegistrationBackendError,
   registerUser,
   setRegistrationFields,
-  setUserPipelineDataLoaded,
 } from './data/reducers';
 import getBackendValidations from './data/selector';
 import isFormValid from './data/utils';
@@ -58,7 +58,6 @@ import { setSubjectsList } from '../progressive-profiling-popup/data/reducers';
 const RegistrationForm = () => {
   const { formatMessage } = useIntl();
   const dispatch = useDispatch();
-
   const [formStartTime, setFormStartTime] = useState(null);
 
   const [formFields, setFormFields] = useState({
@@ -66,6 +65,7 @@ const RegistrationForm = () => {
   });
   const [errors, setErrors] = useState({});
   const [errorCode, setErrorCode] = useState({ type: '', count: 0 });
+  const [userPipelineDataLoaded, setUserPipelineDataLoaded] = useState(false);
 
   const emailRef = useRef(null);
   const registerErrorAlertRef = useRef(null);
@@ -74,7 +74,6 @@ const RegistrationForm = () => {
   const { subjectsList, subjectsLoading } = useSubjectsList();
 
   const registrationResult = useSelector(state => state.register.registrationResult);
-  const userPipelineDataLoaded = useSelector(state => state.register.userPipelineDataLoaded);
 
   const onboardingComponentContext = useSelector(state => state.commonData.onboardingComponentContext);
   const thirdPartyAuthApiStatus = useSelector(state => state.commonData.thirdPartyAuthApiStatus);
@@ -90,7 +89,12 @@ const RegistrationForm = () => {
   const backendValidations = useSelector(getBackendValidations);
   const submitState = useSelector(state => state.register.submitState);
 
-  const autoSubmitRegForm = currentProvider && thirdPartyAuthApiStatus === COMPLETE_STATE && !isLoginSSOIntent;
+  const autoSubmitRegForm = (currentProvider
+      && thirdPartyAuthApiStatus === COMPLETE_STATE
+      && !isLoginSSOIntent
+      && queryParams?.authMode === 'Register'
+      && !localStorage.getItem('ssoPipelineRedirectionDone')
+  );
 
   /**
    * Set the userPipelineDetails data in formFields for only first time
@@ -99,8 +103,8 @@ const RegistrationForm = () => {
     if (!userPipelineDataLoaded && thirdPartyAuthApiStatus === COMPLETE_STATE) {
       if (thirdPartyAuthErrorMessage) {
         setErrorCode(prevState => ({ type: TPA_AUTHENTICATION_FAILURE, count: prevState.count + 1 }));
-        // clear marketingEmailOptIn from local storage if pipeline fails
         localStorage.removeItem('marketingEmailOptIn');
+        localStorage.removeItem('ssoPipelineRedirectionDone');
       }
       if (pipelineUserDetails && Object.keys(pipelineUserDetails).length !== 0) {
         const {
@@ -109,7 +113,7 @@ const RegistrationForm = () => {
         setFormFields(prevState => ({
           ...prevState, name, email,
         }));
-        dispatch(setUserPipelineDataLoaded(true));
+        setUserPipelineDataLoaded(true);
       }
     }
   }, [ // eslint-disable-line react-hooks/exhaustive-deps
@@ -154,9 +158,20 @@ const RegistrationForm = () => {
   };
 
   useEffect(() => {
+    if (thirdPartyAuthApiStatus === COMPLETE_STATE
+      && currentProvider === null
+      && localStorage.getItem('ssoPipelineRedirectionDone')
+    ) {
+      localStorage.removeItem('ssoPipelineRedirectionDone');
+      localStorage.removeItem('marketingEmailOptIn');
+    }
+  }, [currentProvider, thirdPartyAuthApiStatus]);
+
+  useEffect(() => {
     if (registrationResult.success) {
       // clear local storage
       localStorage.removeItem('marketingEmailOptIn');
+      localStorage.removeItem('ssoPipelineRedirectionDone');
 
       // This event is used by GTM
       trackRegistrationSuccess();
@@ -353,6 +368,7 @@ const RegistrationForm = () => {
                 className="mb-2"
                 onClick={() => {
                   trackLoginFormToggled();
+                  dispatch(clearAllRegistrationErrors());
                   dispatch(setCurrentOpenedForm(LOGIN_FORM));
                 }}
                 linkHelpText={formatMessage(messages.registrationFormAlreadyHaveAccountText)}

@@ -3,7 +3,8 @@ import { Provider } from 'react-redux';
 
 import { getConfig, mergeConfig } from '@edx/frontend-platform';
 import { injectIntl, IntlProvider } from '@edx/frontend-platform/i18n';
-import { fireEvent, render } from '@testing-library/react';
+import { fireEvent, render, waitFor } from '@testing-library/react';
+import { act } from 'react-dom/test-utils';
 import { MemoryRouter } from 'react-router-dom';
 import configureStore from 'redux-mock-store';
 import Cookies from 'universal-cookie';
@@ -13,7 +14,7 @@ import {
   COMPLETE_STATE, DEFAULT_STATE, LOGIN_FORM,
 } from '../../../data/constants';
 import { AuthnContext } from '../../../data/storeHooks';
-import { clearRegistrationBackendError, registerUser, setUserPipelineDataLoaded } from '../data/reducers';
+import { clearRegistrationBackendError, registerUser } from '../data/reducers';
 import * as utils from '../data/utils';
 import RegistrationForm from '../index';
 
@@ -295,13 +296,42 @@ describe('RegistrationForm Test', () => {
     expect(store.dispatch).toHaveBeenCalledWith(setCurrentOpenedForm(LOGIN_FORM));
   });
 
-  it('should show spinner instead of form while registering if autoSubmitRegForm is true', () => {
+  it('should load pipeline user details into form if autoSubmitRegForm is true', async () => {
     store = mockStore({
       ...initialState,
-      register: {
-        ...initialState.register,
-        userPipelineDataLoaded: false,
+      commonData: {
+        ...initialState.commonData,
+        thirdPartyAuthApiStatus: COMPLETE_STATE,
+        thirdPartyAuthContext: {
+          ...initialState.commonData.thirdPartyAuthContext,
+          currentProvider: 'Apple',
+          pipelineUserDetails: {
+            name: 'John Doe',
+            email: 'john.doe@example.com',
+          },
+        },
       },
+    });
+    store.dispatch = jest.fn(store.dispatch);
+
+    const { container } = render(reduxWrapper(<IntlRegistrationForm />));
+
+    await act(async () => {
+      await waitFor(() => {
+        expect(container.querySelector('#name').value).toBe('John Doe');
+        expect(container.querySelector('#email').value).toBe('john.doe@example.com');
+      });
+    });
+  });
+
+  it('should show spinner instead of form while registering if autoSubmitRegForm is true', () => {
+    delete window.location;
+    window.location = {
+      href: 'localhost:2999/?authMode=Register',
+      search: '?authMode=Register',
+    };
+    store = mockStore({
+      ...initialState,
       commonData: {
         ...initialState.commonData,
         thirdPartyAuthApiStatus: COMPLETE_STATE,
@@ -312,7 +342,6 @@ describe('RegistrationForm Test', () => {
             name: 'John Doe',
             email: 'john.doe@example.com',
           },
-          autoSubmitRegForm: true,
         },
       },
     });
@@ -326,41 +355,9 @@ describe('RegistrationForm Test', () => {
     expect(registrationFormElement).toBeFalsy();
   });
 
-  it('should load pipeline user details into form is autoSubmitRegForm is true', () => {
-    store = mockStore({
-      ...initialState,
-      register: {
-        ...initialState.register,
-        userPipelineDataLoaded: false,
-      },
-      commonData: {
-        ...initialState.commonData,
-        thirdPartyAuthApiStatus: COMPLETE_STATE,
-        thirdPartyAuthContext: {
-          ...initialState.commonData.thirdPartyAuthContext,
-          currentProvider: 'Apple',
-          pipelineUserDetails: {
-            name: 'John Doe',
-            email: 'john.doe@example.com',
-          },
-          autoSubmitRegForm: true,
-        },
-      },
-    });
-    store.dispatch = jest.fn(store.dispatch);
-
-    render(reduxWrapper(<IntlRegistrationForm />));
-
-    expect(store.dispatch).toHaveBeenCalledWith(setUserPipelineDataLoaded(true));
-  });
-
   it('should auto register if autoSubmitRegForm is true and pipeline details are loaded', () => {
     store = mockStore({
       ...initialState,
-      register: {
-        ...initialState.register,
-        userPipelineDataLoaded: true,
-      },
       commonData: {
         ...initialState.commonData,
         thirdPartyAuthApiStatus: COMPLETE_STATE,
@@ -371,7 +368,6 @@ describe('RegistrationForm Test', () => {
             name: 'John Doe',
             email: 'john.doe@example.com',
           },
-          autoSubmitRegForm: true,
         },
       },
     });
@@ -388,17 +384,12 @@ describe('RegistrationForm Test', () => {
     const errorMsg = 'Error: Third party authenticated failed.';
     store = mockStore({
       ...initialState,
-      register: {
-        ...initialState.register,
-        userPipelineDataLoaded: false,
-      },
       commonData: {
         ...initialState.commonData,
         thirdPartyAuthApiStatus: COMPLETE_STATE,
         thirdPartyAuthContext: {
           ...initialState.commonData.thirdPartyAuthContext,
           pipelineUserDetails: {},
-          autoSubmitRegForm: true,
           errorMessage: errorMsg,
         },
       },
