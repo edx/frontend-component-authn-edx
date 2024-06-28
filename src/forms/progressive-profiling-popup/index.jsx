@@ -7,8 +7,6 @@ import { identifyAuthenticatedUser } from '@edx/frontend-platform/analytics';
 import {
   AxiosJwtAuthService,
   configure as configureAuth,
-  fetchAuthenticatedUser,
-  getAuthenticatedUser,
 } from '@edx/frontend-platform/auth';
 import { getCountryList, getLocale, useIntl } from '@edx/frontend-platform/i18n';
 import { getLoggingService } from '@edx/frontend-platform/logging';
@@ -60,19 +58,12 @@ const ProgressiveProfilingForm = () => {
   const redirectUrl = useSelector(state => state.progressiveProfiling.redirectUrl);
   const authContextCountryCode = useSelector(state => state.commonData.thirdPartyAuthContext.countryCode);
   const finishAuthUrl = useSelector(state => state.commonData.thirdPartyAuthContext.finishAuthUrl);
-  const authenticatedUserFromBackend = useSelector(state => state.register.registrationResult.authenticatedUser);
+  const authenticatedUser = useSelector(state => state.register.registrationResult.authenticatedUser);
 
-  const [authenticatedUser, setAuthenticatedUser] = useState(authenticatedUserFromBackend);
   const [formData, setFormData] = useState({});
   const [formErrors, setFormErrors] = useState({});
   const [autoFilledCountry, setAutoFilledCountry] = useState({ value: '', displayText: '' });
   const [skipButtonState, setSkipButtonState] = useState(DEFAULT_STATE);
-
-  useEffect(() => {
-    fetchAuthenticatedUser({ forceRefresh: !!getAuthenticatedUser() }).then((authUser) => {
-      setAuthenticatedUser(authUser);
-    });
-  }, []);
 
   useEffect(() => {
     let countryCode = null;
