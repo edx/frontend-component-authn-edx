@@ -34,6 +34,7 @@ export default async function registerRequest(registrationInformation) {
 export async function getFieldsValidations(formPayload) {
   const requestConfig = {
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    isPublic: true,
   };
 
   const { data } = await getAuthenticatedHttpClient()

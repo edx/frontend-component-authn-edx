@@ -6,6 +6,8 @@ node_modules
 temp
 src/i18n/transifex_input.json
 .vscode/
+.env.private
 *~
 module.config.js
 .idea/
+.env.private

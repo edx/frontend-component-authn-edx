@@ -31,8 +31,8 @@ import {
   TPA_AUTHENTICATION_FAILURE,
 } from '../../data/constants';
 import { useDispatch, useSelector } from '../../data/storeHooks';
+import getAllPossibleQueryParams, { getCountryCookieValue, moveScrollToTop, setCookie } from '../../data/utils';
 import './index.scss';
-import getAllPossibleQueryParams, { getCountryCookieValue, setCookie } from '../../data/utils';
 import {
   trackLoginFormToggled,
   trackRegistrationPageViewed,
@@ -47,6 +47,8 @@ import {
   NameField,
   PasswordField,
 } from '../fields';
+import useSubjectsList from '../progressive-profiling-popup/data/hooks/useSubjectList';
+import { setSubjectsList } from '../progressive-profiling-popup/data/reducers';
 
 /**
  * RegisterForm component for handling user registration.
@@ -66,8 +68,10 @@ const RegistrationForm = () => {
   const [userPipelineDataLoaded, setUserPipelineDataLoaded] = useState(false);
 
   const emailRef = useRef(null);
+  const registerErrorAlertRef = useRef(null);
   const socialAuthnButtonRef = useRef(null);
   const queryParams = useMemo(() => getAllPossibleQueryParams(), []);
+  const { subjectsList, subjectsLoading } = useSubjectsList();
 
   const registrationResult = useSelector(state => state.register.registrationResult);
 
@@ -131,6 +135,13 @@ const RegistrationForm = () => {
     }
   }, [thirdPartyAuthApiStatus, providers]);
 
+  useEffect(() => {
+    if (!subjectsLoading) {
+      dispatch(setSubjectsList(subjectsList));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, subjectsLoading]);
+
   const handleOnChange = (event) => {
     const { name } = event.target;
     const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
@@ -186,6 +197,7 @@ const RegistrationForm = () => {
   useEffect(() => {
     if (registrationErrorCode) {
       setErrorCode(prevState => ({ type: registrationErrorCode, count: prevState.count + 1 }));
+      moveScrollToTop(registerErrorAlertRef);
     }
   }, [registrationErrorCode]);
 
@@ -228,6 +240,7 @@ const RegistrationForm = () => {
 
     if (!isValid) {
       setErrorCode(prevState => ({ type: FORM_SUBMISSION_ERROR, count: prevState.count + 1 }));
+      moveScrollToTop(registerErrorAlertRef);
       return;
     }
 
@@ -285,16 +298,18 @@ const RegistrationForm = () => {
                 </div>
               </>
             )}
+
             <ThirdPartyAuthAlert
               currentProvider={currentProvider}
               referrer={REGISTRATION_FORM}
             />
-            <RegistrationFailureAlert
-              errorCode={errorCode.type}
-              failureCount={errorCode.count}
-              context={{ provider: currentProvider, errorMessage: thirdPartyAuthErrorMessage }}
-            />
-
+            <div ref={registerErrorAlertRef}>
+              <RegistrationFailureAlert
+                errorCode={errorCode.type}
+                failureCount={errorCode.count}
+                context={{ provider: currentProvider, errorMessage: thirdPartyAuthErrorMessage }}
+              />
+            </div>
             <Form id="registration-form" name="registration-form" className="d-flex flex-column my-4">
               <EmailField
                 name="email"
@@ -368,11 +383,13 @@ const RegistrationForm = () => {
           </>
         )}
       </Container>
-      <div className="bg-dark-500">
-        <p className="mb-0 text-white m-auto authn-popup__registration-footer">
-          <HonorCodeAndPrivacyPolicyMessage />
-        </p>
-      </div>
+      {!(autoSubmitRegForm && !errorCode.type) && (
+        <div className="bg-dark-500">
+          <p className="mb-0 text-white m-auto authn-popup__registration-footer">
+            <HonorCodeAndPrivacyPolicyMessage />
+          </p>
+        </div>
+      )}
     </div>
   );
 };

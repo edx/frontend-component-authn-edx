@@ -10,7 +10,6 @@ import { act } from 'react-dom/test-utils';
 import { MemoryRouter } from 'react-router-dom';
 import configureStore from 'redux-mock-store';
 
-import useSubjectList from './data/hooks/useSubjectList';
 import { saveUserProfile } from './data/reducers';
 import { DEFAULT_STATE } from '../../data/constants';
 import { AuthnContext } from '../../data/storeHooks';
@@ -25,14 +24,16 @@ jest.mock('@edx/frontend-platform/auth', () => ({
   getAuthenticatedUser: jest.fn({}),
 }));
 
+jest.mock('@edx/frontend-platform/logging', () => ({
+  getLoggingService: jest.fn(),
+}));
+
 getAuthenticatedUser.mockReturnValue({ userId: 3, username: 'abc123', name: 'Test User' });
 jest.mock('@edx/frontend-platform/i18n', () => ({
   ...jest.requireActual('@edx/frontend-platform/i18n'),
   getLocale: jest.fn(),
   getMessages: jest.fn(),
 }));
-
-jest.mock('./data/hooks/useSubjectList', () => jest.fn());
 
 describe('ProgressiveProfilingForm Test', () => {
   let store = {};
@@ -52,6 +53,12 @@ describe('ProgressiveProfilingForm Test', () => {
   const initialState = {
     progressiveProfiling: {
       submitState: DEFAULT_STATE,
+      subjectsList: {
+        options: [
+          { label: 'Computer' },
+          { label: 'Science' },
+        ],
+      },
     },
     commonData: {
       thirdPartyAuthContext: {
@@ -71,15 +78,6 @@ describe('ProgressiveProfilingForm Test', () => {
   beforeEach(() => {
     store = mockStore(initialState);
     getLocale.mockImplementationOnce(() => ('en-us'));
-    useSubjectList.mockReturnValue({
-      subjectsList: {
-        options: [
-          { label: 'Computer' },
-          { label: 'Science' },
-        ],
-      },
-      subjectsLoading: false,
-    });
   });
 
   afterEach(() => {
@@ -265,6 +263,12 @@ describe('ProgressiveProfilingForm Test', () => {
       },
       progressiveProfiling: {
         redirectUrl: 'http://example.com',
+        subjectsList: {
+          options: [
+            { label: 'Computer' },
+            { label: 'Science' },
+          ],
+        },
       },
     });
 
@@ -295,27 +299,12 @@ describe('ProgressiveProfilingForm Test', () => {
       ...initialState,
       progressiveProfiling: {
         redirectUrl: 'http://example.com',
-      },
-    });
-
-    delete window.location;
-    window.location = {
-      assign: jest.fn().mockImplementation((value) => { window.location.href = value; }),
-      href: getConfig().LMS_BASE_URL,
-    };
-    const { container } = render(reduxWrapper(<IntlProgressiveProfilingForm />));
-
-    const skipButton = container.querySelector('#skip-optional-fields');
-    fireEvent.click(skipButton);
-
-    expect(window.location.href).not.toEqual('http://example.com');
-  });
-
-  it('should not redirect on skip button click if country not selected', () => {
-    store = mockStore({
-      ...initialState,
-      progressiveProfiling: {
-        redirectUrl: 'http://example.com',
+        subjectsList: {
+          options: [
+            { label: 'Computer' },
+            { label: 'Science' },
+          ],
+        },
       },
     });
 

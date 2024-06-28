@@ -5,12 +5,14 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { Alert, Hyperlink } from '@openedx/paragon';
 import PropTypes from 'prop-types';
 
+import { setCurrentOpenedForm } from '../../../authn-component/data/reducers';
 import {
-  FORBIDDEN_REQUEST,
+  FORBIDDEN_REQUEST, FORGOT_PASSWORD_FORM,
   INTERNAL_SERVER_ERROR,
   INVALID_FORM,
   TPA_AUTHENTICATION_FAILURE,
 } from '../../../data/constants';
+import { useDispatch } from '../../../data/storeHooks';
 import {
   ACCOUNT_LOCKED_OUT,
   ALLOWED_DOMAIN_LOGIN_ERROR,
@@ -29,8 +31,14 @@ import messages from '../messages';
  */
 
 const LoginFailureAlert = (props) => {
+  const dispatch = useDispatch();
   const { formatMessage } = useIntl();
   const { context = {}, errorCode } = props;
+
+  const handleResetPasswordLinkClick = (event) => {
+    event.preventDefault();
+    dispatch(setCurrentOpenedForm(FORGOT_PASSWORD_FORM));
+  };
 
   if (!errorCode || errorCode === TPA_AUTHENTICATION_FAILURE) {
     return null;
@@ -92,7 +100,11 @@ const LoginFailureAlert = (props) => {
       break;
     case FAILED_LOGIN_ATTEMPT: {
       resetLink = (
-        <Hyperlink destination="reset" isInline>
+        <Hyperlink
+          className="popup_login_form__inline_link-cursor"
+          onClick={handleResetPasswordLinkClick}
+          isInline
+        >
           {formatMessage(messages.loginIncorrectCredentialsErrorBeforeAccountBlockedText)}
         </Hyperlink>
       );

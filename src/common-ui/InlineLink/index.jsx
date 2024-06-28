@@ -16,6 +16,7 @@ import PropTypes from 'prop-types';
  * @param {string} linkHelpText - The help text displayed alongside the link.
  * @param {string} linkText - The text displayed for the link.
  * @param {Function} onClick - The function to call when the link is clicked. If provided, `destination` is ignored.
+ * @param {boolean} targetBlank - Tells whether to open the link in a new tab or not
  */
 const InlineLink = ({
   className = '',
@@ -23,6 +24,7 @@ const InlineLink = ({
   linkHelpText = '',
   linkText,
   onClick = null,
+  targetBlank = false,
 }) => {
   const handleClick = (e) => {
     if (onClick) {
@@ -39,10 +41,12 @@ const InlineLink = ({
         </span>
       )}
       <Hyperlink
+        target={targetBlank ? '_blank' : '_self'}
         className="pl-1 popup-container_inline-link_hyperlink"
         destination={destination}
         onClick={handleClick}
         isInline
+        showLaunchIcon={false}
       >
         {linkText}
       </Hyperlink>
@@ -56,6 +60,7 @@ InlineLink.propTypes = {
   onClick: PropTypes.func,
   linkHelpText: PropTypes.string,
   linkText: PropTypes.string.isRequired,
+  targetBlank: PropTypes.bool,
 };
 
 export default InlineLink;
