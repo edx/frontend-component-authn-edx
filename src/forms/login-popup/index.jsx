@@ -38,6 +38,7 @@ import {
   PasswordField,
 } from '../fields';
 import ResetPasswordSuccess from '../reset-password-popup/reset-password/components/ResetPasswordSuccess';
+
 import './index.scss';
 
 /**
@@ -100,6 +101,22 @@ const LoginForm = () => {
   }, [accountActivation, thirdPartyAuthApiStatus, providers]);
 
   useEffect(() => {
+    if (loginResult.success) {
+      // clear local storage
+      localStorage.removeItem('ssoPipelineRedirectionDone');
+    }
+  }, [loginResult]);
+
+  useEffect(() => {
+    if (thirdPartyAuthApiStatus === COMPLETE_STATE
+      && currentProvider === null
+      && localStorage.getItem('ssoPipelineRedirectionDone')
+    ) {
+      localStorage.removeItem('ssoPipelineRedirectionDone');
+    }
+  }, [currentProvider, thirdPartyAuthApiStatus]);
+
+  useEffect(() => {
     if (loginErrorCode) {
       setErrorCode({
         type: loginErrorCode,
@@ -124,10 +141,13 @@ const LoginForm = () => {
   }, [thirdPartyAuthErrorMessage]);
 
   useEffect(() => {
-    if (currentProvider) {
+    if (thirdPartyAuthApiStatus === COMPLETE_STATE && currentProvider) {
       dispatch(setLoginSSOIntent());
+      if (!localStorage.getItem('ssoPipelineRedirectionDone')) {
+        localStorage.setItem('ssoPipelineRedirectionDone', true);
+      }
     }
-  }, [dispatch, currentProvider]);
+  }, [dispatch, currentProvider, thirdPartyAuthApiStatus]);
 
   const validateFormFields = (payload) => {
     const { emailOrUsername, password } = payload;
@@ -246,7 +266,7 @@ const LoginForm = () => {
             name="login-user"
             type="submit"
             variant="primary"
-            className="align-self-end login__btn-width"
+            className="align-self-end login__btn-width authn-btn__pill-shaped"
             state={submitState}
             labels={{
               default: formatMessage(messages.loginFormSignInButton),

@@ -40,7 +40,7 @@ const AccountActivationMessage = ({ messageType = null }) => {
     }
     case ACCOUNT_ACTIVATION_MESSAGE.ERROR: {
       const supportLink = (
-        <Alert.Link href={getConfig().ACTIVATION_EMAIL_SUPPORT_LINK}>
+        <Alert.Link href={`mailto:${getConfig().ACTIVATION_EMAIL_SUPPORT_LINK}`}>
           {formatMessage(messages.accountConfirmationSupportLink)}
         </Alert.Link>
       );

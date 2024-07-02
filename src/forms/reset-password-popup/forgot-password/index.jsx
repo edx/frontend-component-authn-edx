@@ -131,7 +131,7 @@ const ForgotPasswordForm = () => {
             name="reset-password-user"
             type="submit"
             variant="primary"
-            className="align-self-end forgot-password-form__submit-btn__width"
+            className="align-self-end forgot-password-form__submit-btn__width authn-btn__pill-shaped"
             state={status}
             labels={{
               default: formatMessage(messages.resetPasswordFormSubmitButton),
@@ -147,10 +147,11 @@ const ForgotPasswordForm = () => {
               destination={getConfig().LOGIN_ISSUE_SUPPORT_LINK}
               linkHelpText={formatMessage(messages.resetPasswordFormNeedHelpText)}
               linkText={formatMessage(messages.resetPasswordFormHelpCenterLink)}
+              targetBlank
             />
             <InlineLink
               className="font-weight-normal small"
-              destination={getConfig().INFO_EMAIL}
+              destination={`mailto:${getConfig().INFO_EMAIL}`}
               linkHelpText={formatMessage(messages.resetPasswordFormAdditionalHelpText)}
               linkText={getConfig().INFO_EMAIL}
             />
@@ -167,7 +168,7 @@ const ForgotPasswordForm = () => {
             name="reset-password-back-to-login"
             variant="tertiary"
             type="submit"
-            className="align-self-center back-to-login__button"
+            className="align-self-center back-to-login__button authn-btn__pill-shaped"
             onClick={backToLogin}
             onMouseDown={(e) => e.preventDefault()}
           >

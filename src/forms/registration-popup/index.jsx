@@ -11,10 +11,10 @@ import {
 import HonorCodeAndPrivacyPolicyMessage from './components/honorCodeAndTOS';
 import RegistrationFailureAlert from './components/RegistrationFailureAlert';
 import {
+  clearAllRegistrationErrors,
   clearRegistrationBackendError,
   registerUser,
   setRegistrationFields,
-  setUserPipelineDataLoaded,
 } from './data/reducers';
 import getBackendValidations from './data/selector';
 import isFormValid from './data/utils';
@@ -31,8 +31,8 @@ import {
   TPA_AUTHENTICATION_FAILURE,
 } from '../../data/constants';
 import { useDispatch, useSelector } from '../../data/storeHooks';
+import getAllPossibleQueryParams, { getCountryCookieValue, moveScrollToTop, setCookie } from '../../data/utils';
 import './index.scss';
-import getAllPossibleQueryParams, { getCountryCookieValue, setCookie } from '../../data/utils';
 import {
   trackLoginFormToggled,
   trackRegistrationPageViewed,
@@ -47,6 +47,8 @@ import {
   NameField,
   PasswordField,
 } from '../fields';
+import useSubjectsList from '../progressive-profiling-popup/data/hooks/useSubjectList';
+import { setSubjectsList } from '../progressive-profiling-popup/data/reducers';
 
 /**
  * RegisterForm component for handling user registration.
@@ -56,7 +58,6 @@ import {
 const RegistrationForm = () => {
   const { formatMessage } = useIntl();
   const dispatch = useDispatch();
-
   const [formStartTime, setFormStartTime] = useState(null);
 
   const [formFields, setFormFields] = useState({
@@ -64,13 +65,15 @@ const RegistrationForm = () => {
   });
   const [errors, setErrors] = useState({});
   const [errorCode, setErrorCode] = useState({ type: '', count: 0 });
+  const [userPipelineDataLoaded, setUserPipelineDataLoaded] = useState(false);
 
   const emailRef = useRef(null);
+  const registerErrorAlertRef = useRef(null);
   const socialAuthnButtonRef = useRef(null);
   const queryParams = useMemo(() => getAllPossibleQueryParams(), []);
+  const { subjectsList, subjectsLoading } = useSubjectsList();
 
   const registrationResult = useSelector(state => state.register.registrationResult);
-  const userPipelineDataLoaded = useSelector(state => state.register.userPipelineDataLoaded);
 
   const onboardingComponentContext = useSelector(state => state.commonData.onboardingComponentContext);
   const thirdPartyAuthApiStatus = useSelector(state => state.commonData.thirdPartyAuthApiStatus);
@@ -86,7 +89,12 @@ const RegistrationForm = () => {
   const backendValidations = useSelector(getBackendValidations);
   const submitState = useSelector(state => state.register.submitState);
 
-  const autoSubmitRegForm = currentProvider && thirdPartyAuthApiStatus === COMPLETE_STATE && !isLoginSSOIntent;
+  const autoSubmitRegForm = (currentProvider
+      && thirdPartyAuthApiStatus === COMPLETE_STATE
+      && !isLoginSSOIntent
+      && queryParams?.authMode === 'Register'
+      && !localStorage.getItem('ssoPipelineRedirectionDone')
+  );
 
   /**
    * Set the userPipelineDetails data in formFields for only first time
@@ -95,8 +103,8 @@ const RegistrationForm = () => {
     if (!userPipelineDataLoaded && thirdPartyAuthApiStatus === COMPLETE_STATE) {
       if (thirdPartyAuthErrorMessage) {
         setErrorCode(prevState => ({ type: TPA_AUTHENTICATION_FAILURE, count: prevState.count + 1 }));
-        // clear marketingEmailOptIn from local storage if pipeline fails
         localStorage.removeItem('marketingEmailOptIn');
+        localStorage.removeItem('ssoPipelineRedirectionDone');
       }
       if (pipelineUserDetails && Object.keys(pipelineUserDetails).length !== 0) {
         const {
@@ -105,7 +113,7 @@ const RegistrationForm = () => {
         setFormFields(prevState => ({
           ...prevState, name, email,
         }));
-        dispatch(setUserPipelineDataLoaded(true));
+        setUserPipelineDataLoaded(true);
       }
     }
   }, [ // eslint-disable-line react-hooks/exhaustive-deps
@@ -127,6 +135,13 @@ const RegistrationForm = () => {
     }
   }, [thirdPartyAuthApiStatus, providers]);
 
+  useEffect(() => {
+    if (!subjectsLoading) {
+      dispatch(setSubjectsList(subjectsList));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, subjectsLoading]);
+
   const handleOnChange = (event) => {
     const { name } = event.target;
     const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
@@ -143,9 +158,20 @@ const RegistrationForm = () => {
   };
 
   useEffect(() => {
+    if (thirdPartyAuthApiStatus === COMPLETE_STATE
+      && currentProvider === null
+      && localStorage.getItem('ssoPipelineRedirectionDone')
+    ) {
+      localStorage.removeItem('ssoPipelineRedirectionDone');
+      localStorage.removeItem('marketingEmailOptIn');
+    }
+  }, [currentProvider, thirdPartyAuthApiStatus]);
+
+  useEffect(() => {
     if (registrationResult.success) {
       // clear local storage
       localStorage.removeItem('marketingEmailOptIn');
+      localStorage.removeItem('ssoPipelineRedirectionDone');
 
       // This event is used by GTM
       trackRegistrationSuccess();
@@ -171,6 +197,7 @@ const RegistrationForm = () => {
   useEffect(() => {
     if (registrationErrorCode) {
       setErrorCode(prevState => ({ type: registrationErrorCode, count: prevState.count + 1 }));
+      moveScrollToTop(registerErrorAlertRef);
     }
   }, [registrationErrorCode]);
 
@@ -215,6 +242,7 @@ const RegistrationForm = () => {
 
     if (!isValid) {
       setErrorCode(prevState => ({ type: FORM_SUBMISSION_ERROR, count: prevState.count + 1 }));
+      moveScrollToTop(registerErrorAlertRef);
       return;
     }
 
@@ -272,16 +300,18 @@ const RegistrationForm = () => {
                 </div>
               </>
             )}
+
             <ThirdPartyAuthAlert
               currentProvider={currentProvider}
               referrer={REGISTRATION_FORM}
             />
-            <RegistrationFailureAlert
-              errorCode={errorCode.type}
-              failureCount={errorCode.count}
-              context={{ provider: currentProvider, errorMessage: thirdPartyAuthErrorMessage }}
-            />
-
+            <div ref={registerErrorAlertRef}>
+              <RegistrationFailureAlert
+                errorCode={errorCode.type}
+                failureCount={errorCode.count}
+                context={{ provider: currentProvider, errorMessage: thirdPartyAuthErrorMessage }}
+              />
+            </div>
             <Form id="registration-form" name="registration-form" className="d-flex flex-column my-4">
               <EmailField
                 name="email"
@@ -323,7 +353,7 @@ const RegistrationForm = () => {
                   name="register-user"
                   type="submit"
                   variant="primary"
-                  className="align-self-end registration-form__submit-btn__width"
+                  className="align-self-end registration-form__submit-btn__width authn-btn__pill-shaped"
                   state={submitState}
                   labels={{
                     default: formatMessage(messages.registrationFormCreateAccountButton),
@@ -340,6 +370,7 @@ const RegistrationForm = () => {
                 className="mb-2"
                 onClick={() => {
                   trackLoginFormToggled();
+                  dispatch(clearAllRegistrationErrors());
                   dispatch(setCurrentOpenedForm(LOGIN_FORM));
                 }}
                 linkHelpText={formatMessage(messages.registrationFormAlreadyHaveAccountText)}
@@ -354,11 +385,13 @@ const RegistrationForm = () => {
           </>
         )}
       </Container>
-      <div className="bg-dark-500">
-        <p className="mb-0 text-white m-auto authn-popup__registration-footer">
-          <HonorCodeAndPrivacyPolicyMessage />
-        </p>
-      </div>
+      {!(autoSubmitRegForm && !errorCode.type) && (
+        <div className="bg-dark-500">
+          <p className="mb-0 text-white m-auto authn-popup__registration-footer">
+            <HonorCodeAndPrivacyPolicyMessage />
+          </p>
+        </div>
+      )}
     </div>
   );
 };

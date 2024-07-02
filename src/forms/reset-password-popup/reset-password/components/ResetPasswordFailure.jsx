@@ -32,7 +32,7 @@ const ResetPasswordFailure = (props) => {
 
   if (errorMessage) {
     return (
-      <Alert id="validation-errors" className="mb-5" variant="danger">
+      <Alert id="validation-errors" className="mb-4" variant="danger">
         <p>{errorMessage}</p>
       </Alert>
     );

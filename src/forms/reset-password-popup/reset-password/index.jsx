@@ -15,6 +15,7 @@ import {
 import { resetPassword, validatePassword, validateToken } from './data/reducers';
 import { setCurrentOpenedForm } from '../../../authn-component/data/reducers';
 import {
+  COMPLETE_STATE,
   DEFAULT_STATE, FORGOT_PASSWORD_FORM, FORM_SUBMISSION_ERROR, LOGIN_FORM, PENDING_STATE,
 } from '../../../data/constants';
 import { useDispatch, useSelector } from '../../../data/storeHooks';
@@ -48,6 +49,7 @@ const ResetPasswordPage = () => {
   const newPasswordRef = useRef(null);
 
   const status = useSelector(state => state.resetPassword.status);
+  const tokenValidationState = useSelector(state => state.resetPassword.status);
   const errorMsg = useSelector(state => state.resetPassword?.errorMsg);
   const backendValidationError = useSelector(state => state.resetPassword?.backendValidationError);
 
@@ -79,8 +81,10 @@ const ResetPasswordPage = () => {
   }, [status]);
 
   useEffect(() => {
-    trackResetPasswordPageViewed();
-  }, []);
+    if (tokenValidationState === COMPLETE_STATE && status === TOKEN_STATE.VALID) {
+      trackResetPasswordPageViewed();
+    }
+  }, [status, tokenValidationState]);
 
   const validateInput = (name, value, shouldValidateFromBackend = true) => {
     switch (name) {
@@ -199,7 +203,7 @@ const ResetPasswordPage = () => {
           name="reset-password"
           type="submit"
           variant="primary"
-          className="align-self-end"
+          className="align-self-end authn-btn__pill-shaped"
           state={DEFAULT_STATE}
           labels={{
             default: formatMessage(messages.resetPasswordButton),

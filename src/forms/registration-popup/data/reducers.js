@@ -40,10 +40,6 @@ export const registerSlice = createSlice({
       state.validations = null;
       state.submitState = DEFAULT_STATE;
     },
-
-    setUserPipelineDataLoaded: (state, { payload }) => {
-      state.userPipelineDataLoaded = payload;
-    },
     fetchRealtimeValidations: (state) => {
       state.validationState = PENDING_STATE;
       state.validations = null;
@@ -76,7 +72,6 @@ export const {
   registerUser,
   registerUserSuccess,
   registerUserFailed,
-  setUserPipelineDataLoaded,
   setRegistrationFields,
   fetchRealtimeValidations,
   fetchRealtimeValidationsSuccess,
