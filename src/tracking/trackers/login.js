@@ -32,5 +32,6 @@ export const trackRegisterFormToggled = () => {
 
 // Tracks the login sucess event.
 export const trackLoginSuccess = () => createEventTracker(
-  eventNames.loginSuccess, {},
+  eventNames.loginSuccess,
+  {},
 )();
