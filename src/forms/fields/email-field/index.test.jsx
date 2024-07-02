@@ -8,6 +8,7 @@ import configureStore from 'redux-mock-store';
 
 import { AuthnContext } from '../../../data/storeHooks';
 import { clearRegistrationBackendError, fetchRealtimeValidations } from '../../registration-popup/data/reducers';
+import getValidationMessage from '../../reset-password-popup/forgot-password/data/utils';
 import { EmailField } from '../index';
 
 const IntlEmailField = injectIntl(EmailField);
@@ -28,6 +29,7 @@ jest.mock('react-router-dom', () => {
     mockNavigate: mockNavigation,
   };
 });
+jest.mock('../../reset-password-popup/forgot-password/data/utils', () => jest.fn());
 
 describe('EmailField', () => {
   let props = {};
@@ -216,6 +218,27 @@ describe('EmailField', () => {
 
       const closedSuggestionText = container.querySelector('.alert-danger');
       expect(closedSuggestionText).toBeNull();
+    });
+
+    it('should use getValidationMessage for email validation in non-registration context', () => {
+      const mockValidationMessage = 'Enter a valid email address';
+      getValidationMessage.mockReturnValue(mockValidationMessage);
+
+      props.isRegistration = false;
+
+      const { container } = render(routerWrapper(reduxWrapper(<IntlEmailField {...props} />)));
+
+      const emailInput = container.querySelector('input#email');
+      fireEvent.blur(emailInput, { target: { value: 'invalidemail', name: 'email' } });
+
+      expect(getValidationMessage).toHaveBeenCalledTimes(1);
+      expect(getValidationMessage).toHaveBeenCalledWith('invalidemail', expect.any(Function));
+
+      expect(props.handleErrorChange).toHaveBeenCalledTimes(1);
+      expect(props.handleErrorChange).toHaveBeenCalledWith(
+        'email',
+        mockValidationMessage,
+      );
     });
   });
 });

@@ -10,16 +10,10 @@ import messages from './messages';
 import validateEmail from './validator';
 import { useDispatch, useSelector } from '../../../data/storeHooks';
 import { clearRegistrationBackendError, fetchRealtimeValidations } from '../../registration-popup/data/reducers';
+import getValidationMessage from '../../reset-password-popup/forgot-password/data/utils';
 
 import './index.scss';
 
-/**
- * Email field component. It accepts following handler(s)
- * - handleChange for setting value change and
- *
- * It is responsible for
- * - setting value on change
- */
 const EmailField = forwardRef((props, ref) => {
   const dispatch = useDispatch();
   const { formatMessage } = useIntl();
@@ -36,17 +30,23 @@ const EmailField = forwardRef((props, ref) => {
 
   const validationApiRateLimited = useSelector(state => state.register?.validationApiRateLimited);
 
-  const [emailSuggestion, setEmailSuggestion] = useState({ });
+  const [emailSuggestion, setEmailSuggestion] = useState({});
+
   const handleOnBlur = (e) => {
     const { value: fieldValue } = e.target;
-    const { fieldError, suggestion } = validateEmail(fieldValue, formatMessage);
+    if (isRegistration) {
+      const { fieldError, suggestion } = validateEmail(fieldValue, formatMessage);
 
-    setEmailSuggestion(suggestion);
+      setEmailSuggestion(suggestion);
 
-    if (fieldError) {
-      handleErrorChange('email', fieldError);
-    } else if (!validationApiRateLimited && validateEmailFromBackend) {
-      dispatch(fetchRealtimeValidations({ email: fieldValue }));
+      if (fieldError) {
+        handleErrorChange('email', fieldError);
+      } else if (!validationApiRateLimited && validateEmailFromBackend) {
+        dispatch(fetchRealtimeValidations({ email: fieldValue }));
+      }
+    } else {
+      const error = getValidationMessage(fieldValue, formatMessage);
+      handleErrorChange('email', error);
     }
   };
 
@@ -116,7 +116,7 @@ const EmailField = forwardRef((props, ref) => {
         onBlur={handleOnBlur}
         onFocus={handleOnFocus}
         floatingLabel={floatingLabel}
-        ref={ref} // Forwarding the ref here
+        ref={ref}
       />
 
       {errorMessage !== '' && (
