@@ -1,0 +1,27 @@
+@import "~@edx/brand-edx.org/paragon/variables";
+
+.separator {
+  border: 0 !important;
+  border-top: 0.075rem solid $light-500 !important;
+}
+
+.back-to-login__button {
+  border-color: $primary-500 !important;
+  border: 2px solid !important;
+}
+
+.loader-container {
+  height: 275px !important;
+}
+
+.loader-heading {
+  color: $primary-500;
+}
+
+#set-reset-password-form  .pgn__form-control-floating-label-text:after {
+    content: none !important;
+}
+
+.forgot-password-form__submit-btn__width {
+  min-width: 6rem;
+}

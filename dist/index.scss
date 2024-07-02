@@ -1,0 +1,54 @@
+@import "~@edx/brand-edx.org/paragon/variables";
+@import "common-ui";
+@import "base-container";
+@import "forms";
+
+.authn-component__modal .authn-btn__pill-shaped {
+  border-radius: 100px !important;
+  padding: 10px 24px !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.authn-component__modal .authn-sso-btn__pill-shaped {
+  border-radius: 6px !important;
+  box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.17), 0 0 3px 0 rgba(0, 0, 0, 0.08);
+}
+
+.authn-component__modal .pgn__form-group .pgn__form-control-decorator-group input {
+  border-radius: 5px !important;
+}
+
+.authn__popup-container {
+  padding: 2.5rem !important;
+}
+
+.authn-popup__registration-footer {
+  padding: 2.5rem !important;
+}
+
+@media (max-width: 576px) {
+  .authn__popup-container {
+    padding: 1rem !important;
+  }
+
+  .authn-popup__registration-footer {
+    padding: 1rem 1.5rem !important;
+  }
+}
+
+@media (max-width: 350px) {
+  .authn-popup__registration-footer {
+    padding: 1rem !important;
+  }
+}
+
+.authn__popup-container .pgn__form-control-floating-label-text:after {
+  content: "*" !important;
+  color: $danger-500 !important;
+}
+
+.heading-separator {
+  border: 0 !important;
+  border-top: 0.075rem solid $light-500 !important;
+}

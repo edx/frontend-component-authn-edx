@@ -1,0 +1,38 @@
+@import "~@edx/brand-edx.org/paragon/variables";
+
+.authn-component__modal {
+  max-height: 98vh !important;
+}
+
+.authn-component__modal-full-height {
+  max-height: 100vh !important;
+}
+
+@media (max-width: 375px) {
+  .authn-component__modal {
+    max-height: 100vh !important;
+    margin: 0 !important;
+  }
+}
+
+
+.modal-body-container .pgn__modal-body-content {
+  height: 100% !important;
+}
+
+// This class is related to close button of modal
+.authn-component__modal .pgn__modal-close-container .pgn__modal-close-button {
+  background: $white !important;
+  border-radius: 50% !important;
+  color: $light-700 !important;
+  border: 2px solid $light-500 !important;
+}
+
+
+.authn-component__modal .pgn__modal-body {
+  overflow-x: hidden !important;
+}
+
+.authn-component__modal .pgn__modal-body::after {
+  display: none !important;
+}
