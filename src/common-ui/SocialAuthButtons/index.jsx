@@ -61,7 +61,8 @@ export const SocialAuthButton = forwardRef(({
       data-provider-url={isLoginForm ? loginUrl : registerUrl}
       onClick={handleSubmit}
       className={classNames(
-        `social-auth-button_${providerName.toLowerCase()} d-flex justify-content-start mb-3`,
+        `social-auth-button_${providerName.toLowerCase()} d-flex justify-content-start mb-3 
+        authn-sso-btn__pill-shaped`,
         {
           'text-white': inverseTextColor,
           'text-black-50': !inverseTextColor,

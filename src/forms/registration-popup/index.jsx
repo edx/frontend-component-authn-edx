@@ -351,7 +351,7 @@ const RegistrationForm = () => {
                   name="register-user"
                   type="submit"
                   variant="primary"
-                  className="align-self-end registration-form__submit-btn__width"
+                  className="align-self-end registration-form__submit-btn__width authn-btn__pill-shaped"
                   state={submitState}
                   labels={{
                     default: formatMessage(messages.registrationFormCreateAccountButton),

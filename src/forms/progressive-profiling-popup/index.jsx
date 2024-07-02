@@ -291,7 +291,7 @@ const ProgressiveProfilingForm = () => {
           <StatefulButton
             id="skip-optional-fields"
             name="skip-optional-fields"
-            className="authn-progressive-profiling-skip-button"
+            className="authn-progressive-profiling-skip-button authn-btn__pill-shaped"
             type="submit"
             variant="outline-dark"
             state={skipButtonState}
@@ -305,7 +305,7 @@ const ProgressiveProfilingForm = () => {
           <StatefulButton
             id="submit-optional-fields"
             name="submit-optional-fields"
-            className="authn-progressive-profiling-submit-button"
+            className="authn-progressive-profiling-submit-button authn-btn__pill-shaped"
             type="submit"
             state={submitState}
             labels={{

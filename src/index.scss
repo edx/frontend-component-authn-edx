@@ -3,6 +3,22 @@
 @import "base-container";
 @import "forms";
 
+.authn-component__modal .authn-btn__pill-shaped {
+  border-radius: 100px !important;
+  padding: 10px 24px !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.authn-component__modal .authn-sso-btn__pill-shaped {
+  border-radius: 6px !important;
+  box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.17), 0 0 3px 0 rgba(0, 0, 0, 0.08);
+}
+
+.authn-component__modal .pgn__form-group .pgn__form-control-decorator-group input {
+  border-radius: 5px !important;
+}
+
 .authn__popup-container {
   padding: 2.5rem !important;
 }
