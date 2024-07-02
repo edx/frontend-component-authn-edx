@@ -203,7 +203,7 @@ const ResetPasswordPage = () => {
           name="reset-password"
           type="submit"
           variant="primary"
-          className="align-self-end"
+          className="align-self-end authn-btn__pill-shaped"
           state={DEFAULT_STATE}
           labels={{
             default: formatMessage(messages.resetPasswordButton),

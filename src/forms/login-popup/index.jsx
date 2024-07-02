@@ -260,7 +260,7 @@ const LoginForm = () => {
             name="login-user"
             type="submit"
             variant="primary"
-            className="align-self-end login__btn-width"
+            className="align-self-end login__btn-width authn-btn__pill-shaped"
             state={submitState}
             labels={{
               default: formatMessage(messages.loginFormSignInButton),

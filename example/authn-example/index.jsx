@@ -36,7 +36,7 @@ const AuthnExampleContainer = () => {
 
         const trimmedPath = window.location.pathname.replace(/\/$/, '');
         const token = trimmedPath.split('/').pop();
-        searchParams.set('token', token);
+        searchParams.set('password_reset_token', token);
       }
 
       const redirectUrl = new URL(window.location.origin);
@@ -60,13 +60,13 @@ const AuthnExampleContainer = () => {
       <Container className="d-flex justify-content-center align-items-center min-vh-100">
         <div className="authn-example__btns-container p-3">
           <Button
-            className="btn btn-tertiary user-link sign-in-link"
+            className="btn btn-tertiary user-link sign-in-link authn-btn__pill-shaped"
             onClick={() => setSignInFormOpen()}
           >
             Sign In
           </Button>
           <Button
-            className="btn btn-brand user-link mx-1 register-link"
+            className="btn btn-brand user-link mx-1 register-link authn-btn__pill-shaped"
             onClick={() => setSignUpFormOpen()}
           >
             Register for free

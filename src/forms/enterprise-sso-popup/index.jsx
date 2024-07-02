@@ -63,7 +63,8 @@ const EnterpriseSSO = (props) => {
             id={provider.id}
             name={provider.id}
             variant="inverse-primary"
-            className="w-100 text-black-50 d-flex flex-row justify-content-start align-items-center pl-3"
+            className="w-100 text-black-50 d-flex flex-row justify-content-start align-items-center pl-3
+            authn-sso-btn__pill-shaped"
             onClick={(e) => handleClick(e, provider.loginUrl)}
             ref={buttonRef}
           >
@@ -84,7 +85,7 @@ const EnterpriseSSO = (props) => {
           name="other-ways-to-sign-in"
           variant="primary"
           state="Complete"
-          className="w-100"
+          className="w-100 authn-btn__pill-shaped"
           onClick={redirectToLogin}
           onMouseDown={(e) => e.preventDefault()}
         >
