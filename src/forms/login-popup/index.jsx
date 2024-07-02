@@ -28,7 +28,7 @@ import {
 import { useDispatch, useSelector } from '../../data/storeHooks';
 import getAllPossibleQueryParams from '../../data/utils';
 import {
-  trackForgotPasswordLinkClick, trackLoginPageViewed, trackRegisterFormToggled,
+  trackForgotPasswordLinkClick, trackLoginPageViewed, trackRegisterFormToggled, trackLoginSuccess,
 } from '../../tracking/trackers/login';
 import AuthenticatedRedirection from '../common-components/AuthenticatedRedirection';
 import SSOFailureAlert from '../common-components/SSOFailureAlert';
@@ -76,6 +76,12 @@ const LoginForm = () => {
     password: '',
   });
   const [errorCode, setErrorCode] = useState({ type: '', context: {} });
+
+  useEffect(() => {
+    if (loginResult.success) {
+      trackLoginSuccess();
+    }
+  }, [loginResult]);
 
   useEffect(() => {
     trackLoginPageViewed();
