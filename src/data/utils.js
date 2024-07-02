@@ -55,7 +55,7 @@ export const getCountryCookieValue = () => {
 
 export const moveScrollToTop = (ref) => {
   if (ref?.current?.scrollIntoView) {
-    ref.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 };
 

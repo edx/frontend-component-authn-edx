@@ -48,7 +48,7 @@ const ProgressiveProfilingForm = () => {
   const { formatMessage } = useIntl();
   const dispatch = useDispatch();
 
-  const progressiveProfilingHeadingRef = useRef(null);
+  const countryFieldRef = useRef(null);
 
   const countryCookieValue = getCountryCookieValue();
   const countryList = useMemo(() => getCountryList(getLocale()), []);
@@ -137,7 +137,7 @@ const ProgressiveProfilingForm = () => {
     e.preventDefault();
 
     if (hasFormErrors()) {
-      moveScrollToTop(progressiveProfilingHeadingRef);
+      moveScrollToTop(countryFieldRef);
       return;
     }
     const eventProperties = {
@@ -177,14 +177,14 @@ const ProgressiveProfilingForm = () => {
     if (hasFormErrors() && !hasCountry) {
       setFormErrors({ ...formErrors, country: formatMessage(messages.progressiveProfilingCountryFieldErrorMessage) });
       setSkipButtonState(FAILURE_STATE);
-      moveScrollToTop(progressiveProfilingHeadingRef);
+      moveScrollToTop(countryFieldRef);
     } else if (!hasFormErrors() && !hasCountry) {
       setFormErrors({
         ...formErrors,
         country: formatMessage(messages.progressiveProfilingCountryFieldBlockingErrorMessage),
       });
       setSkipButtonState(FAILURE_STATE);
-      moveScrollToTop(progressiveProfilingHeadingRef);
+      moveScrollToTop(countryFieldRef);
     } else if (hasCountry) {
       // link tracker
       trackProgressiveProfilingSkipLinkClick(redirectUrl)(e);
@@ -202,7 +202,6 @@ const ProgressiveProfilingForm = () => {
       <h1
         className="display-1 font-italic text-center mb-4"
         data-testid="progressive-profiling-heading"
-        ref={progressiveProfilingHeadingRef}
       >
         {formatMessage(messages.progressiveProfilingFormHeading)}
       </h1>
@@ -214,7 +213,10 @@ const ProgressiveProfilingForm = () => {
         <h3 className="mb-2.5 mt-2">
           {formatMessage(messages.progressiveProfilingCountryFieldTitle)}
         </h3>
-        <p className="x-small">
+        <p
+          className="x-small"
+          ref={countryFieldRef}
+        >
           {formatMessage(messages.progressiveProfilingCountryFieldInfoMessage)}
         </p>
         <Form.Group controlId="country" className="mb-4.5">

@@ -26,7 +26,7 @@ import {
   TPA_AUTHENTICATION_FAILURE,
 } from '../../data/constants';
 import { useDispatch, useSelector } from '../../data/storeHooks';
-import getAllPossibleQueryParams from '../../data/utils';
+import getAllPossibleQueryParams, { moveScrollToTop } from '../../data/utils';
 import {
   trackForgotPasswordLinkClick, trackLoginPageViewed, trackLoginSuccess, trackRegisterFormToggled,
 } from '../../tracking/trackers/login';
@@ -53,6 +53,7 @@ const LoginForm = () => {
 
   const emailOrUsernameRef = useRef(null);
   const socialAuthnButtonRef = useRef(null);
+  const errorAlertRef = useRef(null);
 
   const loginResult = useSelector(state => state.login.loginResult);
   const loginErrorCode = useSelector(state => state.login.loginError?.errorCode);
@@ -183,6 +184,9 @@ const LoginForm = () => {
     if (validationErrors.emailOrUsername || validationErrors.password) {
       setFormErrors({ ...validationErrors });
       setErrorCode({ type: INVALID_FORM, context: {} });
+      if (moveScrollToTop) {
+        moveScrollToTop(errorAlertRef);
+      }
       return;
     }
 
@@ -222,10 +226,12 @@ const LoginForm = () => {
           </div>
         </>
       )}
-      <LoginFailureAlert
-        errorCode={errorCode.type}
-        context={errorCode.context}
-      />
+      <div ref={errorAlertRef}>
+        <LoginFailureAlert
+          errorCode={errorCode.type}
+          context={errorCode.context}
+        />
+      </div>
       {showResetPasswordSuccessBanner && <ResetPasswordSuccess />}
       <ThirdPartyAuthAlert
         currentProvider={currentProvider}
