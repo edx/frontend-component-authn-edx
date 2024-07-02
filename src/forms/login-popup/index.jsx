@@ -28,7 +28,7 @@ import {
 import { useDispatch, useSelector } from '../../data/storeHooks';
 import getAllPossibleQueryParams from '../../data/utils';
 import {
-  trackForgotPasswordLinkClick, trackLoginPageViewed, trackRegisterFormToggled,
+  trackForgotPasswordLinkClick, trackLoginPageViewed, trackLoginSuccess, trackRegisterFormToggled,
 } from '../../tracking/trackers/login';
 import AuthenticatedRedirection from '../common-components/AuthenticatedRedirection';
 import SSOFailureAlert from '../common-components/SSOFailureAlert';
@@ -97,6 +97,7 @@ const LoginForm = () => {
   useEffect(() => {
     if (loginResult.success) {
       // clear local storage
+      trackLoginSuccess();
       localStorage.removeItem('ssoPipelineRedirectionDone');
     }
   }, [loginResult]);

@@ -4,6 +4,7 @@ export const eventNames = {
   forgotPasswordLinkClicked: 'edx.bi.password-reset_form.toggled',
   loginAndRegistration: 'login_and_registration',
   registerFormToggled: 'edx.bi.register_form.toggled',
+  loginSuccess: 'edx.bi.user.account.authenticated.client',
 };
 
 export const categories = {
@@ -28,3 +29,9 @@ export const trackRegisterFormToggled = () => {
     { category: categories.userEngagement },
   )();
 };
+
+// Tracks the login sucess event.
+export const trackLoginSuccess = () => createEventTracker(
+  eventNames.loginSuccess,
+  {},
+)();
