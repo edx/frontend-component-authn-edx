@@ -79,12 +79,6 @@ const LoginForm = () => {
   const [errorCode, setErrorCode] = useState({ type: '', context: {} });
 
   useEffect(() => {
-    if (loginResult.success) {
-      trackLoginSuccess();
-    }
-  }, [loginResult]);
-
-  useEffect(() => {
     trackLoginPageViewed();
   }, []);
 
@@ -103,6 +97,7 @@ const LoginForm = () => {
   useEffect(() => {
     if (loginResult.success) {
       // clear local storage
+      trackLoginSuccess();
       localStorage.removeItem('ssoPipelineRedirectionDone');
     }
   }, [loginResult]);
