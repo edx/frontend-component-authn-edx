@@ -184,7 +184,9 @@ const RegistrationForm = () => {
   const handleUserRegistration = () => {
     const totalRegistrationTime = (Date.now() - formStartTime) / 1000;
     const userCountryCode = getCountryCookieValue();
-    let payload = { ...formFields, honor_code: true, terms_of_service: true };
+    let payload = {
+      ...formFields, honor_code: true, terms_of_service: true, app_name: 'onboarding_component',
+    };
 
     if (currentProvider) {
       delete payload.password;
