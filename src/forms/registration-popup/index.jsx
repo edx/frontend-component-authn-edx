@@ -70,6 +70,7 @@ const RegistrationForm = () => {
   const emailRef = useRef(null);
   const registerErrorAlertRef = useRef(null);
   const socialAuthnButtonRef = useRef(null);
+  const registerFormHeadingRef = useRef(null);
   const queryParams = useMemo(() => getAllPossibleQueryParams(), []);
   const { subjectsList, subjectsLoading } = useSubjectsList();
 
@@ -133,6 +134,7 @@ const RegistrationForm = () => {
     } else if (thirdPartyAuthApiStatus === FAILURE_STATE) {
       emailRef.current.focus();
     }
+    moveScrollToTop(registerFormHeadingRef, 'end');
   }, [thirdPartyAuthApiStatus, providers]);
 
   useEffect(() => {
@@ -277,6 +279,7 @@ const RegistrationForm = () => {
         <h2
           className="font-italic text-center display-1 mb-0"
           data-testid="sign-up-heading"
+          ref={registerFormHeadingRef}
         >
           {formatMessage(messages.registrationFormHeading1)}
         </h2>
