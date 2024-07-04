@@ -54,6 +54,7 @@ const LoginForm = () => {
   const emailOrUsernameRef = useRef(null);
   const socialAuthnButtonRef = useRef(null);
   const errorAlertRef = useRef(null);
+  const loginFormHeadingRef = useRef(null);
 
   const loginResult = useSelector(state => state.login.loginResult);
   const loginErrorCode = useSelector(state => state.login.loginError?.errorCode);
@@ -94,6 +95,12 @@ const LoginForm = () => {
       emailOrUsernameRef.current.focus();
     }
   }, [accountActivation, thirdPartyAuthApiStatus, providers]);
+
+  useEffect(() => {
+    if (moveScrollToTop) {
+      moveScrollToTop(loginFormHeadingRef, 'end');
+    }
+  }, []);
 
   useEffect(() => {
     if (loginResult.success) {
@@ -208,6 +215,7 @@ const LoginForm = () => {
       <h1
         className="display-1 font-italic text-center mb-0"
         data-testid="sign-in-heading"
+        ref={loginFormHeadingRef}
       >
         {formatMessage(messages.loginFormHeading1)}
       </h1>
