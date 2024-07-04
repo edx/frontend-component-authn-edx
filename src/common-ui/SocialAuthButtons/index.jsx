@@ -46,9 +46,9 @@ export const SocialAuthButton = forwardRef(({
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // setting marketingEmailOptIn state in local storage to preserve user marketing opt-in
+    // setting marketingEmailsOptIn state in local storage to preserve user marketing opt-in
     // choice in case of SSO auto registratioon
-    localStorage.setItem('marketingEmailOptIn', registrationFields?.marketingEmailOptIn);
+    localStorage.setItem('marketingEmailsOptIn', registrationFields?.marketingEmailsOptIn);
     const url = e.currentTarget.dataset.providerUrl;
     window.location.href = getConfig().LMS_BASE_URL + url;
   };
