@@ -134,8 +134,11 @@ const RegistrationForm = () => {
     } else if (thirdPartyAuthApiStatus === FAILURE_STATE) {
       emailRef.current.focus();
     }
-    moveScrollToTop(registerFormHeadingRef, 'end');
   }, [thirdPartyAuthApiStatus, providers]);
+
+  useEffect(() => {
+    moveScrollToTop(registerFormHeadingRef, 'end');
+  }, []);
 
   useEffect(() => {
     if (!subjectsLoading) {

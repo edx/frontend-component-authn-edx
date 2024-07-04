@@ -94,10 +94,13 @@ const LoginForm = () => {
     } else if (thirdPartyAuthApiStatus === FAILURE_STATE && accountActivation === null) {
       emailOrUsernameRef.current.focus();
     }
+  }, [accountActivation, thirdPartyAuthApiStatus, providers]);
+
+  useEffect(() => {
     if (moveScrollToTop) {
       moveScrollToTop(loginFormHeadingRef, 'end');
     }
-  }, [accountActivation, thirdPartyAuthApiStatus, providers]);
+  }, []);
 
   useEffect(() => {
     if (loginResult.success) {
