@@ -14,10 +14,7 @@ import { setCurrentOpenedForm } from '../../../authn-component/data/reducers';
 import { InlineLink } from '../../../common-ui';
 import { COMPLETE_STATE, DEFAULT_STATE, LOGIN_FORM } from '../../../data/constants';
 import { useDispatch, useSelector } from '../../../data/storeHooks';
-import {
-  trackForgotPasswordPageEvent,
-  trackForgotPasswordPageViewed,
-} from '../../../tracking/trackers/forgotpassword';
+import { trackForgotPasswordPageEvent, trackForgotPasswordPageViewed } from '../../../tracking/trackers/forgotpassword';
 import EmailField from '../../fields/email-field';
 import { NUDGE_PASSWORD_CHANGE, REQUIRE_PASSWORD_CHANGE } from '../../login-popup/data/constants';
 import { loginErrorClear } from '../../login-popup/data/reducers';
@@ -25,10 +22,6 @@ import messages from '../messages';
 import ResetPasswordHeader from '../ResetPasswordHeader';
 import '../index.scss';
 
-/**
- * ForgotPasswordForm component for handling user password reset.
- * This component provides a form for users to reset their password by entering their email.
- */
 const ForgotPasswordForm = () => {
   const { formatMessage } = useIntl();
   const dispatch = useDispatch();
@@ -52,6 +45,9 @@ const ForgotPasswordForm = () => {
     const { name } = event.target;
     const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
     setFormFields(prevState => ({ ...prevState, [name]: value }));
+  };
+  const handleErrorChange = (fieldName, error) => {
+    setFormErrors(error);
   };
 
   const backToLogin = (e) => {
@@ -110,7 +106,8 @@ const ForgotPasswordForm = () => {
           aria-live="assertive"
           ref={nudgePasswordChangeRef}
           data-testid="nudge-password-change-message"
-        >{formatMessage(messages.vulnerablePasswordWarnedMessage)}
+        >
+          {formatMessage(messages.vulnerablePasswordWarnedMessage)}
         </p>
       )}
       {!isSuccess && (
@@ -119,6 +116,7 @@ const ForgotPasswordForm = () => {
             name="email"
             value={formFields.email}
             handleChange={handleOnChange}
+            handleErrorChange={handleErrorChange}
             autoComplete="email"
             errorMessage={formErrors}
             floatingLabel={formatMessage(messages.forgotPasswordFormEmailFieldLabel)}
