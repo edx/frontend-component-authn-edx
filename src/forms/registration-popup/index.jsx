@@ -61,7 +61,7 @@ const RegistrationForm = () => {
   const [formStartTime, setFormStartTime] = useState(null);
 
   const [formFields, setFormFields] = useState({
-    name: '', email: '', password: '', marketingEmailOptIn: true,
+    name: '', email: '', password: '', marketingEmailsOptIn: true,
   });
   const [errors, setErrors] = useState({});
   const [errorCode, setErrorCode] = useState({ type: '', count: 0 });
@@ -103,7 +103,7 @@ const RegistrationForm = () => {
     if (!userPipelineDataLoaded && thirdPartyAuthApiStatus === COMPLETE_STATE) {
       if (thirdPartyAuthErrorMessage) {
         setErrorCode(prevState => ({ type: TPA_AUTHENTICATION_FAILURE, count: prevState.count + 1 }));
-        localStorage.removeItem('marketingEmailOptIn');
+        localStorage.removeItem('marketingEmailsOptIn');
         localStorage.removeItem('ssoPipelineRedirectionDone');
       }
       if (pipelineUserDetails && Object.keys(pipelineUserDetails).length !== 0) {
@@ -149,8 +149,8 @@ const RegistrationForm = () => {
     if (registrationError[name]) {
       dispatch(clearRegistrationBackendError(name));
     }
-    // seting marketingEmailOptIn state for SSO authentication flow for register API call
-    if (name === 'marketingEmailOptIn') {
+    // seting marketingEmailsOptIn state for SSO authentication flow for register API call
+    if (name === 'marketingEmailsOptIn') {
       dispatch(setRegistrationFields({ [name]: value }));
     }
     setErrors(prevErrors => ({ ...prevErrors, [name]: '' }));
@@ -163,14 +163,14 @@ const RegistrationForm = () => {
       && localStorage.getItem('ssoPipelineRedirectionDone')
     ) {
       localStorage.removeItem('ssoPipelineRedirectionDone');
-      localStorage.removeItem('marketingEmailOptIn');
+      localStorage.removeItem('marketingEmailsOptIn');
     }
   }, [currentProvider, thirdPartyAuthApiStatus]);
 
   useEffect(() => {
     if (registrationResult.success) {
       // clear local storage
-      localStorage.removeItem('marketingEmailOptIn');
+      localStorage.removeItem('marketingEmailsOptIn');
       localStorage.removeItem('ssoPipelineRedirectionDone');
 
       // This event is used by GTM
@@ -220,8 +220,8 @@ const RegistrationForm = () => {
       payload.social_auth_provider = currentProvider;
 
       if (!isLoginSSOIntent) {
-        delete payload.marketingEmailOptIn;
-        payload.marketingEmailOptIn = localStorage.getItem('marketingEmailOptIn');
+        delete payload.marketingEmailsOptIn;
+        payload.marketingEmailsOptIn = localStorage.getItem('marketingEmailsOptIn');
       }
     }
 
@@ -343,8 +343,8 @@ const RegistrationForm = () => {
                 />
               )}
               <MarketingEmailOptInCheckbox
-                name="marketingEmailOptIn"
-                value={formFields.marketingEmailOptIn}
+                name="marketingEmailsOptIn"
+                value={formFields.marketingEmailsOptIn}
                 handleChange={handleOnChange}
               />
               <div className="d-flex flex-column my-4">
