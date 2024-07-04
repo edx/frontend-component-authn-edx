@@ -203,6 +203,9 @@ const RegistrationForm = () => {
     if (registrationErrorCode) {
       setErrorCode(prevState => ({ type: registrationErrorCode, count: prevState.count + 1 }));
       moveScrollToTop(registerErrorAlertRef);
+      if (registerErrorAlertRef.current) {
+        registerErrorAlertRef.current.focus();
+      }
     }
   }, [registrationErrorCode]);
 
@@ -312,7 +315,7 @@ const RegistrationForm = () => {
               currentProvider={currentProvider}
               referrer={REGISTRATION_FORM}
             />
-            <div ref={registerErrorAlertRef}>
+            <div ref={registerErrorAlertRef} tabIndex="-1" aria-live="assertive">
               <RegistrationFailureAlert
                 errorCode={errorCode.type}
                 failureCount={errorCode.count}

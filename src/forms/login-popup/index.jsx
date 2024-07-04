@@ -128,6 +128,9 @@ const LoginForm = () => {
       if (loginErrorCode === NUDGE_PASSWORD_CHANGE || loginErrorCode === REQUIRE_PASSWORD_CHANGE) {
         dispatch(setCurrentOpenedForm(FORGOT_PASSWORD_FORM));
       }
+      if (errorAlertRef.current) {
+        errorAlertRef.current.focus();
+      }
     }
   }, [dispatch, loginErrorCode, loginErrorContext]);
 
@@ -234,7 +237,7 @@ const LoginForm = () => {
           </div>
         </>
       )}
-      <div ref={errorAlertRef}>
+      <div ref={errorAlertRef} tabIndex="-1" aria-live="assertive">
         <LoginFailureAlert
           errorCode={errorCode.type}
           context={errorCode.context}
