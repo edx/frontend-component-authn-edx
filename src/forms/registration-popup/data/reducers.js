@@ -16,7 +16,7 @@ export const registerInitialState = {
   validationState: DEFAULT_STATE,
   registrationError: {},
   registrationResult: {},
-  registrationFields: { marketingEmailOptIn: true },
+  registrationFields: { marketingEmailsOptIn: true },
   userPipelineDataLoaded: false,
   validationApiRateLimited: false,
   validations: null,
