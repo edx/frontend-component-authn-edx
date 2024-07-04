@@ -96,7 +96,7 @@ describe('RegistrationForm Test', () => {
       marketing_emails_opt_in: true,
       honor_code: true,
       terms_of_service: true,
-      total_registration_time: 0,
+      totalRegistrationTime: 0,
       app_name: 'onboarding_component',
     };
     const { container } = render(reduxWrapper(<IntlRegistrationForm />));
@@ -131,7 +131,7 @@ describe('RegistrationForm Test', () => {
       honor_code: true,
       terms_of_service: true,
       country: 'US',
-      total_registration_time: 0,
+      totalRegistrationTime: 0,
       app_name: 'onboarding_component',
     };
     const { container } = render(reduxWrapper(<IntlRegistrationForm />));
