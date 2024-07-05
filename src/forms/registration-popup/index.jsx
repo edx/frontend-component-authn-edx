@@ -5,8 +5,9 @@ import React, {
 import { getConfig, snakeCaseObject } from '@edx/frontend-platform';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
-  Container, Form, Spinner, StatefulButton,
+  breakpoints, Container, Form, Spinner, StatefulButton, useMediaQuery,
 } from '@openedx/paragon';
+import classNames from 'classnames';
 
 import HonorCodeAndPrivacyPolicyMessage from './components/honorCodeAndTOS';
 import RegistrationFailureAlert from './components/RegistrationFailureAlert';
@@ -59,6 +60,8 @@ const RegistrationForm = () => {
   const { formatMessage } = useIntl();
   const dispatch = useDispatch();
   const [formStartTime, setFormStartTime] = useState(null);
+
+  const isExtraSmall = useMediaQuery({ maxWidth: breakpoints.extraSmall.maxWidth - 1 });
 
   const [formFields, setFormFields] = useState({
     name: '', email: '', password: '', marketingEmailsOptIn: true,
@@ -305,7 +308,15 @@ const RegistrationForm = () => {
             {(!autoSubmitRegForm || errorCode.type) && (!currentProvider) && (
               <>
                 <SocialAuthProviders isLoginForm={false} ref={socialAuthnButtonRef} />
-                <div className="text-center mb-4 mt-3">
+                <div
+                  className={classNames(
+                    'text-center',
+                    {
+                      'mb-4 mt-3': !isExtraSmall,
+                      'mt-3 mb-3': isExtraSmall,
+                    },
+                  )}
+                >
                   {formatMessage(messages.registrationFormHeading2)}
                 </div>
               </>
@@ -356,8 +367,17 @@ const RegistrationForm = () => {
                 name="marketingEmailsOptIn"
                 value={formFields.marketingEmailsOptIn}
                 handleChange={handleOnChange}
+                isExtraSmall={isExtraSmall}
               />
-              <div className="d-flex flex-column my-4">
+              <div
+                className={classNames(
+                  'd-flex flex-column',
+                  {
+                    'my-4': !isExtraSmall,
+                    'mt-4 mb-3': isExtraSmall,
+                  },
+                )}
+              >
                 <StatefulButton
                   id="register-user"
                   name="register-user"

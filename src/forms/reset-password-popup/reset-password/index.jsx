@@ -159,7 +159,7 @@ const ResetPasswordPage = () => {
         className="loader-container d-flex flex-column justify-content-center align-items-center my-6 w-100 h-100 text-center"
       >
         <h1 className="loader-heading text-center mb-4">{formatMessage(messages.resetPasswordTokenValidatingHeadingText)}</h1>
-        <Spinner animation="border" variant="primary" className="spinner--position-centered" />;
+        <Spinner animation="border" variant="primary" className="spinner--position-centered" />
       </Container>
     );
   } if (status === PASSWORD_RESET_ERROR || status === PASSWORD_RESET.INVALID_TOKEN) {
