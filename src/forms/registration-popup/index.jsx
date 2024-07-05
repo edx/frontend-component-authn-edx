@@ -74,6 +74,7 @@ const RegistrationForm = () => {
   const registerErrorAlertRef = useRef(null);
   const socialAuthnButtonRef = useRef(null);
   const registerFormHeadingRef = useRef(null);
+  const focusedFieldRef = useRef(null);
   const queryParams = useMemo(() => getAllPossibleQueryParams(), []);
   const { subjectsList, subjectsLoading } = useSubjectsList();
 
@@ -129,9 +130,9 @@ const RegistrationForm = () => {
 
   useEffect(() => {
     if (thirdPartyAuthApiStatus === COMPLETE_STATE) {
-      if (providers.length > 0 && socialAuthnButtonRef.current) {
+      if (providers.length > 0 && socialAuthnButtonRef.current && !focusedFieldRef.current) {
         socialAuthnButtonRef.current.focus();
-      } else if (emailRef.current) {
+      } else if (emailRef.current && !focusedFieldRef.current) {
         emailRef.current.focus();
       }
     } else if (thirdPartyAuthApiStatus === FAILURE_STATE) {
@@ -157,7 +158,7 @@ const RegistrationForm = () => {
     if (registrationError[name]) {
       dispatch(clearRegistrationBackendError(name));
     }
-    // seting marketingEmailsOptIn state for SSO authentication flow for register API call
+    // setting marketingEmailsOptIn state for SSO authentication flow for register API call
     if (name === 'marketingEmailsOptIn') {
       dispatch(setRegistrationFields({ [name]: value }));
     }
@@ -333,7 +334,13 @@ const RegistrationForm = () => {
                 context={{ provider: currentProvider, errorMessage: thirdPartyAuthErrorMessage }}
               />
             </div>
-            <Form id="registration-form" name="registration-form" className="d-flex flex-column my-4">
+            <Form
+              id="registration-form"
+              name="registration-form"
+              className="d-flex flex-column my-4"
+              onFocus={(e) => { focusedFieldRef.current = e.target; }}
+              onBlur={() => { focusedFieldRef.current = null; }}
+            >
               <EmailField
                 name="email"
                 value={formFields.email}
