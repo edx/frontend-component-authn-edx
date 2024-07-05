@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
-import { Spinner } from '@openedx/paragon';
+import { breakpoints, Spinner, useMediaQuery } from '@openedx/paragon';
 import PropTypes from 'prop-types';
 
 import { getThirdPartyAuthContext, setCurrentOpenedForm, setOnboardingComponentContext } from './data/reducers';
@@ -46,6 +46,8 @@ export const AuthnComponent = ({
   const dispatch = useDispatch();
   const queryParams = useMemo(() => getAllPossibleQueryParams(), []);
 
+  const isExtraSmall = useMediaQuery({ maxWidth: breakpoints.extraSmall.maxWidth - 1 });
+
   const [screenSize, setScreenSize] = useState('lg');
   const [hasCloseButton, setHasCloseButton] = useState(true);
 
@@ -59,6 +61,15 @@ export const AuthnComponent = ({
   const tpaHint = getTpaHint();
   const { provider: tpaProvider } = getTpaProvider(tpaHint, providers, secondaryProviders);
   const pendingState = queryParams?.tpa_hint && thirdPartyAuthApiStatus === PENDING_STATE;
+
+  useEffect(() => {
+    if (isExtraSmall) {
+      setScreenSize('fullscreen');
+    }
+    if (!isExtraSmall && currentForm !== PROGRESSIVE_PROFILING_FORM) {
+      setScreenSize('lg');
+    }
+  }, [isExtraSmall, currentForm]);
 
   useEffect(() => {
     if (currentForm === PROGRESSIVE_PROFILING_FORM) {
