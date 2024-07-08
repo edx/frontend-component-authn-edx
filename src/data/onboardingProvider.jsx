@@ -4,15 +4,15 @@ import { Provider } from 'react-redux';
 import { getLocale, getMessages, IntlProvider } from '@edx/frontend-platform/i18n';
 
 import store from './configureStore';
-import { AuthnContext } from './storeHooks';
+import { OnboardingComponentContext } from './storeHooks';
 
 // eslint-disable-next-line react/prop-types
-const AuthnProvider = ({ children }) => (
+const OnBoardingProvider = ({ children }) => (
   <IntlProvider locale={getLocale()} messages={getMessages()}>
-    <Provider context={AuthnContext} store={store}>
+    <Provider context={OnboardingComponentContext} store={store}>
       {children}
     </Provider>
   </IntlProvider>
 );
 
-export default AuthnProvider;
+export default OnBoardingProvider;

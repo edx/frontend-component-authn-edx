@@ -18,7 +18,6 @@ import { Language } from '@openedx/paragon/icons';
 import { extendedProfileFields, optionalFieldsData } from './data/constants';
 import { saveUserProfile } from './data/reducers';
 import messages from './messages';
-import { setCurrentOpenedForm } from '../../authn-component/data/reducers';
 import {
   COMPLETE_STATE,
   DEFAULT_STATE,
@@ -28,6 +27,7 @@ import {
 } from '../../data/constants';
 import { useDispatch, useSelector } from '../../data/storeHooks';
 import { getCountryCookieValue, moveScrollToTop } from '../../data/utils';
+import { setCurrentOpenedForm } from '../../onboarding-component/data/reducers';
 import {
   trackProgressiveProfilingPageViewed,
   trackProgressiveProfilingSkipLinkClick,
@@ -192,7 +192,7 @@ const ProgressiveProfilingForm = () => {
   };
 
   return (
-    <Container size="lg" className="authn__popup-progressive-profiling-container m-0 overflow-auto">
+    <Container size="lg" className="onboarding__popup-progressive-profiling-container m-0 overflow-auto">
       <AuthenticatedRedirection
         success={submitState === COMPLETE_STATE}
         redirectUrl={redirectUrl}
@@ -293,7 +293,7 @@ const ProgressiveProfilingForm = () => {
           <StatefulButton
             id="skip-optional-fields"
             name="skip-optional-fields"
-            className="authn-progressive-profiling-skip-button authn-btn__pill-shaped"
+            className="onboarding-progressive-profiling-skip-button onboarding-btn__pill-shaped"
             type="submit"
             variant="outline-dark"
             state={skipButtonState}
@@ -307,7 +307,7 @@ const ProgressiveProfilingForm = () => {
           <StatefulButton
             id="submit-optional-fields"
             name="submit-optional-fields"
-            className="authn-progressive-profiling-submit-button authn-btn__pill-shaped"
+            className="onboarding-progressive-profiling-submit-button onboarding-btn__pill-shaped"
             type="submit"
             state={submitState}
             labels={{

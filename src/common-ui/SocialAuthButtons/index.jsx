@@ -7,9 +7,9 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
 import socialLogos from './constants';
-import providersSelector from '../../authn-component/data/selectors';
 import { PENDING_STATE } from '../../data/constants';
 import { useSelector } from '../../data/storeHooks';
+import providersSelector from '../../onboarding-component/data/selectors';
 import messages from '../messages';
 
 import './index.scss';
@@ -62,7 +62,7 @@ export const SocialAuthButton = forwardRef(({
       onClick={handleSubmit}
       className={classNames(
         `social-auth-button_${providerName.toLowerCase()} d-flex justify-content-start mb-3 
-        authn-sso-btn__pill-shaped`,
+        onboarding-sso-btn__pill-shaped`,
         {
           'text-white': inverseTextColor,
           'text-black-50': !inverseTextColor,

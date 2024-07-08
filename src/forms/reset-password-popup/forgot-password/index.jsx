@@ -10,10 +10,10 @@ import { forgotPassword, forgotPasswordClearStatus } from './data/reducers';
 import getValidationMessage from './data/utils';
 import ForgotPasswordFailureAlert from './ForgotPasswordFailureAlert';
 import ForgotPasswordSuccess from './ForgotPasswordSuccess';
-import { setCurrentOpenedForm } from '../../../authn-component/data/reducers';
 import { InlineLink } from '../../../common-ui';
 import { COMPLETE_STATE, DEFAULT_STATE, LOGIN_FORM } from '../../../data/constants';
 import { useDispatch, useSelector } from '../../../data/storeHooks';
+import { setCurrentOpenedForm } from '../../../onboarding-component/data/reducers';
 import { trackForgotPasswordPageEvent, trackForgotPasswordPageViewed } from '../../../tracking/trackers/forgotpassword';
 import EmailField from '../../fields/email-field';
 import { NUDGE_PASSWORD_CHANGE, REQUIRE_PASSWORD_CHANGE } from '../../login-popup/data/constants';
@@ -87,7 +87,7 @@ const ForgotPasswordForm = () => {
   };
 
   return (
-    <Container size="lg" className="authn__popup-container overflow-auto">
+    <Container size="lg" className="onboarding__popup-container overflow-auto">
       <ResetPasswordHeader />
       <ForgotPasswordFailureAlert emailError={formErrors} status={status} />
       {status === DEFAULT_STATE && loginErrorCode === REQUIRE_PASSWORD_CHANGE && (
@@ -129,7 +129,7 @@ const ForgotPasswordForm = () => {
             name="reset-password-user"
             type="submit"
             variant="primary"
-            className="align-self-end forgot-password-form__submit-btn__width authn-btn__pill-shaped"
+            className="align-self-end forgot-password-form__submit-btn__width onboarding-btn__pill-shaped"
             state={status}
             labels={{
               default: formatMessage(messages.resetPasswordFormSubmitButton),
@@ -166,7 +166,7 @@ const ForgotPasswordForm = () => {
             name="reset-password-back-to-login"
             variant="tertiary"
             type="submit"
-            className="align-self-center back-to-login__button authn-btn__pill-shaped"
+            className="align-self-center back-to-login__button onboarding-btn__pill-shaped"
             onClick={backToLogin}
             onMouseDown={(e) => e.preventDefault()}
           >

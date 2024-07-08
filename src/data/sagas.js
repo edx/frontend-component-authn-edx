@@ -1,6 +1,5 @@
 import { all } from 'redux-saga/effects';
 
-import thirdPartyAuthSaga from '../authn-component/data/sagas';
 import {
   forgotPasswordSaga,
   loginSaga,
@@ -8,6 +7,7 @@ import {
   registerSaga,
   resetPasswordSaga,
 } from '../forms';
+import thirdPartyAuthSaga from '../onboarding-component/data/sagas';
 
 export default function* rootSaga() {
   yield all([

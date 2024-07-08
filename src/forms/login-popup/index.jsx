@@ -14,7 +14,6 @@ import { NUDGE_PASSWORD_CHANGE, REQUIRE_PASSWORD_CHANGE } from './data/constants
 import useGetActivationMessage from './data/hooks';
 import { loginUser, setLoginSSOIntent } from './data/reducers';
 import messages from './messages';
-import { setCurrentOpenedForm } from '../../authn-component/data/reducers';
 import { InlineLink, SocialAuthProviders } from '../../common-ui';
 import {
   COMPLETE_STATE,
@@ -27,6 +26,7 @@ import {
 } from '../../data/constants';
 import { useDispatch, useSelector } from '../../data/storeHooks';
 import getAllPossibleQueryParams, { moveScrollToTop } from '../../data/utils';
+import { setCurrentOpenedForm } from '../../onboarding-component/data/reducers';
 import {
   trackForgotPasswordLinkClick, trackLoginPageViewed, trackLoginSuccess, trackRegisterFormToggled,
 } from '../../tracking/trackers/login';
@@ -52,7 +52,7 @@ const LoginForm = () => {
   const queryParams = useMemo(() => getAllPossibleQueryParams(), []);
 
   const emailOrUsernameRef = useRef(null);
-  const socialAuthnButtonRef = useRef(null);
+  const socialAuthButtonRef = useRef(null);
   const errorAlertRef = useRef(null);
   const loginFormHeadingRef = useRef(null);
   const isEditingFieldRef = useRef(false);
@@ -87,8 +87,8 @@ const LoginForm = () => {
 
   useEffect(() => {
     if (thirdPartyAuthApiStatus === COMPLETE_STATE && accountActivation === null) {
-      if (providers.length > 0 && socialAuthnButtonRef.current && !isEditingFieldRef.current) {
-        socialAuthnButtonRef.current.focus();
+      if (providers.length > 0 && socialAuthButtonRef.current && !isEditingFieldRef.current) {
+        socialAuthButtonRef.current.focus();
       } else if (emailOrUsernameRef.current && !isEditingFieldRef.current) {
         emailOrUsernameRef.current.focus();
       }
@@ -216,7 +216,7 @@ const LoginForm = () => {
   };
 
   return (
-    <Container size="lg" className="authn__popup-container">
+    <Container size="lg" className="onboarding__popup-container">
       <AuthenticatedRedirection
         success={loginResult.success}
         redirectUrl={loginResult.redirectUrl}
@@ -238,7 +238,7 @@ const LoginForm = () => {
       />
       {!currentProvider && (
         <>
-          <SocialAuthProviders ref={socialAuthnButtonRef} />
+          <SocialAuthProviders ref={socialAuthButtonRef} />
           <div className="text-center my-3 my-sm-4">
             {formatMessage(messages.loginFormHeading2)}
           </div>
@@ -287,7 +287,7 @@ const LoginForm = () => {
             name="login-user"
             type="submit"
             variant="primary"
-            className="align-self-end login__btn-width authn-btn__pill-shaped"
+            className="align-self-end login__btn-width onboarding-btn__pill-shaped"
             state={submitState}
             labels={{
               default: formatMessage(messages.loginFormSignInButton),

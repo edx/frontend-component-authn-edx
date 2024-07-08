@@ -13,13 +13,13 @@ import {
   PASSWORD_VALIDATION_ERROR, SUCCESS, TOKEN_STATE,
 } from './data/constants';
 import { resetPassword, validatePassword, validateToken } from './data/reducers';
-import { setCurrentOpenedForm } from '../../../authn-component/data/reducers';
 import {
   COMPLETE_STATE,
   DEFAULT_STATE, FORGOT_PASSWORD_FORM, FORM_SUBMISSION_ERROR, LOGIN_FORM, PENDING_STATE,
 } from '../../../data/constants';
 import { useDispatch, useSelector } from '../../../data/storeHooks';
 import getAllPossibleQueryParams from '../../../data/utils';
+import { setCurrentOpenedForm } from '../../../onboarding-component/data/reducers';
 import { trackPasswordResetSuccess, trackResetPasswordPageViewed } from '../../../tracking/trackers/reset-password';
 import { PasswordField } from '../../fields';
 import messages from '../messages';
@@ -170,7 +170,7 @@ const ResetPasswordPage = () => {
   }
 
   return (
-    <Container size="lg" className="authn__popup-container overflow-auto">
+    <Container size="lg" className="onboarding__popup-container overflow-auto">
       <ResetPasswordHeader />
       <ResetPasswordFailure errorCode={errorCode} errorMsg={errorMsg} />
       <div className="text-gray-800 mb-4">{formatMessage(messages.enterConfirmPasswordMessage)}</div>
@@ -203,7 +203,7 @@ const ResetPasswordPage = () => {
           name="reset-password"
           type="submit"
           variant="primary"
-          className="align-self-end authn-btn__pill-shaped"
+          className="align-self-end onboarding-btn__pill-shaped"
           state={DEFAULT_STATE}
           labels={{
             default: formatMessage(messages.resetPasswordButton),

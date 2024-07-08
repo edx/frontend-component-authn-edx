@@ -9,11 +9,11 @@ import {
 } from '@edx/frontend-platform';
 
 import './index.scss';
-import AuthnExampleContainer from './authn-example';
+import OnBoardingExampleContainer from './onboarding-example';
 
 subscribe(APP_READY, () => {
   ReactDOM.render(
-    <AuthnExampleContainer />,
+    <OnBoardingExampleContainer />,
     document.getElementById('root'),
   );
 });
@@ -23,8 +23,8 @@ initialize({
   handlers: {
     config: () => {
       mergeConfig({
-        AUTHN_ALGOLIA_APP_ID: process.env.AUTHN_ALGOLIA_APP_ID || '',
-        AUTHN_ALGOLIA_SEARCH_API_KEY: process.env.AUTHN_ALGOLIA_SEARCH_API_KEY || '',
+        ON_BOARDING_ALGOLIA_APP_ID: process.env.ON_BOARDING_ALGOLIA_APP_ID || '',
+        ON_BOARDING_ALGOLIA_SEARCH_API_KEY: process.env.ON_BOARDING_ALGOLIA_SEARCH_API_KEY || '',
         INFO_EMAIL: process.env.INFO_EMAIL || '',
         LOGIN_ISSUE_SUPPORT_LINK: process.env.LOGIN_ISSUE_SUPPORT_LINK || '',
         ONBOARDING_COMPONENT_ENV: process.env.ONBOARDING_COMPONENT_ENV || '',

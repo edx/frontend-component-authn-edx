@@ -16,7 +16,7 @@ import {
   INVALID_FORM,
   TPA_AUTHENTICATION_FAILURE,
 } from '../../../data/constants';
-import { AuthnContext } from '../../../data/storeHooks';
+import { OnboardingComponentContext } from '../../../data/storeHooks';
 import SSOFailureAlert from '../../common-components/SSOFailureAlert';
 import {
   ACCOUNT_LOCKED_OUT,
@@ -38,7 +38,7 @@ describe('LoginFailureAlert', () => {
   const reduxWrapper = children => (
     <IntlProvider locale="en">
       <MemoryRouter>
-        <Provider context={AuthnContext} store={store}>{children}</Provider>
+        <Provider context={OnboardingComponentContext} store={store}>{children}</Provider>
       </MemoryRouter>
     </IntlProvider>
   );

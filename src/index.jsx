@@ -1,6 +1,6 @@
 import {
   ResetPasswordComponent, SignInComponent, SignUpComponent,
-} from './authn-component';
+} from './onboarding-component';
 
 export {
   SignUpComponent,

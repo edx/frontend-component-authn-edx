@@ -20,7 +20,6 @@ import {
 import getBackendValidations from './data/selector';
 import isFormValid from './data/utils';
 import messages from './messages';
-import { setCurrentOpenedForm } from '../../authn-component/data/reducers';
 import { InlineLink, SocialAuthProviders } from '../../common-ui';
 import {
   COMPLETE_STATE,
@@ -33,6 +32,7 @@ import {
 } from '../../data/constants';
 import { useDispatch, useSelector } from '../../data/storeHooks';
 import getAllPossibleQueryParams, { getCountryCookieValue, moveScrollToTop, setCookie } from '../../data/utils';
+import { setCurrentOpenedForm } from '../../onboarding-component/data/reducers';
 import './index.scss';
 import {
   trackLoginFormToggled,
@@ -72,7 +72,7 @@ const RegistrationForm = () => {
 
   const emailRef = useRef(null);
   const registerErrorAlertRef = useRef(null);
-  const socialAuthnButtonRef = useRef(null);
+  const socialAuthButtonRef = useRef(null);
   const registerFormHeadingRef = useRef(null);
   const focusedFieldRef = useRef(null);
   const queryParams = useMemo(() => getAllPossibleQueryParams(), []);
@@ -130,8 +130,8 @@ const RegistrationForm = () => {
 
   useEffect(() => {
     if (thirdPartyAuthApiStatus === COMPLETE_STATE) {
-      if (providers.length > 0 && socialAuthnButtonRef.current && !focusedFieldRef.current) {
-        socialAuthnButtonRef.current.focus();
+      if (providers.length > 0 && socialAuthButtonRef.current && !focusedFieldRef.current) {
+        socialAuthButtonRef.current.focus();
       } else if (emailRef.current && !focusedFieldRef.current) {
         emailRef.current.focus();
       }
@@ -279,7 +279,7 @@ const RegistrationForm = () => {
 
   return (
     <div className="flex-column">
-      <Container size="lg" className="authn__popup-container">
+      <Container size="lg" className="onboarding__popup-container">
         <AuthenticatedRedirection
           success={registrationResult.success}
           redirectUrl={registrationResult.redirectUrl}
@@ -308,7 +308,7 @@ const RegistrationForm = () => {
           <>
             {(!autoSubmitRegForm || errorCode.type) && (!currentProvider) && (
               <>
-                <SocialAuthProviders isLoginForm={false} ref={socialAuthnButtonRef} />
+                <SocialAuthProviders isLoginForm={false} ref={socialAuthButtonRef} />
                 <div
                   className={classNames(
                     'text-center',
@@ -390,7 +390,7 @@ const RegistrationForm = () => {
                   name="register-user"
                   type="submit"
                   variant="primary"
-                  className="align-self-end registration-form__submit-btn__width authn-btn__pill-shaped"
+                  className="align-self-end registration-form__submit-btn__width onboarding-btn__pill-shaped"
                   state={submitState}
                   labels={{
                     default: formatMessage(messages.registrationFormCreateAccountButton),
@@ -424,7 +424,7 @@ const RegistrationForm = () => {
       </Container>
       {!(autoSubmitRegForm && !errorCode.type) && (
         <div className="bg-dark-500">
-          <p className="mb-0 text-white m-auto authn-popup__registration-footer">
+          <p className="mb-0 text-white m-auto onboarding-popup__registration-footer">
             <HonorCodeAndPrivacyPolicyMessage />
           </p>
         </div>

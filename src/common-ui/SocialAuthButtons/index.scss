@@ -3,7 +3,7 @@
 $facebook-blue: #1877F2;
 $icon-and-text-gap: 15px;
 
-.authn-component__modal .social-auth-button_facebook {
+.onboarding-component__modal .social-auth-button_facebook {
   gap: $icon-and-text-gap !important;
   background-color: $facebook-blue !important;
 
@@ -12,13 +12,13 @@ $icon-and-text-gap: 15px;
   }
 }
 
-.authn-component__modal .social-auth-button_google {
+.onboarding-component__modal .social-auth-button_google {
   gap: $icon-and-text-gap !important;
   margin-top: 0 !important;
   background-color: $white !important;
 }
 
-.authn-component__modal .social-auth-button_apple {
+.onboarding-component__modal .social-auth-button_apple {
   gap: $icon-and-text-gap !important;
   background-color: $black !important;
 
@@ -27,7 +27,7 @@ $icon-and-text-gap: 15px;
   }
 }
 
-.authn-component__modal .social-auth-button_microsoft {
+.onboarding-component__modal .social-auth-button_microsoft {
   margin-bottom: 0 !important;
   gap: $icon-and-text-gap !important;
   background-color: $white !important;
@@ -37,10 +37,10 @@ $icon-and-text-gap: 15px;
   }
 }
 
-.authn-component__modal .react-loading-skeleton:nth-last-child(n+3) {
+.onboarding-component__modal .react-loading-skeleton:nth-last-child(n+3) {
   margin-bottom: 16px !important;
 }
 
-.authn-component__modal .react-loading-skeleton {
+.onboarding-component__modal .react-loading-skeleton {
   line-height: 44px !important;
 }

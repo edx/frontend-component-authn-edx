@@ -12,7 +12,7 @@ import configureStore from 'redux-mock-store';
 import {
   FORBIDDEN_REQUEST, INTERNAL_SERVER_ERROR, TPA_AUTHENTICATION_FAILURE, TPA_SESSION_EXPIRED,
 } from '../../../../data/constants';
-import { AuthnContext } from '../../../../data/storeHooks';
+import { OnboardingComponentContext } from '../../../../data/storeHooks';
 import SSOFailureAlert from '../../../common-components/SSOFailureAlert';
 import RegistrationPage from '../../index';
 import RegistrationFailureAlert from '../RegistrationFailureAlert';
@@ -69,7 +69,7 @@ describe('RegistrationFailure', () => {
 
   const reduxWrapper = children => (
     <IntlProvider locale="en">
-      <Provider context={AuthnContext} store={store}>{children}</Provider>
+      <Provider context={OnboardingComponentContext} store={store}>{children}</Provider>
     </IntlProvider>
   );
 

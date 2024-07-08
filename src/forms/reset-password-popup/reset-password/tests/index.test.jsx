@@ -9,12 +9,12 @@ import { act } from 'react-dom/test-utils';
 import { MemoryRouter } from 'react-router-dom';
 import configureStore from 'redux-mock-store';
 
-import { setCurrentOpenedForm } from '../../../../authn-component/data/reducers';
 import {
   DEFAULT_STATE, FORGOT_PASSWORD_FORM,
   LOGIN_FORM,
 } from '../../../../data/constants';
-import { AuthnContext } from '../../../../data/storeHooks';
+import { OnboardingComponentContext } from '../../../../data/storeHooks';
+import { setCurrentOpenedForm } from '../../../../onboarding-component/data/reducers';
 import {
   PASSWORD_RESET, PASSWORD_RESET_ERROR, SUCCESS, TOKEN_STATE,
 } from '../data/constants';
@@ -44,7 +44,7 @@ describe('ResetPasswordPage', () => {
   const reduxWrapper = children => (
     <IntlProvider locale="en">
       <MemoryRouter>
-        <Provider context={AuthnContext} store={store}>{children}</Provider>
+        <Provider context={OnboardingComponentContext} store={store}>{children}</Provider>
       </MemoryRouter>
     </IntlProvider>
   );

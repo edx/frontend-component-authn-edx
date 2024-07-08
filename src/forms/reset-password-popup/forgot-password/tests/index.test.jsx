@@ -6,9 +6,9 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import configureStore from 'redux-mock-store';
 
-import { setCurrentOpenedForm } from '../../../../authn-component/data/reducers';
 import { COMPLETE_STATE, DEFAULT_STATE, LOGIN_FORM } from '../../../../data/constants';
-import { AuthnContext } from '../../../../data/storeHooks';
+import { OnboardingComponentContext } from '../../../../data/storeHooks';
+import { setCurrentOpenedForm } from '../../../../onboarding-component/data/reducers';
 import { NUDGE_PASSWORD_CHANGE, REQUIRE_PASSWORD_CHANGE } from '../../../login-popup/data/constants';
 import { loginErrorClear } from '../../../login-popup/data/reducers';
 import { forgotPassword, forgotPasswordClearStatus } from '../data/reducers';
@@ -34,7 +34,7 @@ describe('ForgotPasswordPage', () => {
   const reduxWrapper = (children) => (
     <IntlProvider locale="en">
       <MemoryRouter>
-        <Provider context={AuthnContext} store={store}>{children}</Provider>
+        <Provider context={OnboardingComponentContext} store={store}>{children}</Provider>
       </MemoryRouter>
     </IntlProvider>
   );

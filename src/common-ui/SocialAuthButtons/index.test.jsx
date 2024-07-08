@@ -6,7 +6,7 @@ import { fireEvent, render } from '@testing-library/react';
 import configureStore from 'redux-mock-store';
 
 import { COMPLETE_STATE, PENDING_STATE } from '../../data/constants';
-import { AuthnContext } from '../../data/storeHooks';
+import { OnboardingComponentContext } from '../../data/storeHooks';
 
 import SocialAuthProviders, { SocialAuthButton } from './index';
 
@@ -25,7 +25,7 @@ describe('SocialAuthButton', () => {
   const IntlSocialAuthButton = injectIntl(SocialAuthButton);
   const reduxWrapper = children => (
     <IntlProvider locale="en">
-      <Provider context={AuthnContext} store={store}>{children}</Provider>
+      <Provider context={OnboardingComponentContext} store={store}>{children}</Provider>
     </IntlProvider>
   );
 
@@ -92,7 +92,7 @@ describe('SocialAuthProviders', () => {
 
   const reduxWrapper = children => (
     <IntlProvider locale="en">
-      <Provider context={AuthnContext} store={store}>{children}</Provider>
+      <Provider context={OnboardingComponentContext} store={store}>{children}</Provider>
     </IntlProvider>
   );
 
