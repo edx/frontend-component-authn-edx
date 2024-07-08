@@ -1,0 +1,21 @@
+.progressive-profiling__cta-btn-container {
+  gap: 12px !important;
+}
+
+.authn__popup-progressive-profiling-container {
+  padding: 4rem 7.5rem !important;
+  @media (max-width: 767px) {
+    padding: 2.5rem 1.5rem !important;
+  }
+  @media (max-width: 576px) {
+    padding: 2.5rem 1rem !important;
+  }
+}
+
+.authn-progressive-profiling-submit-button {
+  min-width: 5.938rem !important;
+}
+
+.authn-progressive-profiling-skip-button {
+  min-width: 8.68rem !important;
+}

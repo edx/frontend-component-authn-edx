@@ -1,2 +1,9 @@
+import esMessages from './messages/es_419.json';
+
 // Placeholder be overridden by `make pull_translations`
-export default [];
+const messages = {
+  'es-419': esMessages,
+  es: esMessages,
+}
+
+export default messages;
