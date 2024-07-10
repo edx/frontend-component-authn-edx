@@ -22,6 +22,8 @@ import isFormValid from './data/utils';
 import messages from './messages';
 import { InlineLink, SocialAuthProviders } from '../../common-ui';
 import {
+  AUTH_MODE,
+  AUTH_MODE_REGSITER,
   COMPLETE_STATE,
   ENTERPRISE_LOGIN_URL,
   FAILURE_STATE,
@@ -142,6 +144,14 @@ const RegistrationForm = () => {
 
   useEffect(() => {
     moveScrollToTop(registerFormHeadingRef, 'end');
+    const queryParam = getAllPossibleQueryParams();
+    if (!Object.prototype.hasOwnProperty.call(queryParam, AUTH_MODE)
+      || queryParam?.[AUTH_MODE] !== AUTH_MODE_REGSITER) {
+      const url = new URL(window.location.href);
+      url.searchParams.delete(AUTH_MODE);
+      url.searchParams.set(AUTH_MODE, AUTH_MODE_REGSITER);
+      window.history.replaceState(null, null, url);
+    }
   }, []);
 
   useEffect(() => {

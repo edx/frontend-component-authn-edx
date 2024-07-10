@@ -32,6 +32,10 @@ export const VALID_AUTH_PARAMS = [
   'next', 'tpa_hint', 'account_activation_status', 'authMode', 'password_reset_token',
 ];
 
+export const AUTH_MODE = 'authMode';
+export const AUTH_MODE_LOGIN = 'Login';
+export const AUTH_MODE_REGSITER = 'Register';
+
 // Regular expression for validating email addresses.
 export const VALID_EMAIL_REGEX = '(^[-!#$%&\'*+/=?^_`{}|~0-9A-Z]+(\\.[-!#$%&\'*+/=?^_`{}|~0-9A-Z]+)*'
                                  + '|^"([\\001-\\010\\013\\014\\016-\\037!#-\\[\\]-\\177]|\\\\[\\001-\\011\\013\\014\\016-\\177])*"'

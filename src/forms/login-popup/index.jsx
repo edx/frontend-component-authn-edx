@@ -16,6 +16,8 @@ import { loginUser, setLoginSSOIntent } from './data/reducers';
 import messages from './messages';
 import { InlineLink, SocialAuthProviders } from '../../common-ui';
 import {
+  AUTH_MODE,
+  AUTH_MODE_LOGIN,
   COMPLETE_STATE,
   ENTERPRISE_LOGIN_URL,
   FAILURE_STATE,
@@ -100,6 +102,14 @@ const LoginForm = () => {
   useEffect(() => {
     if (moveScrollToTop) {
       moveScrollToTop(loginFormHeadingRef, 'end');
+    }
+    const queryParam = getAllPossibleQueryParams();
+    if (!Object.prototype.hasOwnProperty.call(queryParam, AUTH_MODE)
+      || queryParam?.[AUTH_MODE] !== AUTH_MODE_LOGIN) {
+      const url = new URL(window.location.href);
+      url.searchParams.delete(AUTH_MODE);
+      url.searchParams.set(AUTH_MODE, AUTH_MODE_LOGIN);
+      window.history.replaceState(null, null, url);
     }
   }, []);
 
