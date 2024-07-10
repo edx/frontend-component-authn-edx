@@ -5,7 +5,7 @@ export const FORGOT_PASSWORD_FORM = 'forgot-password';
 export const RESET_PASSWORD_FORM = 'reset-password';
 export const PROGRESSIVE_PROFILING_FORM = 'progressive-profiling';
 export const ENTERPRISE_LOGIN = 'enterprise-login';
-export const VALID_FORMS = [LOGIN_FORM, REGISTRATION_FORM, RESET_PASSWORD_FORM];
+export const VALID_FORMS = [LOGIN_FORM, REGISTRATION_FORM, RESET_PASSWORD_FORM, PROGRESSIVE_PROFILING_FORM];
 
 // Common States
 export const DEFAULT_STATE = 'default';
@@ -30,6 +30,7 @@ export const ENTERPRISE_LOGIN_URL = '/enterprise/login';
 export const VALID_AUTH_PARAMS = [
   'course_id', 'enrollment_action', 'course_mode', 'email_opt_in', 'purchase_workflow',
   'next', 'tpa_hint', 'account_activation_status', 'authMode', 'password_reset_token',
+  'from_tpa_pipeline',
 ];
 
 export const AUTH_MODE = 'authMode';

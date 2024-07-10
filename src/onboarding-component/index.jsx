@@ -133,6 +133,7 @@ export const OnBoardingComponent = ({
       return <LoginForm />;
     }
     if (currentForm === PROGRESSIVE_PROFILING_FORM) {
+      console.log('getForm');
       return <ProgressiveProfilingForm />;
     }
     if (currentForm === REGISTRATION_FORM) {
@@ -231,4 +232,8 @@ export const SignUpComponent = (props) => (
  */
 export const ResetPasswordComponent = (props) => (
   <OnBoardingComponentWithProvider {...props} formToRender={RESET_PASSWORD_FORM} />
+);
+
+export const WelcomePageComponent = (props) => (
+  <AuthnComponentWithProvider {...props} formToRender={PROGRESSIVE_PROFILING_FORM} />
 );

@@ -3,9 +3,11 @@ import React, {
 } from 'react';
 
 import { getConfig, snakeCaseObject } from '@edx/frontend-platform';
+import { identifyAuthenticatedUser } from '@edx/frontend-platform/analytics';
 import {
   AxiosJwtAuthService,
-  configure as configureAuth,
+  configure as configureAuth, fetchAuthenticatedUser,
+  getAuthenticatedUser,
 } from '@edx/frontend-platform/auth';
 import { getCountryList, getLocale, useIntl } from '@edx/frontend-platform/i18n';
 import { getLoggingService } from '@edx/frontend-platform/logging';
@@ -26,7 +28,7 @@ import {
 } from '../../data/constants';
 import { getCountryCookieValue } from '../../data/cookies';
 import { useDispatch, useSelector } from '../../data/storeHooks';
-import { moveScrollToTop } from '../../data/utils';
+import getAllPossibleQueryParams, { moveScrollToTop } from '../../data/utils';
 import { setCurrentOpenedForm } from '../../onboarding-component/data/reducers';
 import {
   trackProgressiveProfilingPageViewed,
@@ -47,6 +49,7 @@ import './index.scss';
 const ProgressiveProfilingForm = () => {
   const { formatMessage } = useIntl();
   const dispatch = useDispatch();
+  const queryParams = useMemo(() => getAllPossibleQueryParams(), []);
 
   const countryFieldRef = useRef(null);
 
@@ -58,12 +61,27 @@ const ProgressiveProfilingForm = () => {
   const redirectUrl = useSelector(state => state.progressiveProfiling.redirectUrl);
   const authContextCountryCode = useSelector(state => state.commonData.thirdPartyAuthContext.countryCode);
   const finishAuthUrl = useSelector(state => state.commonData.thirdPartyAuthContext.finishAuthUrl);
-  const authenticatedUser = useSelector(state => state.register.registrationResult.authenticatedUser);
+  const authUser = useSelector(state => state.register.registrationResult.authenticatedUser);
 
   const [formData, setFormData] = useState({});
   const [formErrors, setFormErrors] = useState({});
   const [autoFilledCountry, setAutoFilledCountry] = useState({ value: '', displayText: '' });
   const [skipButtonState, setSkipButtonState] = useState(DEFAULT_STATE);
+  const [authConfigured, setAuthConfigured] = useState(false);
+  const [authenticatedUser, setAuthenticatedUser] = useState(authUser);
+  const [isUserFetchingCompleted, setIsUserFetchingCompleted] = useState(false);
+
+  // const loadAuthenticatedUser = () => {
+  //   if (queryParams?.from_tpa_pipeline) {
+  //     return getAuthenticatedUser();
+  //   }
+  //   return authUser;
+  // };
+  // const authenticatedUser = loadAuthenticatedUser();
+
+  console.log('authUser = ', authUser);
+  console.log('getAuthenticatedUser = ', getAuthenticatedUser());
+  // console.log('authenticatedUser = ', loadAuthenticatedUser());
 
   useEffect(() => {
     let countryCode = null;
@@ -85,14 +103,41 @@ const ProgressiveProfilingForm = () => {
   }, [authContextCountryCode, autoFilledCountry, countryCookieValue, countryList, formatMessage]);
 
   useEffect(() => {
-    if (authenticatedUser === null) {
-      dispatch(setCurrentOpenedForm(LOGIN_FORM));
-    }
-    if (authenticatedUser?.userId) {
+    console.log('1. inside configure auth useEffect', { authConfigured });
+    if (!authConfigured) {
+      console.log('1.1 inside configure auth useEffect INSIDE', { authConfigured });
       configureAuth(AxiosJwtAuthService, { loggingService: getLoggingService(), config: getConfig() });
+      setAuthConfigured(true);
+    }
+  }, [authConfigured]);
+
+  useEffect(() => {
+    console.log('2. inside fetch user useEffect', { authConfigured });
+    if (authConfigured) {
+      console.log('2.1 inside fetch user useEffect INSIDE', { authConfigured });
+      fetchAuthenticatedUser({ forceRefresh: !!getAuthenticatedUser() }).then((user) => {
+        console.log('inside fetchAuthenticatedUser success', { user });
+        setAuthenticatedUser(user);
+        setIsUserFetchingCompleted(true);
+      }).catch(() => setIsUserFetchingCompleted(true));
+    }
+  }, [authConfigured]);
+
+  useEffect(() => {
+    if (authenticatedUser?.userId) {
+      setAuthConfigured(true);
+      identifyAuthenticatedUser(authenticatedUser?.userId);
       trackProgressiveProfilingPageViewed();
     }
-  }, [authenticatedUser, dispatch]);
+  }, [authenticatedUser]);
+
+  useEffect(() => {
+    console.log('EXIT inside returning to Login useEffect', { isUserFetchingCompleted, authenticatedUser });
+    if (isUserFetchingCompleted && !authenticatedUser) {
+      console.log('EXIT inside returning to Login useEffect inside if', { isUserFetchingCompleted, authenticatedUser });
+      dispatch(setCurrentOpenedForm(LOGIN_FORM));
+    }
+  }, [isUserFetchingCompleted, authenticatedUser, dispatch]);
 
   const hasFormErrors = () => {
     let error = false;
@@ -185,8 +230,11 @@ const ProgressiveProfilingForm = () => {
       setSkipButtonState(FAILURE_STATE);
       moveScrollToTop(countryFieldRef);
     } else if (hasCountry) {
-      // link tracker
-      trackProgressiveProfilingSkipLinkClick(redirectUrl)(e);
+      let finalRedirectUrl = redirectUrl;
+      if (finishAuthUrl && !redirectUrl.includes(finishAuthUrl)) {
+        finalRedirectUrl = getConfig().LMS_BASE_URL + finishAuthUrl;
+      }
+      trackProgressiveProfilingSkipLinkClick(finalRedirectUrl)(e);
     }
   };
 
@@ -232,18 +280,18 @@ const ProgressiveProfilingForm = () => {
             onBlurHandler={onFieldBlur}
           />
         </Form.Group>
-        <h3 className="mb-2.5">
-          {formatMessage(messages.progressiveProfilingDataCollectionTitle)}
-        </h3>
-        <Form.Group controlId="subject" className="mb-4">
-          <AutoSuggestField
-            name="subject"
-            placeholder={formatMessage(messages.progressiveProfilingSubjectFieldPlaceholder)}
-            label={formatMessage(messages.progressiveProfilingSubjectFieldLabel)}
-            options={subjectsList?.options}
-            onChangeHandler={handleSelect}
-          />
-        </Form.Group>
+        {/* <h3 className="mb-2.5"> */}
+        {/*  {formatMessage(messages.progressiveProfilingDataCollectionTitle)} */}
+        {/* </h3> */}
+        {/* <Form.Group controlId="subject" className="mb-4"> */}
+        {/*  <AutoSuggestField */}
+        {/*    name="subject" */}
+        {/*    placeholder={formatMessage(messages.progressiveProfilingSubjectFieldPlaceholder)} */}
+        {/*    label={formatMessage(messages.progressiveProfilingSubjectFieldLabel)} */}
+        {/*    options={subjectsList?.options} */}
+        {/*    onChangeHandler={handleSelect} */}
+        {/*  /> */}
+        {/* </Form.Group> */}
         <Form.Group controlId="levelOfEducation" className="mb-4">
           <AutoSuggestField
             name="levelOfEducation"

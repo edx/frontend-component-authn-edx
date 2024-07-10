@@ -59,9 +59,8 @@ const AuthenticatedRedirection = ({
 
     if (isLinkTracked) {
       setTimeout(() => { window.location.href = finalRedirectUrl; }, LINK_TIMEOUT);
-    } else {
-      window.location.href = finalRedirectUrl;
     }
+    window.location.href = finalRedirectUrl;
   }
 
   return null;
