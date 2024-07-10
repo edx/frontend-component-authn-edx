@@ -16,6 +16,15 @@ export const registerInitialState = {
   validationState: DEFAULT_STATE,
   registrationError: {},
   registrationResult: {},
+  registrationFormData: {
+    isFormDirty: false,
+    formFields: {
+      name: '', email: '', password: '', marketingEmailsOptIn: true,
+    },
+    errors: {
+      name: '', email: '', password: '',
+    },
+  },
   registrationFields: { marketingEmailsOptIn: true },
   userPipelineDataLoaded: false,
   validationApiRateLimited: false,
@@ -65,6 +74,9 @@ export const registerSlice = createSlice({
     setRegistrationFields: (state, { payload }) => {
       state.registrationFields = payload;
     },
+    backupRegistrationFormBegin: (state, { payload }) => {
+      state.registrationFormData = payload;
+    },
   },
 });
 
@@ -78,6 +90,7 @@ export const {
   fetchRealtimeValidationsFailed,
   clearAllRegistrationErrors,
   clearRegistrationBackendError,
+  backupRegistrationFormBegin,
 } = registerSlice.actions;
 
 export default registerSlice.reducer;

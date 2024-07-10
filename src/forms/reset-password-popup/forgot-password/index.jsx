@@ -6,7 +6,7 @@ import {
   Button, Container, Form, StatefulButton,
 } from '@openedx/paragon';
 
-import { forgotPassword, forgotPasswordClearStatus } from './data/reducers';
+import { forgotPassword, forgotPasswordClearStatus, setForgotPasswordFormData } from './data/reducers';
 import getValidationMessage from './data/utils';
 import ForgotPasswordFailureAlert from './ForgotPasswordFailureAlert';
 import ForgotPasswordSuccess from './ForgotPasswordSuccess';
@@ -25,11 +25,13 @@ import '../index.scss';
 const ForgotPasswordForm = () => {
   const { formatMessage } = useIntl();
   const dispatch = useDispatch();
+
   const status = useSelector(state => state.forgotPassword?.status);
+  const backedUpFormData = useSelector(state => state.forgotPassword?.forgotPasswordFormData);
   const loginErrorCode = useSelector(state => state.login.loginError?.errorCode);
 
-  const [formErrors, setFormErrors] = useState('');
-  const [formFields, setFormFields] = useState({ email: '' });
+  const [formErrors, setFormErrors] = useState(backedUpFormData.error);
+  const [formFields, setFormFields] = useState({ email: backedUpFormData.email });
   const [isSuccess, setIsSuccess] = useState(false);
 
   const emailRef = useRef(null);
@@ -49,9 +51,15 @@ const ForgotPasswordForm = () => {
   const handleErrorChange = (fieldName, error) => {
     setFormErrors(error);
   };
-
+  const backupFormDataHandler = () => {
+    dispatch(setForgotPasswordFormData({
+      email: formFields.email,
+      error: formErrors,
+    }));
+  };
   const backToLogin = (e) => {
     e.preventDefault();
+    backupFormDataHandler();
     dispatch(forgotPasswordClearStatus());
     dispatch(loginErrorClear());
     dispatch(setCurrentOpenedForm(LOGIN_FORM));

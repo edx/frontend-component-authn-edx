@@ -14,7 +14,7 @@ import {
 } from '../../../data/constants';
 import { OnboardingComponentContext } from '../../../data/storeHooks';
 import { setCurrentOpenedForm } from '../../../onboarding-component/data/reducers';
-import { clearRegistrationBackendError, registerUser } from '../data/reducers';
+import { backupRegistrationFormBegin, clearRegistrationBackendError, registerUser } from '../data/reducers';
 import * as utils from '../data/utils';
 import RegistrationForm from '../index';
 
@@ -44,6 +44,15 @@ const populateRequiredFields = (
 describe('RegistrationForm Test', () => {
   let store = {};
 
+  const registrationFormData = {
+    formFields: {
+      name: '', email: '', password: '', marketingEmailsOptIn: true,
+    },
+    errors: {
+      name: '', email: '', password: '',
+    },
+  };
+
   const reduxWrapper = children => (
     <IntlProvider locale="en">
       <MemoryRouter>
@@ -57,6 +66,7 @@ describe('RegistrationForm Test', () => {
       submitState: DEFAULT_STATE,
       registrationError: {},
       registrationResult: {},
+      registrationFormData: { ...registrationFormData },
     },
     login: {
       isLoginSSOIntent: false,
@@ -182,6 +192,20 @@ describe('RegistrationForm Test', () => {
     fireEvent.click(registerButton);
 
     expect(store.dispatch).not.toHaveBeenCalledWith(registerUser({}));
+  });
+
+  it('should backup the registration form state when switch to login form', () => {
+    store = mockStore({
+      ...initialState,
+      register: {
+        ...initialState.register,
+      },
+    });
+
+    store.dispatch = jest.fn(store.dispatch);
+    const { getByText } = render(reduxWrapper(<IntlRegistrationForm />));
+    fireEvent.click(getByText('Sign In'));
+    expect(store.dispatch).toHaveBeenCalledWith(backupRegistrationFormBegin({ ...registrationFormData }));
   });
 
   // ******** test registration form validations ********

@@ -11,11 +11,16 @@ import { OnboardingComponentContext } from '../../../../data/storeHooks';
 import { setCurrentOpenedForm } from '../../../../onboarding-component/data/reducers';
 import { NUDGE_PASSWORD_CHANGE, REQUIRE_PASSWORD_CHANGE } from '../../../login-popup/data/constants';
 import { loginErrorClear } from '../../../login-popup/data/reducers';
-import { forgotPassword, forgotPasswordClearStatus } from '../data/reducers';
+import { forgotPassword, forgotPasswordClearStatus, setForgotPasswordFormData } from '../data/reducers';
 import ForgotPasswordPage from '../index';
 
 const IntlForgotPasswordPage = injectIntl(ForgotPasswordPage);
 const mockStore = configureStore();
+
+const forgotPasswordFormData = {
+  email: '',
+  error: '',
+};
 
 const initialState = {
   login: {
@@ -25,6 +30,7 @@ const initialState = {
   },
   forgotPassword: {
     status: DEFAULT_STATE,
+    forgotPasswordFormData,
   },
 };
 
@@ -99,6 +105,25 @@ describe('ForgotPasswordPage', () => {
       { type: forgotPasswordClearStatus.type },
       { type: loginErrorClear.type },
       { type: setCurrentOpenedForm.type, payload: LOGIN_FORM },
+    ]));
+  });
+
+  it('Backup the forgotPassword form into redux when back to login', () => {
+    store = mockStore({
+      ...initialState,
+      forgotPassword: {
+        ...initialState.forgotPassword,
+      },
+    });
+    render(reduxWrapper(<IntlForgotPasswordPage />));
+
+    const backToLoginButton = screen.getByRole('button', { name: 'Back to login' });
+
+    fireEvent.click(backToLoginButton);
+
+    const actions = store.getActions();
+    expect(actions).toEqual(expect.arrayContaining([
+      { type: setForgotPasswordFormData.type, payload: forgotPasswordFormData },
     ]));
   });
 
@@ -188,10 +213,22 @@ describe('ForgotPasswordPage', () => {
       login: {
         loginError: {
           errorCode: REQUIRE_PASSWORD_CHANGE,
+          loginFormData: {
+            formFields: {
+              emailOrUsername: '', password: '',
+            },
+            errors: {
+              emailOrUsername: '', password: '',
+            },
+          },
         },
       },
       forgotPassword: {
         status: DEFAULT_STATE,
+        forgotPasswordFormData: {
+          email: '',
+          error: '',
+        },
       },
     });
 
