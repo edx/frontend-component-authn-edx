@@ -111,6 +111,7 @@ describe('RegistrationFailure', () => {
 
   beforeEach(() => {
     store = mockStore(initialState);
+    window.history.replaceState = jest.fn();
     configure({
       loggingService: { logError: jest.fn() },
       config: {

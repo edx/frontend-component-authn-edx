@@ -23,11 +23,11 @@ const getAllPossibleQueryParams = (locationURl = null) => {
   );
 };
 
-export const handleURLUpdationOnLoad = (pageName) => {
+export const handleURLUpdationOnLoad = pageName => {
   const queryParam = getAllPossibleQueryParams();
   if (!Object.prototype.hasOwnProperty.call(queryParam, AUTH_MODE)
     || queryParam?.[AUTH_MODE] !== pageName) {
-    const url = new URL(window.location.href);
+    const url = new URL(window.location.href || process.env.LMS_BASE_URL);
     url.searchParams.delete(AUTH_MODE);
     url.searchParams.set(AUTH_MODE, pageName);
     window.history.replaceState(null, null, url);

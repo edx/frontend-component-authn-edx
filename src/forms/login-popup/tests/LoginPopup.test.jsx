@@ -22,7 +22,11 @@ const IntlLoginForm = injectIntl(LoginForm);
 const mockStore = configureStore();
 
 // mocking getAllPossibleQueryParams
-jest.mock('../../../data/utils', () => jest.fn());
+jest.mock('../../../data/utils', () => ({
+  ...jest.requireActual('../../../data/utils'),
+  __esModule: true,
+  default: jest.fn(),
+}));
 
 // Mocking the trackForgotPasswordLinkClick function
 jest.mock('../../../tracking/trackers/login', () => ({
@@ -62,6 +66,7 @@ describe('LoginForm Test', () => {
 
   beforeEach(() => {
     store = mockStore(initialState);
+    window.history.replaceState = jest.fn();
     mergeConfig({
       TOS_AND_HONOR_CODE: process.env.TOS_AND_HONOR_CODE,
       PRIVACY_POLICY: process.env.PRIVACY_POLICY,
