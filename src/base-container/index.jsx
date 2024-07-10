@@ -46,11 +46,11 @@ const BaseContainer = ({
       size={size}
       isBlocking
       variant="default"
-      title="authn-component"
+      title="onboarding-component"
       className={classNames(
-        'bg-light-200 authn-component__modal',
+        'bg-light-200 onboarding-component__modal',
         {
-          'authn-component__modal-full-height': size === 'fullscreen',
+          'onboarding-component__modal-full-height': size === 'fullscreen',
         },
       )}
       hasCloseButton={hasCloseButton}

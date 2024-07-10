@@ -5,7 +5,6 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { Alert, Hyperlink } from '@openedx/paragon';
 import PropTypes from 'prop-types';
 
-import { setCurrentOpenedForm } from '../../../authn-component/data/reducers';
 import {
   FORBIDDEN_REQUEST, FORGOT_PASSWORD_FORM,
   INTERNAL_SERVER_ERROR,
@@ -13,6 +12,7 @@ import {
   TPA_AUTHENTICATION_FAILURE,
 } from '../../../data/constants';
 import { useDispatch } from '../../../data/storeHooks';
+import { setCurrentOpenedForm } from '../../../onboarding-component/data/reducers';
 import {
   ACCOUNT_LOCKED_OUT,
   ALLOWED_DOMAIN_LOGIN_ERROR,

@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 import { getThirdPartyAuthContext, setCurrentOpenedForm, setOnboardingComponentContext } from './data/reducers';
 import validateContextData from './data/utils';
 import BaseContainer from '../base-container';
-import AuthnProvider from '../data/authnProvider';
 import {
   ENTERPRISE_LOGIN,
   FORGOT_PASSWORD_FORM,
@@ -17,6 +16,7 @@ import {
   RESET_PASSWORD_FORM,
   VALID_FORMS,
 } from '../data/constants';
+import OnBoardingProvider from '../data/onboardingProvider';
 import { useDispatch, useSelector } from '../data/storeHooks';
 import getAllPossibleQueryParams from '../data/utils';
 import {
@@ -40,7 +40,7 @@ import { TOKEN_STATE } from '../forms/reset-password-popup/reset-password/data/c
  *
  * @returns {JSX.Element} The rendered component containing the login or registration form.
  */
-export const AuthnComponent = ({
+export const OnBoardingComponent = ({
   isOpen, close, context = null, formToRender,
 }) => {
   const dispatch = useDispatch();
@@ -149,7 +149,7 @@ export const AuthnComponent = ({
   );
 };
 
-AuthnComponent.propTypes = {
+OnBoardingComponent.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
   context: PropTypes.shape({
@@ -161,21 +161,21 @@ AuthnComponent.propTypes = {
 };
 
 /**
- * Higher Order Component that wraps AuthnComponent with AppProvider.
+ * Higher Order Component that wraps OnBoardingComponent with AppProvider.
  */
-const AuthnComponentWithProvider = (props) => {
+const OnBoardingComponentWithProvider = (props) => {
   if (props.isOpen) {
     return (
-      <AuthnProvider>
-        <AuthnComponent {...props} />
-      </AuthnProvider>
+      <OnBoardingProvider>
+        <OnBoardingComponent {...props} />
+      </OnBoardingProvider>
     );
   }
 
   return null;
 };
 
-AuthnComponentWithProvider.propTypes = {
+OnBoardingComponentWithProvider.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
   context: PropTypes.shape({
@@ -188,31 +188,31 @@ AuthnComponentWithProvider.propTypes = {
 };
 
 /**
- * Component that renders a sign-in form using AuthnComponentWithProvider.
+ * Component that renders a sign-in form using OnBoardingComponentWithProvider.
  *
  * @param {Object} props - Props for the component.
  * @returns {JSX.Element} The rendered sign-in component.
  */
 export const SignInComponent = (props) => (
-  <AuthnComponentWithProvider {...props} formToRender={LOGIN_FORM} />
+  <OnBoardingComponentWithProvider {...props} formToRender={LOGIN_FORM} />
 );
 
 /**
- * Component that renders a sign-up form using AuthnComponentWithProvider.
+ * Component that renders a sign-up form using OnBoardingComponentWithProvider.
  *
  * @param {Object} props - Props for the component.
  * @returns {JSX.Element} The rendered sign-up component.
  */
 export const SignUpComponent = (props) => (
-  <AuthnComponentWithProvider {...props} formToRender={REGISTRATION_FORM} />
+  <OnBoardingComponentWithProvider {...props} formToRender={REGISTRATION_FORM} />
 );
 
 /**
- * Component that renders a reset password form using AuthnComponentWithProvider.
+ * Component that renders a reset password form using OnBoardingComponentWithProvider.
  *
  * @param {Object} props - Props for the component.
  * @returns {JSX.Element} The rendered reset password component.
  */
 export const ResetPasswordComponent = (props) => (
-  <AuthnComponentWithProvider {...props} formToRender={RESET_PASSWORD_FORM} />
+  <OnBoardingComponentWithProvider {...props} formToRender={RESET_PASSWORD_FORM} />
 );

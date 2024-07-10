@@ -10,8 +10,8 @@ const PRODUCT_INDEX = 'product';
 const SUBJECT_FACET = 'subject';
 
 const getAlgoliaSearchClient = () => algoliasearch(
-  getConfig().AUTHN_ALGOLIA_APP_ID,
-  getConfig().AUTHN_ALGOLIA_SEARCH_API_KEY,
+  getConfig().ON_BOARDING_ALGOLIA_APP_ID,
+  getConfig().ON_BOARDING_ALGOLIA_SEARCH_API_KEY,
 );
 
 const parseSubjectsFromAlgoliaResults = (subjectsList) => (

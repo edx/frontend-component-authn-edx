@@ -9,10 +9,10 @@ import PropTypes from 'prop-types';
 import './index.scss';
 import { SOCIAL_AUTH_PROVIDERS, WHITE_TEXT_COLOR_PROVIDERS } from './data/constants';
 import messages from './messages';
-import { setCurrentOpenedForm } from '../../authn-component/data/reducers';
 import { SocialAuthButton as EnterpriseSSOButton } from '../../common-ui/SocialAuthButtons';
 import { LOGIN_FORM } from '../../data/constants';
 import { useDispatch } from '../../data/storeHooks';
+import { setCurrentOpenedForm } from '../../onboarding-component/data/reducers';
 /**
  * This component renders the Single sign-on (SSO) button only for the tpa provider passed
  *
@@ -49,7 +49,7 @@ const EnterpriseSSO = (props) => {
 
   if (provider) {
     return (
-      <div className="authn__popup-container d-flex flex-column w-100">
+      <div className="onboarding__popup-container d-flex flex-column w-100">
         <p>{formatMessage(messages.enterprisetpaTitleHeading, { providerName: provider.name })}</p>
         {SOCIAL_AUTH_PROVIDERS.includes(provider.name) ? (
           <EnterpriseSSOButton
@@ -64,7 +64,7 @@ const EnterpriseSSO = (props) => {
             name={provider.id}
             variant="inverse-primary"
             className="w-100 text-black-50 d-flex flex-row justify-content-start align-items-center pl-3
-            authn-sso-btn__pill-shaped"
+            onboarding-sso-btn__pill-shaped"
             onClick={(e) => handleClick(e, provider.loginUrl)}
             ref={buttonRef}
           >
@@ -85,7 +85,7 @@ const EnterpriseSSO = (props) => {
           name="other-ways-to-sign-in"
           variant="primary"
           state="Complete"
-          className="w-100 authn-btn__pill-shaped"
+          className="w-100 onboarding-btn__pill-shaped"
           onClick={redirectToLogin}
           onMouseDown={(e) => e.preventDefault()}
         >

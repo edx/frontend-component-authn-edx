@@ -1,6 +1,5 @@
 import { combineReducers } from 'redux';
 
-import commonDataReducer, { commonDataStoreName } from '../authn-component/data/reducers';
 import {
   forgotPasswordReducer,
   forgotPasswordStoreName,
@@ -13,6 +12,7 @@ import {
   resetPasswordReducer,
   resetPasswordStoreName,
 } from '../forms';
+import commonDataReducer, { commonDataStoreName } from '../onboarding-component/data/reducers';
 
 const createRootReducer = () => combineReducers({
   [registerStoreName]: registerReducer,

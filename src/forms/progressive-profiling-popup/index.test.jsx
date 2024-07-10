@@ -12,7 +12,7 @@ import configureStore from 'redux-mock-store';
 
 import { saveUserProfile } from './data/reducers';
 import { DEFAULT_STATE } from '../../data/constants';
-import { AuthnContext } from '../../data/storeHooks';
+import { OnboardingComponentContext } from '../../data/storeHooks';
 
 import ProgressiveProfilingForm from './index';
 
@@ -45,7 +45,7 @@ describe('ProgressiveProfilingForm Test', () => {
   const reduxWrapper = children => (
     <IntlProvider locale="en">
       <MemoryRouter>
-        <Provider context={AuthnContext} store={store}>{children}</Provider>
+        <Provider context={OnboardingComponentContext} store={store}>{children}</Provider>
       </MemoryRouter>
     </IntlProvider>
   );

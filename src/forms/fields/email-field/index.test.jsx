@@ -6,7 +6,7 @@ import { fireEvent, render } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import configureStore from 'redux-mock-store';
 
-import { AuthnContext } from '../../../data/storeHooks';
+import { OnboardingComponentContext } from '../../../data/storeHooks';
 import { clearRegistrationBackendError, fetchRealtimeValidations } from '../../registration-popup/data/reducers';
 import getValidationMessage from '../../reset-password-popup/forgot-password/data/utils';
 import { EmailField } from '../index';
@@ -37,7 +37,7 @@ describe('EmailField', () => {
 
   const reduxWrapper = children => (
     <IntlProvider locale="en">
-      <Provider context={AuthnContext} store={store}>{children}</Provider>
+      <Provider context={OnboardingComponentContext} store={store}>{children}</Provider>
     </IntlProvider>
   );
 

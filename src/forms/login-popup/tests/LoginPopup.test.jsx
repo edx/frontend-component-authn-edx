@@ -8,12 +8,12 @@ import { act } from 'react-dom/test-utils';
 import { MemoryRouter } from 'react-router-dom';
 import configureStore from 'redux-mock-store';
 
-import { setCurrentOpenedForm } from '../../../authn-component/data/reducers';
 import {
   DEFAULT_STATE, FORGOT_PASSWORD_FORM, INTERNAL_SERVER_ERROR, REGISTRATION_FORM,
 } from '../../../data/constants';
-import { AuthnContext } from '../../../data/storeHooks';
+import { OnboardingComponentContext } from '../../../data/storeHooks';
 import getAllPossibleQueryParams from '../../../data/utils';
+import { setCurrentOpenedForm } from '../../../onboarding-component/data/reducers';
 import { NUDGE_PASSWORD_CHANGE, REQUIRE_PASSWORD_CHANGE } from '../data/constants';
 import { loginUser } from '../data/reducers';
 import LoginForm from '../index';
@@ -36,7 +36,7 @@ describe('LoginForm Test', () => {
   const reduxWrapper = children => (
     <IntlProvider locale="en">
       <MemoryRouter>
-        <Provider context={AuthnContext} store={store}>{children}</Provider>
+        <Provider context={OnboardingComponentContext} store={store}>{children}</Provider>
       </MemoryRouter>
     </IntlProvider>
   );

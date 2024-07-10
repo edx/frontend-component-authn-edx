@@ -2,18 +2,18 @@ import React, { useEffect } from 'react';
 
 import { Button, Container, useToggle } from '@openedx/paragon';
 
+import getAllPossibleQueryParams from '../../src/data/utils';
 import {
   ResetPasswordComponent, SignInComponent, SignUpComponent,
-} from '../../src/authn-component';
-import getAllPossibleQueryParams from '../../src/data/utils';
+} from '../../src/onboarding-component';
 
 import './index.scss';
 
 /**
- * Demonstrates the usage of the Authn Component as a host component.
- * This component serves as an example of how the Authn Component can be used in an application.
+ * Demonstrates the usage of the On boarding Component as a host component.
+ * This component serves as an example of how the On boarding Component can be used in an application.
  */
-const AuthnExampleContainer = () => {
+const OnBoardingExampleContainer = () => {
   const [isSignUpFormOpen, setSignUpFormOpen, setSignUpFormClose] = useToggle(false);
   const [isSignInFormOpen, setSignInFormOpen, setSignInFormClose] = useToggle(false);
   const [isResetPasswordFormOpen, setResetPasswordFormOpen, setResetPasswordFormClose] = useToggle(false);
@@ -58,15 +58,15 @@ const AuthnExampleContainer = () => {
   return (
     <>
       <Container className="d-flex justify-content-center align-items-center min-vh-100">
-        <div className="authn-example__btns-container p-3">
+        <div className="onboarding-example__btns-container p-3">
           <Button
-            className="btn btn-tertiary user-link sign-in-link authn-btn__pill-shaped"
+            className="btn btn-tertiary user-link sign-in-link onboarding-btn__pill-shaped"
             onClick={() => setSignInFormOpen()}
           >
             Sign In
           </Button>
           <Button
-            className="btn btn-brand user-link mx-1 register-link authn-btn__pill-shaped"
+            className="btn btn-brand user-link mx-1 register-link onboarding-btn__pill-shaped"
             onClick={() => setSignUpFormOpen()}
           >
             Register for free
@@ -90,6 +90,6 @@ const AuthnExampleContainer = () => {
   );
 };
 
-AuthnExampleContainer.propTypes = {};
+OnBoardingExampleContainer.propTypes = {};
 
-export default AuthnExampleContainer;
+export default OnBoardingExampleContainer;

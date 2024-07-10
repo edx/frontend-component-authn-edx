@@ -18,11 +18,11 @@ import {
   PROGRESSIVE_PROFILING_FORM,
   REGISTRATION_FORM,
 } from '../../data/constants';
-import { AuthnContext } from '../../data/storeHooks';
+import { OnboardingComponentContext } from '../../data/storeHooks';
 import { getThirdPartyAuthContext, setCurrentOpenedForm } from '../data/reducers';
-import { AuthnComponent, SignInComponent, SignUpComponent } from '../index';
+import { OnBoardingComponent, SignInComponent, SignUpComponent } from '../index';
 
-const IntlAuthnComponent = injectIntl(AuthnComponent);
+const IntlOnBoardingComponent = injectIntl(OnBoardingComponent);
 const mockStore = configureStore();
 
 jest.mock('@edx/frontend-platform/react', () => ({
@@ -42,13 +42,13 @@ jest.mock('@edx/frontend-platform/i18n', () => ({
   getMessages: jest.fn(),
 }));
 
-describe('AuthnComponent Test', () => {
+describe('OnBoardingComponent Test', () => {
   let store = {};
 
   const reduxWrapper = children => (
     <IntlProvider locale="en">
       <MemoryRouter>
-        <Provider context={AuthnContext} store={store}>{children}</Provider>
+        <Provider context={OnboardingComponentContext} store={store}>{children}</Provider>
       </MemoryRouter>
     </IntlProvider>
   );
@@ -152,12 +152,12 @@ describe('AuthnComponent Test', () => {
     });
   });
 
-  describe('AuthnComponent', () => {
+  describe('OnBoardingComponent', () => {
     it('sets currentForm in commonData from formToRender prop', () => {
       store.dispatch = jest.fn(store.dispatch);
 
-      // Render the AuthnComponent with context and formToRender props
-      render(reduxWrapper(<IntlAuthnComponent isOpen close={() => {}} formToRender={LOGIN_FORM} />));
+      // Render the OnBoardingComponent with context and formToRender props
+      render(reduxWrapper(<IntlOnBoardingComponent isOpen close={() => {}} formToRender={LOGIN_FORM} />));
 
       expect(store.dispatch).toHaveBeenCalledWith(setCurrentOpenedForm(LOGIN_FORM));
     });
@@ -171,8 +171,8 @@ describe('AuthnComponent Test', () => {
         email_opt_in: true,
         invalid_key_in_context: 'Splash!!!!',
       };
-      // Render the AuthnComponent with context
-      render(reduxWrapper(<IntlAuthnComponent isOpen close={() => {}} context={contextData} />));
+      // Render the OnBoardingComponent with context
+      render(reduxWrapper(<IntlOnBoardingComponent isOpen close={() => {}} context={contextData} />));
 
       // Expect dispatch to have been called with getThirdPartyAuthContext action
       expect(store.dispatch).toHaveBeenCalledWith(getThirdPartyAuthContext({
@@ -191,7 +191,7 @@ describe('AuthnComponent Test', () => {
         },
       });
       const { getByTestId } = render(reduxWrapper(
-        <IntlAuthnComponent isOpen close={() => {}} />,
+        <IntlOnBoardingComponent isOpen close={() => {}} />,
       ));
 
       expect(getByTestId('sign-in-heading')).toBeTruthy();
@@ -206,7 +206,7 @@ describe('AuthnComponent Test', () => {
         },
       });
       const { getByTestId } = render(reduxWrapper(
-        <IntlAuthnComponent isOpen close={() => {}} />,
+        <IntlOnBoardingComponent isOpen close={() => {}} />,
       ));
 
       expect(getByTestId('sign-up-heading')).toBeTruthy();
@@ -233,7 +233,7 @@ describe('AuthnComponent Test', () => {
         },
       });
       const { container, getByTestId } = render(reduxWrapper(
-        <IntlAuthnComponent isOpen close={() => {}} />,
+        <IntlOnBoardingComponent isOpen close={() => {}} />,
       ));
       const closeButton = container.querySelector('.btn-icon__icon');
 
@@ -250,7 +250,7 @@ describe('AuthnComponent Test', () => {
         },
       });
       const { getByTestId } = render(reduxWrapper(
-        <IntlAuthnComponent isOpen close={() => {}} />,
+        <IntlOnBoardingComponent isOpen close={() => {}} />,
       ));
 
       expect(getByTestId('forgot-password-heading')).toBeTruthy();
@@ -279,7 +279,7 @@ describe('AuthnComponent Test', () => {
 
     delete window.location;
     window.location = { href: 'localhost:2999/login', search: `?tpa_hint=${appleProvider.id}` };
-    const { getByText } = render(reduxWrapper(<IntlAuthnComponent isOpen close={() => {}} />));
+    const { getByText } = render(reduxWrapper(<IntlOnBoardingComponent isOpen close={() => {}} />));
 
     expect(getByText(`Sign in with ${appleProvider.name}`)).toBeTruthy();
   });
@@ -295,7 +295,7 @@ describe('AuthnComponent Test', () => {
 
     delete window.location;
     window.location = { href: 'localhost:2999/login', search: '?tpa_hint=oa2-apple-id' };
-    const { getByTestId } = render(reduxWrapper(<IntlAuthnComponent isOpen close={() => {}} />));
+    const { getByTestId } = render(reduxWrapper(<IntlOnBoardingComponent isOpen close={() => {}} />));
     expect(getByTestId('tpa-spinner')).toBeTruthy();
   });
 });

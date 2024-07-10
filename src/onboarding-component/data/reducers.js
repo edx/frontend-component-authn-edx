@@ -1,5 +1,5 @@
 /**
- * Redux slice for managing authn component common state i.e, providers, current providers, etc
+ * Redux slice for managing on boarding component common state i.e, providers, current providers, etc
  */
 
 import { createSlice } from '@reduxjs/toolkit';
