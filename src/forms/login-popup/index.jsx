@@ -55,6 +55,7 @@ const LoginForm = () => {
   const socialAuthnButtonRef = useRef(null);
   const errorAlertRef = useRef(null);
   const loginFormHeadingRef = useRef(null);
+  const isEditingFieldRef = useRef(false);
 
   const loginResult = useSelector(state => state.login.loginResult);
   const loginErrorCode = useSelector(state => state.login.loginError?.errorCode);
@@ -86,15 +87,15 @@ const LoginForm = () => {
 
   useEffect(() => {
     if (thirdPartyAuthApiStatus === COMPLETE_STATE && accountActivation === null) {
-      if (providers.length > 0 && socialAuthnButtonRef.current) {
+      if (providers.length > 0 && socialAuthnButtonRef.current && !isEditingFieldRef.current) {
         socialAuthnButtonRef.current.focus();
-      } else if (emailOrUsernameRef.current) {
+      } else if (emailOrUsernameRef.current && !isEditingFieldRef.current) {
         emailOrUsernameRef.current.focus();
       }
     } else if (thirdPartyAuthApiStatus === FAILURE_STATE && accountActivation === null) {
       emailOrUsernameRef.current.focus();
     }
-  }, [accountActivation, thirdPartyAuthApiStatus, providers]);
+  }, [accountActivation, thirdPartyAuthApiStatus, providers, isEditingFieldRef]);
 
   useEffect(() => {
     if (moveScrollToTop) {
@@ -174,11 +175,17 @@ const LoginForm = () => {
   const handleOnChange = (event) => {
     const { name, value } = event.target;
     setFormFields(prevState => ({ ...prevState, [name]: value }));
+    isEditingFieldRef.current = true;
   };
 
   const handleOnFocus = (event) => {
     const { name } = event.target;
     setFormErrors(prevErrors => ({ ...prevErrors, [name]: '' }));
+    isEditingFieldRef.current = true;
+  };
+
+  const handleBlur = () => {
+    isEditingFieldRef.current = false;
   };
 
   const handleForgotPasswordClick = () => {
@@ -256,6 +263,7 @@ const LoginForm = () => {
           errorMessage={formErrors.emailOrUsername}
           handleChange={handleOnChange}
           handleFocus={handleOnFocus}
+          onBlur={handleBlur}
           ref={emailOrUsernameRef}
         />
         <PasswordField
@@ -264,6 +272,7 @@ const LoginForm = () => {
           errorMessage={formErrors.password}
           handleChange={handleOnChange}
           handleFocus={handleOnFocus}
+          onBlur={handleBlur}
           floatingLabel={formatMessage(messages.loginFormPasswordFieldLabel)}
           showPasswordTooltip={false}
         />
