@@ -58,11 +58,34 @@ describe('OnBoardingComponent Test', () => {
       submitState: DEFAULT_STATE,
       loginResult: { success: false, redirectUrl: '' },
       loginError: {},
+      loginFormData: {
+        formFields: {
+          emailOrUsername: '', password: '',
+        },
+        errors: {
+          emailOrUsername: '', password: '',
+        },
+      },
     },
     register: {
       submitState: DEFAULT_STATE,
       registrationError: {},
       registrationResult: { success: false, redirectUrl: '' },
+      registrationFormData: {
+        formFields: {
+          name: '', email: '', password: '', marketingEmailsOptIn: true,
+        },
+        errors: {
+          name: '', email: '', password: '',
+        },
+      },
+    },
+    forgotPassword: {
+      status: DEFAULT_STATE,
+      forgotPasswordFormData: {
+        email: '',
+        error: '',
+      },
     },
     commonData: {
       thirdPartyAuthContext: {

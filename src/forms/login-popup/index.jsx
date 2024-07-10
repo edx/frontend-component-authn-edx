@@ -12,7 +12,9 @@ import AccountActivationMessage from './components/AccountActivationMessage';
 import LoginFailureAlert from './components/LoginFailureAlert';
 import { NUDGE_PASSWORD_CHANGE, REQUIRE_PASSWORD_CHANGE } from './data/constants';
 import useGetActivationMessage from './data/hooks';
-import { loginUser, setLoginSSOIntent } from './data/reducers';
+import {
+  backupLoginFormBegin, loginErrorClear, loginUser, setLoginSSOIntent,
+} from './data/reducers';
 import messages from './messages';
 import { InlineLink, SocialAuthProviders } from '../../common-ui';
 import {
@@ -58,6 +60,7 @@ const LoginForm = () => {
   const isEditingFieldRef = useRef(false);
 
   const loginResult = useSelector(state => state.login.loginResult);
+  const backedUpFormData = useSelector(state => state.login.loginFormData);
   const loginErrorCode = useSelector(state => state.login.loginError?.errorCode);
   const loginErrorContext = useSelector(state => state.login.loginError?.errorContext);
   const providers = useSelector(state => state.commonData.thirdPartyAuthContext?.providers);
@@ -70,15 +73,9 @@ const LoginForm = () => {
 
   const accountActivation = useGetActivationMessage();
 
-  const [formFields, setFormFields] = useState({
-    emailOrUsername: '',
-    password: '',
-  });
+  const [formFields, setFormFields] = useState({ ...backedUpFormData.formFields });
 
-  const [formErrors, setFormErrors] = useState({
-    emailOrUsername: '',
-    password: '',
-  });
+  const [formErrors, setFormErrors] = useState({ ...backedUpFormData.errors });
   const [errorCode, setErrorCode] = useState({ type: '', context: {} });
 
   useEffect(() => {
@@ -193,6 +190,13 @@ const LoginForm = () => {
     trackForgotPasswordLinkClick();
   };
 
+  const backupFormDataHandler = () => {
+    dispatch(backupLoginFormBegin({
+      formFields: { ...formFields },
+      errors: { ...formErrors },
+    }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -303,6 +307,8 @@ const LoginForm = () => {
           className="mb-2"
           onClick={() => {
             trackRegisterFormToggled();
+            backupFormDataHandler();
+            dispatch(loginErrorClear());
             dispatch(setCurrentOpenedForm(REGISTRATION_FORM));
           }}
           linkHelpText={formatMessage(messages.loginFormRegistrationHelpText)}

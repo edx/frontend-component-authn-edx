@@ -15,7 +15,7 @@ import { OnboardingComponentContext } from '../../../data/storeHooks';
 import getAllPossibleQueryParams from '../../../data/utils';
 import { setCurrentOpenedForm } from '../../../onboarding-component/data/reducers';
 import { NUDGE_PASSWORD_CHANGE, REQUIRE_PASSWORD_CHANGE } from '../data/constants';
-import { loginUser } from '../data/reducers';
+import { backupLoginFormBegin, loginUser } from '../data/reducers';
 import LoginForm from '../index';
 
 const IntlLoginForm = injectIntl(LoginForm);
@@ -33,6 +33,15 @@ jest.mock('../../../tracking/trackers/login', () => ({
 describe('LoginForm Test', () => {
   let store = {};
 
+  const loginFormData = {
+    formFields: {
+      emailOrUsername: '', password: '',
+    },
+    errors: {
+      emailOrUsername: '', password: '',
+    },
+  };
+
   const reduxWrapper = children => (
     <IntlProvider locale="en">
       <MemoryRouter>
@@ -45,6 +54,7 @@ describe('LoginForm Test', () => {
     login: {
       submitState: DEFAULT_STATE,
       loginResult: { success: false, redirectUrl: '' },
+      loginFormData,
       loginError: {},
     },
     register: {
@@ -244,6 +254,20 @@ describe('LoginForm Test', () => {
     fireEvent.click(getByText('Create account'));
 
     expect(store.dispatch).toHaveBeenCalledWith(setCurrentOpenedForm(REGISTRATION_FORM));
+  });
+
+  it('should backup the login form state when switch to sign-up form', () => {
+    store = mockStore({
+      ...initialState,
+      login: {
+        ...initialState.login,
+      },
+    });
+
+    store.dispatch = jest.fn(store.dispatch);
+    const { getByText } = render(reduxWrapper(<IntlLoginForm />));
+    fireEvent.click(getByText('Create account'));
+    expect(store.dispatch).toHaveBeenCalledWith(backupLoginFormBegin({ ...loginFormData }));
   });
 
   it('should dispatch setCurrentOpenedForm action on "Forgot Password?" link click', () => {
