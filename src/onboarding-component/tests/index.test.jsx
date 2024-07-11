@@ -76,6 +76,7 @@ describe('OnBoardingComponent Test', () => {
 
   beforeEach(() => {
     store = mockStore(initialState);
+    window.history.replaceState = jest.fn();
     mergeConfig({
       TOS_AND_HONOR_CODE: process.env.TOS_AND_HONOR_CODE,
       PRIVACY_POLICY: process.env.PRIVACY_POLICY,

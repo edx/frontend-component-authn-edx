@@ -3,7 +3,7 @@ import { getConfig } from '@edx/frontend-platform';
 import QueryString from 'query-string';
 import Cookies from 'universal-cookie';
 
-import { VALID_AUTH_PARAMS } from './constants';
+import { AUTH_MODE, VALID_AUTH_PARAMS } from './constants';
 
 /**
  * Parses query parameters from a URL string or the current window's location and
@@ -21,6 +21,17 @@ const getAllPossibleQueryParams = (locationURl = null) => {
   return Object.fromEntries(
     Object.entries(urlParams).filter(([key]) => VALID_AUTH_PARAMS.includes(key)),
   );
+};
+
+export const handleURLUpdationOnLoad = formName => {
+  const queryParam = getAllPossibleQueryParams();
+  if (!Object.prototype.hasOwnProperty.call(queryParam, AUTH_MODE)
+    || queryParam?.[AUTH_MODE] !== formName) {
+    const url = new URL(window.location.href || getConfig().MARKETING_SITE_BASE_URL);
+    url.searchParams.delete(AUTH_MODE);
+    url.searchParams.set(AUTH_MODE, formName);
+    window.history.replaceState(null, null, url);
+  }
 };
 
 export const deleteQueryParams = (params) => {

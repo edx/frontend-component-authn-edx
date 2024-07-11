@@ -22,6 +22,7 @@ import isFormValid from './data/utils';
 import messages from './messages';
 import { InlineLink, SocialAuthProviders } from '../../common-ui';
 import {
+  AUTH_MODE_REGSITER,
   COMPLETE_STATE,
   ENTERPRISE_LOGIN_URL,
   FAILURE_STATE,
@@ -31,7 +32,9 @@ import {
   TPA_AUTHENTICATION_FAILURE,
 } from '../../data/constants';
 import { useDispatch, useSelector } from '../../data/storeHooks';
-import getAllPossibleQueryParams, { getCountryCookieValue, moveScrollToTop, setCookie } from '../../data/utils';
+import getAllPossibleQueryParams, {
+  getCountryCookieValue, handleURLUpdationOnLoad, moveScrollToTop, setCookie,
+} from '../../data/utils';
 import { setCurrentOpenedForm } from '../../onboarding-component/data/reducers';
 import './index.scss';
 import {
@@ -142,6 +145,7 @@ const RegistrationForm = () => {
 
   useEffect(() => {
     moveScrollToTop(registerFormHeadingRef, 'end');
+    handleURLUpdationOnLoad(AUTH_MODE_REGSITER);
   }, []);
 
   useEffect(() => {
