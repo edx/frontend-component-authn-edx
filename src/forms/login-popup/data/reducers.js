@@ -67,7 +67,7 @@ export const loginSlice = createSlice({
     setLoginSSOIntent: (state) => {
       state.isLoginSSOIntent = true;
     },
-    backupLoginFormBegin: (state, { payload }) => {
+    backupLoginForm: (state, { payload }) => {
       state.loginFormData = payload;
     },
   },
@@ -80,7 +80,7 @@ export const {
   loginUserFailed,
   setShowPasswordResetBanner,
   setLoginSSOIntent,
-  backupLoginFormBegin,
+  backupLoginForm,
 } = loginSlice.actions;
 
 export default loginSlice.reducer;

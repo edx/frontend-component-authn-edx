@@ -12,7 +12,7 @@ import classNames from 'classnames';
 import HonorCodeAndPrivacyPolicyMessage from './components/honorCodeAndTOS';
 import RegistrationFailureAlert from './components/RegistrationFailureAlert';
 import {
-  backupRegistrationFormBegin,
+  backupRegistrationForm,
   clearAllRegistrationErrors,
   clearRegistrationBackendError,
   registerUser,
@@ -116,7 +116,7 @@ const RegistrationForm = () => {
         removeCookie('marketingEmailsOptIn');
         removeCookie('ssoPipelineRedirectionDone');
       }
-      if (pipelineUserDetails && Object.keys(pipelineUserDetails).length !== 0 && !backedUpFormData.isFormDirty) {
+      if (pipelineUserDetails && Object.keys(pipelineUserDetails).length !== 0 && !backedUpFormData.isFormFilled) {
         const {
           name = '', email = '',
         } = pipelineUserDetails;
@@ -225,9 +225,9 @@ const RegistrationForm = () => {
   };
 
   const backupFormDataHandler = () => {
-    dispatch(backupRegistrationFormBegin({
+    dispatch(backupRegistrationForm({
       ...backedUpFormData,
-      isFormDirty: true,
+      isFormFilled: true,
       formFields: { ...formFields },
       errors: { ...errors },
     }));

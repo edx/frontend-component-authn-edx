@@ -73,7 +73,11 @@ describe('OnBoardingComponent Test', () => {
       registrationResult: { success: false, redirectUrl: '' },
       registrationFormData: {
         formFields: {
-          name: '', email: '', password: '', marketingEmailsOptIn: true,
+          isFormFilled: true,
+          name: '',
+          email: '',
+          password: '',
+          marketingEmailsOptIn: true,
         },
         errors: {
           name: '', email: '', password: '',

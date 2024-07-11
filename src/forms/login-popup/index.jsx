@@ -13,7 +13,7 @@ import LoginFailureAlert from './components/LoginFailureAlert';
 import { NUDGE_PASSWORD_CHANGE, REQUIRE_PASSWORD_CHANGE } from './data/constants';
 import useGetActivationMessage from './data/hooks';
 import {
-  backupLoginFormBegin, loginErrorClear, loginUser, setLoginSSOIntent,
+  backupLoginForm, loginErrorClear, loginUser, setLoginSSOIntent,
 } from './data/reducers';
 import messages from './messages';
 import { InlineLink, SocialAuthProviders } from '../../common-ui';
@@ -194,7 +194,7 @@ const LoginForm = () => {
   };
 
   const backupFormDataHandler = () => {
-    dispatch(backupLoginFormBegin({
+    dispatch(backupLoginForm({
       formFields: { ...formFields },
       errors: { ...formErrors },
     }));
