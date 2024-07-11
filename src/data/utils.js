@@ -27,7 +27,7 @@ export const handleURLUpdationOnLoad = formName => {
   const queryParam = getAllPossibleQueryParams();
   if (!Object.prototype.hasOwnProperty.call(queryParam, AUTH_MODE)
     || queryParam?.[AUTH_MODE] !== formName) {
-    const url = new URL(window.location.href || process.env.MARKETING_SITE_BASE_URL);
+    const url = new URL(window.location.href || getConfig().MARKETING_SITE_BASE_URL);
     url.searchParams.delete(AUTH_MODE);
     url.searchParams.set(AUTH_MODE, formName);
     window.history.replaceState(null, null, url);

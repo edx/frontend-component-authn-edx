@@ -33,9 +33,10 @@ const MarketingEmailOptInCheckbox = (props) => {
         )}
         checked={!!value}
         onChange={handleChange}
-      >
+      />
+      <Form.Label className="registration-form__marketing_opt-in-label">
         {formatMessage(messages.registrationFormMarketingOptInLabel)}
-      </Form.Checkbox>
+      </Form.Label>
     </Form.Group>
   );
 };
