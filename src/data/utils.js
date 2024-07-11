@@ -23,13 +23,13 @@ const getAllPossibleQueryParams = (locationURl = null) => {
   );
 };
 
-export const handleURLUpdationOnLoad = pageName => {
+export const handleURLUpdationOnLoad = formName => {
   const queryParam = getAllPossibleQueryParams();
   if (!Object.prototype.hasOwnProperty.call(queryParam, AUTH_MODE)
-    || queryParam?.[AUTH_MODE] !== pageName) {
-    const url = new URL(window.location.href || process.env.LMS_BASE_URL);
+    || queryParam?.[AUTH_MODE] !== formName) {
+    const url = new URL(window.location.href || process.env.MARKETING_SITE_BASE_URL);
     url.searchParams.delete(AUTH_MODE);
-    url.searchParams.set(AUTH_MODE, pageName);
+    url.searchParams.set(AUTH_MODE, formName);
     window.history.replaceState(null, null, url);
   }
 };
