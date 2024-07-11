@@ -235,5 +235,5 @@ export const ResetPasswordComponent = (props) => (
 );
 
 export const WelcomePageComponent = (props) => (
-  <AuthnComponentWithProvider {...props} formToRender={PROGRESSIVE_PROFILING_FORM} />
+  <OnBoardingComponentWithProvider {...props} formToRender={PROGRESSIVE_PROFILING_FORM} />
 );

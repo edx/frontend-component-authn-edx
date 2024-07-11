@@ -33,9 +33,23 @@ export const SocialAuthButton = forwardRef(({
 
   const registrationFields = useSelector(state => state.register.registrationFields);
 
+  // tmporary code for testing
+  const registrationParams = {
+    // ...registrationFields,
+    totalRegistrationTime: 0,
+    app_name: 'onboarding-component',
+    marketing_emails_opt_in: true,
+  };
+
   if (!provider) {
     return null;
   }
+
+  const prepareFinalUrl = (url, paramKey, paramValue) => {
+    const urlObj = new URL(url, getConfig().LMS_BASE_URL);
+    urlObj.searchParams.set(paramKey, paramValue);
+    return urlObj.toString();
+  };
 
   const {
     id: providerId,
@@ -52,8 +66,13 @@ export const SocialAuthButton = forwardRef(({
     if (!isLoginForm) {
       setCookie('marketingEmailsOptIn', registrationFields?.marketingEmailsOptIn);
     }
+
     const url = e.currentTarget.dataset.providerUrl;
-    window.location.href = getConfig().LMS_BASE_URL + url;
+    // eslint-disable-next-line max-len
+    // const finalUrl = prepareFinalUrl(url, 'marketing_emails_opt_in', registrationFields?.marketingEmailsOptIn.toString());
+    const finalUrl = prepareFinalUrl(url, 'registration_params', JSON.stringify(registrationParams));
+    console.log('final url = ', finalUrl);
+    window.location.href = finalUrl;
   };
 
   return (

@@ -50,4 +50,7 @@ const isFormValid = (
   return { isValid, fieldErrors, emailSuggestion };
 };
 
+// const preparePayload = (formFields, totalRegistrationTime, currentProvider, isLoginSSOIntent, backendCountryCode, ) => {
+//
+// }
 export default isFormValid;
