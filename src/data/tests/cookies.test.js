@@ -1,7 +1,7 @@
 import { getConfig } from '@edx/frontend-platform';
 import Cookies from 'universal-cookie';
 
-import { setCookie } from '../utils';
+import { setCookie } from '../cookies';
 
 // Mock getConfig function
 jest.mock('@edx/frontend-platform', () => ({

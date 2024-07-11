@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 
 import socialLogos from './constants';
 import { PENDING_STATE } from '../../data/constants';
+import { setCookie } from '../../data/cookies';
 import { useSelector } from '../../data/storeHooks';
 import providersSelector from '../../onboarding-component/data/selectors';
 import messages from '../messages';
@@ -46,9 +47,11 @@ export const SocialAuthButton = forwardRef(({
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // setting marketingEmailsOptIn state in local storage to preserve user marketing opt-in
-    // choice in case of SSO auto registratioon
-    localStorage.setItem('marketingEmailsOptIn', registrationFields?.marketingEmailsOptIn);
+    // setting marketingEmailsOptIn state in cookie to preserve user marketing opt-in
+    // choice in case of SSO auto registration
+    if (!isLoginForm) {
+      setCookie('marketingEmailsOptIn', registrationFields?.marketingEmailsOptIn);
+    }
     const url = e.currentTarget.dataset.providerUrl;
     window.location.href = getConfig().LMS_BASE_URL + url;
   };

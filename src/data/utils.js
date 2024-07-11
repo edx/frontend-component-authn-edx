@@ -1,7 +1,6 @@
 // Utility functions
 import { getConfig } from '@edx/frontend-platform';
 import QueryString from 'query-string';
-import Cookies from 'universal-cookie';
 
 import { AUTH_MODE, VALID_AUTH_PARAMS } from './constants';
 
@@ -45,23 +44,6 @@ export const deleteQueryParams = (params) => {
   });
 
   window.history.replaceState(window.history.state, '', url.href);
-};
-
-export const setCookie = (cookieName, cookieValue, cookieExpiry) => {
-  if (cookieName) { // To avoid setting getting exception when setting cookie with undefined names.
-    const cookies = new Cookies();
-    const options = { domain: getConfig().SESSION_COOKIE_DOMAIN, path: '/' };
-    if (cookieExpiry) {
-      options.expires = cookieExpiry;
-    }
-    cookies.set(cookieName, cookieValue, options);
-  }
-};
-
-export const getCountryCookieValue = () => {
-  const cookieName = `${getConfig().ONBOARDING_COMPONENT_ENV}-edx-cf-loc`;
-  const cookies = new Cookies();
-  return cookies.get(cookieName);
 };
 
 export const moveScrollToTop = (ref, block = 'start') => {

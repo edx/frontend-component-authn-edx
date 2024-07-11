@@ -1,7 +1,8 @@
 import { getConfig, mergeConfig } from '@edx/frontend-platform';
 import Cookies from 'universal-cookie';
 
-import getAllPossibleQueryParams, { getCountryCookieValue } from '../utils';
+import { getCountryCookieValue } from '../cookies';
+import getAllPossibleQueryParams from '../utils';
 
 describe('getAllPossibleQueryParams', () => {
   beforeEach(() => {

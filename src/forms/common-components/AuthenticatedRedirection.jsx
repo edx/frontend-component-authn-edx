@@ -2,9 +2,9 @@ import { getConfig } from '@edx/frontend-platform';
 import PropTypes from 'prop-types';
 
 import { PROGRESSIVE_PROFILING_FORM } from '../../data/constants';
+import { setCookie } from '../../data/cookies';
 import { LINK_TIMEOUT } from '../../data/segment/utils';
 import { useDispatch } from '../../data/storeHooks';
-import { setCookie } from '../../data/utils';
 import { setCurrentOpenedForm } from '../../onboarding-component/data/reducers';
 import {
   setProgressiveProfilingRedirectUrl,
