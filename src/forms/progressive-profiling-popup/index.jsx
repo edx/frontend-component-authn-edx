@@ -25,8 +25,9 @@ import {
   LOGIN_FORM,
   PENDING_STATE,
 } from '../../data/constants';
+import { getCountryCookieValue } from '../../data/cookies';
 import { useDispatch, useSelector } from '../../data/storeHooks';
-import { getCountryCookieValue, moveScrollToTop } from '../../data/utils';
+import { moveScrollToTop } from '../../data/utils';
 import { setCurrentOpenedForm } from '../../onboarding-component/data/reducers';
 import {
   trackProgressiveProfilingPageViewed,

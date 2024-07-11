@@ -25,6 +25,7 @@ import {
   REGISTRATION_FORM,
   TPA_AUTHENTICATION_FAILURE,
 } from '../../data/constants';
+import { getCookie, removeCookie, setCookie } from '../../data/cookies';
 import { useDispatch, useSelector } from '../../data/storeHooks';
 import getAllPossibleQueryParams, { handleURLUpdationOnLoad, moveScrollToTop } from '../../data/utils';
 import { setCurrentOpenedForm } from '../../onboarding-component/data/reducers';
@@ -109,16 +110,16 @@ const LoginForm = () => {
     if (loginResult.success) {
       // clear local storage
       trackLoginSuccess();
-      localStorage.removeItem('ssoPipelineRedirectionDone');
+      removeCookie('ssoPipelineRedirectionDone');
     }
   }, [loginResult]);
 
   useEffect(() => {
     if (thirdPartyAuthApiStatus === COMPLETE_STATE
       && currentProvider === null
-      && localStorage.getItem('ssoPipelineRedirectionDone')
+      && getCookie('ssoPipelineRedirectionDone')
     ) {
-      localStorage.removeItem('ssoPipelineRedirectionDone');
+      removeCookie('ssoPipelineRedirectionDone');
     }
   }, [currentProvider, thirdPartyAuthApiStatus]);
 
@@ -152,8 +153,8 @@ const LoginForm = () => {
   useEffect(() => {
     if (thirdPartyAuthApiStatus === COMPLETE_STATE && currentProvider) {
       dispatch(setLoginSSOIntent());
-      if (!localStorage.getItem('ssoPipelineRedirectionDone')) {
-        localStorage.setItem('ssoPipelineRedirectionDone', true);
+      if (!getCookie('ssoPipelineRedirectionDone')) {
+        setCookie('ssoPipelineRedirectionDone', true);
       }
     }
   }, [dispatch, currentProvider, thirdPartyAuthApiStatus]);

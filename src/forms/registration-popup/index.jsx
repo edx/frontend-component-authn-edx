@@ -31,10 +31,11 @@ import {
   REGISTRATION_FORM,
   TPA_AUTHENTICATION_FAILURE,
 } from '../../data/constants';
+import {
+  getCookie, getCountryCookieValue, removeCookie, setCookie,
+} from '../../data/cookies';
 import { useDispatch, useSelector } from '../../data/storeHooks';
-import getAllPossibleQueryParams, {
-  getCountryCookieValue, handleURLUpdationOnLoad, moveScrollToTop, setCookie,
-} from '../../data/utils';
+import getAllPossibleQueryParams, { handleURLUpdationOnLoad, moveScrollToTop } from '../../data/utils';
 import { setCurrentOpenedForm } from '../../onboarding-component/data/reducers';
 import './index.scss';
 import {
@@ -101,7 +102,7 @@ const RegistrationForm = () => {
       && thirdPartyAuthApiStatus === COMPLETE_STATE
       && !isLoginSSOIntent
       && queryParams?.authMode === 'Register'
-      && !localStorage.getItem('ssoPipelineRedirectionDone')
+      && !getCookie('ssoPipelineRedirectionDone')
   );
 
   /**
@@ -111,8 +112,8 @@ const RegistrationForm = () => {
     if (!userPipelineDataLoaded && thirdPartyAuthApiStatus === COMPLETE_STATE) {
       if (thirdPartyAuthErrorMessage) {
         setErrorCode(prevState => ({ type: TPA_AUTHENTICATION_FAILURE, count: prevState.count + 1 }));
-        localStorage.removeItem('marketingEmailsOptIn');
-        localStorage.removeItem('ssoPipelineRedirectionDone');
+        removeCookie('marketingEmailsOptIn');
+        removeCookie('ssoPipelineRedirectionDone');
       }
       if (pipelineUserDetails && Object.keys(pipelineUserDetails).length !== 0) {
         const {
@@ -173,18 +174,16 @@ const RegistrationForm = () => {
   useEffect(() => {
     if (thirdPartyAuthApiStatus === COMPLETE_STATE
       && currentProvider === null
-      && localStorage.getItem('ssoPipelineRedirectionDone')
     ) {
-      localStorage.removeItem('ssoPipelineRedirectionDone');
-      localStorage.removeItem('marketingEmailsOptIn');
+      removeCookie('ssoPipelineRedirectionDone');
+      removeCookie('marketingEmailsOptIn');
     }
   }, [currentProvider, thirdPartyAuthApiStatus]);
 
   useEffect(() => {
     if (registrationResult.success) {
-      // clear local storage
-      localStorage.removeItem('marketingEmailsOptIn');
-      localStorage.removeItem('ssoPipelineRedirectionDone');
+      removeCookie('ssoPipelineRedirectionDone');
+      removeCookie('marketingEmailsOptIn');
 
       // This event is used by GTM
       trackRegistrationSuccess();
@@ -235,9 +234,9 @@ const RegistrationForm = () => {
       delete payload.password;
       payload.social_auth_provider = currentProvider;
 
-      if (!isLoginSSOIntent) {
+      if (autoSubmitRegForm) {
         delete payload.marketingEmailsOptIn;
-        payload.marketingEmailsOptIn = localStorage.getItem('marketingEmailsOptIn');
+        payload.marketingEmailsOptIn = getCookie('marketingEmailsOptIn');
       }
     }
 
