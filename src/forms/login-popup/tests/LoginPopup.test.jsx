@@ -15,7 +15,7 @@ import { OnboardingComponentContext } from '../../../data/storeHooks';
 import getAllPossibleQueryParams from '../../../data/utils';
 import { setCurrentOpenedForm } from '../../../onboarding-component/data/reducers';
 import { NUDGE_PASSWORD_CHANGE, REQUIRE_PASSWORD_CHANGE } from '../data/constants';
-import { backupLoginFormBegin, loginUser } from '../data/reducers';
+import { backupLoginForm, loginUser } from '../data/reducers';
 import LoginForm from '../index';
 
 const IntlLoginForm = injectIntl(LoginForm);
@@ -267,7 +267,7 @@ describe('LoginForm Test', () => {
     store.dispatch = jest.fn(store.dispatch);
     const { getByText } = render(reduxWrapper(<IntlLoginForm />));
     fireEvent.click(getByText('Create account'));
-    expect(store.dispatch).toHaveBeenCalledWith(backupLoginFormBegin({ ...loginFormData }));
+    expect(store.dispatch).toHaveBeenCalledWith(backupLoginForm({ ...loginFormData }));
   });
 
   it('should dispatch setCurrentOpenedForm action on "Forgot Password?" link click', () => {

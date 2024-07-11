@@ -14,7 +14,7 @@ import {
 } from '../../../data/constants';
 import { OnboardingComponentContext } from '../../../data/storeHooks';
 import { setCurrentOpenedForm } from '../../../onboarding-component/data/reducers';
-import { backupRegistrationFormBegin, clearRegistrationBackendError, registerUser } from '../data/reducers';
+import { backupRegistrationForm, clearRegistrationBackendError, registerUser } from '../data/reducers';
 import * as utils from '../data/utils';
 import RegistrationForm from '../index';
 
@@ -45,6 +45,7 @@ describe('RegistrationForm Test', () => {
   let store = {};
 
   const registrationFormData = {
+    isFormDirty: true,
     formFields: {
       name: '', email: '', password: '', marketingEmailsOptIn: true,
     },
@@ -204,7 +205,7 @@ describe('RegistrationForm Test', () => {
     store.dispatch = jest.fn(store.dispatch);
     const { getByText } = render(reduxWrapper(<IntlRegistrationForm />));
     fireEvent.click(getByText('Sign In'));
-    expect(store.dispatch).toHaveBeenCalledWith(backupRegistrationFormBegin({ ...registrationFormData }));
+    expect(store.dispatch).toHaveBeenCalledWith(backupRegistrationForm({ ...registrationFormData }));
   });
 
   // ******** test registration form validations ********
@@ -337,6 +338,13 @@ describe('RegistrationForm Test', () => {
           },
         },
       },
+      register: {
+        ...initialState.register,
+        registrationFormData: {
+          ...registrationFormData,
+          isFormDirty: false,
+        },
+      },
     });
     store.dispatch = jest.fn(store.dispatch);
 
@@ -394,6 +402,13 @@ describe('RegistrationForm Test', () => {
             name: 'John Doe',
             email: 'john.doe@example.com',
           },
+        },
+      },
+      register: {
+        ...initialState.register,
+        registrationFormData: {
+          ...registrationFormData,
+          isFormDirty: false,
         },
       },
     });

@@ -12,7 +12,7 @@ import classNames from 'classnames';
 import HonorCodeAndPrivacyPolicyMessage from './components/honorCodeAndTOS';
 import RegistrationFailureAlert from './components/RegistrationFailureAlert';
 import {
-  backupRegistrationFormBegin,
+  backupRegistrationForm,
   clearAllRegistrationErrors,
   clearRegistrationBackendError,
   registerUser,
@@ -222,7 +222,7 @@ const RegistrationForm = () => {
   };
 
   const backupFormDataHandler = () => {
-    dispatch(backupRegistrationFormBegin({
+    dispatch(backupRegistrationForm({
       ...backedUpFormData,
       isFormDirty: true,
       formFields: { ...formFields },

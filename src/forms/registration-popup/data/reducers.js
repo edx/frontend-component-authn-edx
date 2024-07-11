@@ -74,7 +74,7 @@ export const registerSlice = createSlice({
     setRegistrationFields: (state, { payload }) => {
       state.registrationFields = payload;
     },
-    backupRegistrationFormBegin: (state, { payload }) => {
+    backupRegistrationForm: (state, { payload }) => {
       state.registrationFormData = payload;
     },
   },
@@ -90,7 +90,7 @@ export const {
   fetchRealtimeValidationsFailed,
   clearAllRegistrationErrors,
   clearRegistrationBackendError,
-  backupRegistrationFormBegin,
+  backupRegistrationForm,
 } = registerSlice.actions;
 
 export default registerSlice.reducer;
