@@ -13,7 +13,7 @@ import messages from './messages';
 import validatePasswordField from './validator';
 import { useDispatch, useSelector } from '../../../data/storeHooks';
 import { LETTER_REGEX, NUMBER_REGEX } from '../../registration-popup/data/constants';
-import { clearRegistrationBackendError, fetchRealtimeValidations } from '../../registration-popup/data/reducers';
+import { fetchRealtimeValidations } from '../../registration-popup/data/reducers';
 import './index.scss';
 
 /**
@@ -91,11 +91,10 @@ const PasswordField = forwardRef((props, ref) => {
     }
 
     if (props.handleFocus) {
-      props.handleFocus(e);
+      props.handleFocus(e, 'password');
     }
     if (handleErrorChange) {
       handleErrorChange('password', '');
-      dispatch(clearRegistrationBackendError('password'));
     }
     setShowPasswordRequirements(showPasswordTooltip && true);
   };

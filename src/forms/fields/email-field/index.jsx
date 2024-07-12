@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import messages from './messages';
 import validateEmail from './validator';
 import { useDispatch, useSelector } from '../../../data/storeHooks';
-import { clearRegistrationBackendError, fetchRealtimeValidations } from '../../registration-popup/data/reducers';
+import { fetchRealtimeValidations } from '../../registration-popup/data/reducers';
 import getValidationMessage from '../../reset-password-popup/forgot-password/data/utils';
 
 import './index.scss';
@@ -25,6 +25,7 @@ const EmailField = forwardRef((props, ref) => {
     floatingLabel,
     errorMessage = '',
     handleErrorChange = () => {},
+    handleFocus = () => {},
     validateEmailFromBackend = true,
   } = props;
 
@@ -52,7 +53,7 @@ const EmailField = forwardRef((props, ref) => {
 
   const handleOnFocus = () => {
     handleErrorChange('email', '');
-    dispatch(clearRegistrationBackendError('email'));
+    handleFocus('', 'email');
   };
 
   const handleSuggestionClick = (event) => {
@@ -134,6 +135,7 @@ EmailField.propTypes = {
   value: PropTypes.string.isRequired,
   handleChange: PropTypes.func.isRequired,
   handleErrorChange: PropTypes.func,
+  handleFocus: PropTypes.func,
   floatingLabel: PropTypes.string.isRequired,
   errorMessage: PropTypes.string,
   isRegistration: PropTypes.bool,
