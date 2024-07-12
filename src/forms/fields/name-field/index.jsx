@@ -4,8 +4,6 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import PropTypes from 'prop-types';
 
 import validateName from './validator';
-import { useDispatch } from '../../../data/storeHooks';
-import { clearRegistrationBackendError } from '../../registration-popup/data/reducers';
 import TextField from '../text-field';
 
 /**
@@ -20,10 +18,10 @@ import TextField from '../text-field';
  */
 const NameField = (props) => {
   const { formatMessage } = useIntl();
-  const dispatch = useDispatch();
 
   const {
     handleErrorChange,
+    handleFocus,
     errorMessage = '',
   } = props;
 
@@ -38,7 +36,7 @@ const NameField = (props) => {
 
   const handleOnFocus = () => {
     handleErrorChange('name', '');
-    dispatch(clearRegistrationBackendError('name'));
+    handleFocus('', 'name');
   };
 
   return (
@@ -56,6 +54,7 @@ NameField.propTypes = {
   value: PropTypes.string.isRequired,
   handleChange: PropTypes.func.isRequired,
   handleErrorChange: PropTypes.func.isRequired,
+  handleFocus: PropTypes.func.isRequired,
 };
 
 export default NameField;

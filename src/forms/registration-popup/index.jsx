@@ -230,6 +230,11 @@ const RegistrationForm = () => {
     }));
   };
 
+  const handleOnFocus = (e, name) => {
+    if (registrationError[name]) {
+      dispatch(clearRegistrationBackendError(name));
+    }
+  };
   const handleUserRegistration = () => {
     const totalRegistrationTime = (Date.now() - formStartTime) / 1000;
     const userCountryCode = getCountryCookieValue();
@@ -357,6 +362,7 @@ const RegistrationForm = () => {
                 errorMessage={errors.email}
                 handleChange={handleOnChange}
                 handleErrorChange={handleErrorChange}
+                handleFocus={handleOnFocus}
                 floatingLabel={formatMessage(messages.registrationFormEmailFieldLabel)}
                 ref={emailRef}
               />
@@ -367,7 +373,7 @@ const RegistrationForm = () => {
                 errorMessage={errors.name}
                 handleChange={handleOnChange}
                 handleErrorChange={handleErrorChange}
-                handleFocus={() => { }}
+                handleFocus={handleOnFocus}
               />
               {!currentProvider && (
                 <PasswordField
@@ -376,7 +382,7 @@ const RegistrationForm = () => {
                   errorMessage={errors.password}
                   handleChange={handleOnChange}
                   handleErrorChange={handleErrorChange}
-                  handleFocus={() => { }}
+                  handleFocus={handleOnFocus}
                   floatingLabel={formatMessage(messages.registrationFormPasswordFieldLabel)}
                 />
               )}

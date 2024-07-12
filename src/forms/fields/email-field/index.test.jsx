@@ -7,7 +7,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import configureStore from 'redux-mock-store';
 
 import { OnboardingComponentContext } from '../../../data/storeHooks';
-import { clearRegistrationBackendError, fetchRealtimeValidations } from '../../registration-popup/data/reducers';
+import { fetchRealtimeValidations } from '../../registration-popup/data/reducers';
 import getValidationMessage from '../../reset-password-popup/forgot-password/data/utils';
 import { EmailField } from '../index';
 
@@ -67,6 +67,7 @@ describe('EmailField', () => {
       handleChange: jest.fn(),
       floatingLabel: '',
       handleErrorChange: jest.fn(),
+      handleFocus: jest.fn(),
       confirmEmailValue: '',
     };
     window.location = { search: '' };
@@ -201,7 +202,10 @@ describe('EmailField', () => {
       const emailInput = container.querySelector('input#email');
       fireEvent.focus(emailInput, { target: { value: 'a@gmail.com', name: 'email' } });
 
-      expect(store.dispatch).toHaveBeenCalledWith(clearRegistrationBackendError('email'));
+      expect(props.handleFocus).toHaveBeenCalledWith(
+        '',
+        'email',
+      );
     });
 
     it('should clear email suggestions when close icon is clicked', () => {

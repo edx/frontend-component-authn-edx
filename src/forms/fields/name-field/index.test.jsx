@@ -6,7 +6,6 @@ import { fireEvent, render } from '@testing-library/react';
 import configureStore from 'redux-mock-store';
 
 import { OnboardingComponentContext } from '../../../data/storeHooks';
-import { clearRegistrationBackendError } from '../../registration-popup/data/reducers';
 import { NameField } from '../index';
 
 const IntlNameField = injectIntl(NameField);
@@ -34,6 +33,7 @@ describe('NameField', () => {
       errorMessage: '',
       handleChange: jest.fn(),
       handleErrorChange: jest.fn(),
+      handleFocus: jest.fn(),
       floatingLabel: '',
       label: '',
     };
@@ -105,7 +105,10 @@ describe('NameField', () => {
 
       fireEvent.focus(nameInput, { target: { value: 'test', name: 'name' } });
 
-      expect(store.dispatch).toHaveBeenCalledWith(clearRegistrationBackendError('name'));
+      expect(props.handleFocus).toHaveBeenCalledWith(
+        '',
+        'name',
+      );
     });
   });
 });
