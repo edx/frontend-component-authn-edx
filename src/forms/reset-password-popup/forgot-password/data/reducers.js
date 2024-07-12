@@ -19,6 +19,10 @@ export const FORGOT_PASSWORD_SLICE_NAME = 'forgotPassword';
 
 export const forgotPasswordInitialState = {
   status: DEFAULT_STATE,
+  forgotPasswordFormData: {
+    email: '',
+    error: '',
+  },
 };
 
 export const forgotPasswordSlice = createSlice({
@@ -43,6 +47,9 @@ export const forgotPasswordSlice = createSlice({
     forgotPassweordTokenInvalidFailure: (state, { payload }) => {
       state.status = payload;
     },
+    setForgotPasswordFormData: (state, { payload }) => {
+      state.forgotPasswordFormData = payload;
+    },
   },
 });
 
@@ -53,6 +60,7 @@ export const {
   forgotPasswordFailed,
   forgotPasswordClearStatus,
   forgotPassweordTokenInvalidFailure,
+  setForgotPasswordFormData,
 } = forgotPasswordSlice.actions;
 
 export default forgotPasswordSlice.reducer;

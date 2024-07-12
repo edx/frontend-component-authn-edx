@@ -12,6 +12,7 @@ import classNames from 'classnames';
 import HonorCodeAndPrivacyPolicyMessage from './components/honorCodeAndTOS';
 import RegistrationFailureAlert from './components/RegistrationFailureAlert';
 import {
+  backupRegistrationForm,
   clearAllRegistrationErrors,
   clearRegistrationBackendError,
   registerUser,
@@ -67,13 +68,6 @@ const RegistrationForm = () => {
 
   const isExtraSmall = useMediaQuery({ maxWidth: breakpoints.extraSmall.maxWidth - 1 });
 
-  const [formFields, setFormFields] = useState({
-    name: '', email: '', password: '', marketingEmailsOptIn: true,
-  });
-  const [errors, setErrors] = useState({});
-  const [errorCode, setErrorCode] = useState({ type: '', count: 0 });
-  const [userPipelineDataLoaded, setUserPipelineDataLoaded] = useState(false);
-
   const emailRef = useRef(null);
   const registerErrorAlertRef = useRef(null);
   const socialAuthButtonRef = useRef(null);
@@ -83,6 +77,8 @@ const RegistrationForm = () => {
   const { subjectsList, subjectsLoading } = useSubjectsList();
 
   const registrationResult = useSelector(state => state.register.registrationResult);
+
+  const backedUpFormData = useSelector(state => state.register.registrationFormData);
 
   const onboardingComponentContext = useSelector(state => state.commonData.onboardingComponentContext);
   const thirdPartyAuthApiStatus = useSelector(state => state.commonData.thirdPartyAuthApiStatus);
@@ -97,6 +93,11 @@ const RegistrationForm = () => {
   const registrationErrorCode = registrationError?.errorCode;
   const backendValidations = useSelector(getBackendValidations);
   const submitState = useSelector(state => state.register.submitState);
+
+  const [formFields, setFormFields] = useState({ ...backedUpFormData.formFields });
+  const [errors, setErrors] = useState({ ...backedUpFormData.errors });
+  const [errorCode, setErrorCode] = useState({ type: '', count: 0 });
+  const [userPipelineDataLoaded, setUserPipelineDataLoaded] = useState(false);
 
   const autoSubmitRegForm = (currentProvider
       && thirdPartyAuthApiStatus === COMPLETE_STATE
@@ -115,7 +116,7 @@ const RegistrationForm = () => {
         removeCookie('marketingEmailsOptIn');
         removeCookie('ssoPipelineRedirectionDone');
       }
-      if (pipelineUserDetails && Object.keys(pipelineUserDetails).length !== 0) {
+      if (pipelineUserDetails && Object.keys(pipelineUserDetails).length !== 0 && !backedUpFormData.isFormFilled) {
         const {
           name = '', email = '',
         } = pipelineUserDetails;
@@ -220,6 +221,15 @@ const RegistrationForm = () => {
     setErrors(prevErrors => ({
       ...prevErrors,
       [fieldName]: error,
+    }));
+  };
+
+  const backupFormDataHandler = () => {
+    dispatch(backupRegistrationForm({
+      ...backedUpFormData,
+      isFormFilled: true,
+      formFields: { ...formFields },
+      errors: { ...errors },
     }));
   };
 
@@ -410,6 +420,7 @@ const RegistrationForm = () => {
                 className="mb-2"
                 onClick={() => {
                   trackLoginFormToggled();
+                  backupFormDataHandler();
                   dispatch(clearAllRegistrationErrors());
                   dispatch(setCurrentOpenedForm(LOGIN_FORM));
                 }}

@@ -21,6 +21,14 @@ export const loginInitialState = {
   isLoginSSOIntent: false,
   loginError: {},
   loginResult: {},
+  loginFormData: {
+    formFields: {
+      emailOrUsername: '', password: '',
+    },
+    errors: {
+      emailOrUsername: '', password: '',
+    },
+  },
   showResetPasswordSuccessBanner: false,
 };
 
@@ -59,6 +67,9 @@ export const loginSlice = createSlice({
     setLoginSSOIntent: (state) => {
       state.isLoginSSOIntent = true;
     },
+    backupLoginForm: (state, { payload }) => {
+      state.loginFormData = payload;
+    },
   },
 });
 
@@ -69,6 +80,7 @@ export const {
   loginUserFailed,
   setShowPasswordResetBanner,
   setLoginSSOIntent,
+  backupLoginForm,
 } = loginSlice.actions;
 
 export default loginSlice.reducer;
