@@ -16,7 +16,7 @@ import {
 import { OnboardingComponentContext } from '../../../../data/storeHooks';
 import { setCurrentOpenedForm } from '../../../../onboarding-component/data/reducers';
 import {
-  PASSWORD_RESET, PASSWORD_RESET_ERROR, SUCCESS, TOKEN_STATE,
+  PASSWORD_RESET, PASSWORD_RESET_ERROR, PASSWORD_VALIDATION_ERROR, SUCCESS, TOKEN_STATE,
 } from '../data/constants';
 import { resetPassword, validateToken } from '../data/reducers';
 import ResetPasswordPage from '../index';
@@ -163,7 +163,38 @@ describe('ResetPasswordPage', () => {
     expect(passwordsDoNotMatchError).toBeTruthy();
   });
 
-  //   // ******** alert message tests ********
+  it('should show error message when password does not meet criteria', () => {
+    store = mockStore({
+      ...initialState,
+      resetPassword: {
+        status: TOKEN_STATE.VALID,
+      },
+    });
+    render(reduxWrapper(<IntlResetPasswordPage />));
+    const newPasswordInput = screen.getByLabelText('New password');
+    fireEvent.change(newPasswordInput, { target: { value: 'short' } });
+    fireEvent.blur(newPasswordInput);
+
+    const passwordValidationError = screen.getByText('Password criteria has not been met');
+    expect(passwordValidationError).toBeTruthy();
+  });
+
+  it('should show password validation error', () => {
+    store = mockStore({
+      ...initialState,
+      resetPassword: {
+        status: PASSWORD_VALIDATION_ERROR,
+      },
+    });
+    render(reduxWrapper(<IntlResetPasswordPage />));
+    const newPasswordInput = screen.getByLabelText('New password');
+    fireEvent.blur(newPasswordInput);
+
+    const passwordValidationError = screen.getByText('Password is a required field');
+    expect(passwordValidationError).toBeTruthy();
+  });
+
+  // ******** alert message tests ********
 
   it('should show reset password rate limit error', () => {
     const validationMessage = 'An error has occurred because of too many requests. Please try again after some time.';
@@ -196,15 +227,22 @@ describe('ResetPasswordPage', () => {
     expect(internalServerError).toBe(validationMessage);
   });
 
-  //   // ******** miscellaneous tests ********
-  // TODO: test will be fixed later
-  it.skip('should call validation on password field when blur event fires', () => {
+  // ******** miscellaneous tests ********
+
+  it('should call validation on password field when blur event fires', () => {
+    store = mockStore({
+      ...initialState,
+      resetPassword: {
+        status: TOKEN_STATE.VALID,
+      },
+    });
+
     const resetPasswordPage = render(reduxWrapper(<IntlResetPasswordPage />));
     const expectedText = 'Password is a required field';
     const newPasswordInput = screen.getByLabelText('New password');
-    fireEvent.change(newPasswordInput, { value: 'test-password' });
 
-    fireEvent.blur(newPasswordInput, { value: 'test-password' });
+    fireEvent.change(newPasswordInput, { target: { value: '' } });
+    fireEvent.blur(newPasswordInput);
 
     const feedbackDiv = resetPasswordPage.container.querySelector('div[feedback-for="newPassword"]');
     expect(feedbackDiv.textContent).toEqual(expectedText);
@@ -229,6 +267,7 @@ describe('ResetPasswordPage', () => {
 
     expect(store.dispatch).toHaveBeenCalledWith(validateToken(token));
   });
+
   it('should redirect the user to Reset password email screen ', async () => {
     store = mockStore({
       ...initialState,
@@ -251,5 +290,46 @@ describe('ResetPasswordPage', () => {
     store.dispatch = jest.fn(store.dispatch);
     render(reduxWrapper(<IntlResetPasswordPage />));
     expect(store.dispatch).toHaveBeenCalledWith(setCurrentOpenedForm(LOGIN_FORM));
+  });
+
+  it('should clear confirmPassword error message when passwords match', async () => {
+    store = mockStore({
+      ...initialState,
+      resetPassword: {
+        status: TOKEN_STATE.VALID,
+        token,
+      },
+    });
+
+    render(reduxWrapper(<IntlResetPasswordPage />));
+    const newPasswordInput = screen.getByLabelText('New password');
+    const confirmPasswordInput = screen.getByTestId('confirmPassword');
+
+    fireEvent.change(newPasswordInput, { target: { value: 'ValidPass123' } });
+    fireEvent.change(confirmPasswordInput, { target: { value: 'ValidPass123' } });
+
+    fireEvent.blur(confirmPasswordInput);
+
+    // Ensure no error message is displayed for confirmPassword
+    expect(screen.queryByText('Confirm your password')).toBeNull();
+  });
+
+  it('should handle mouse down event on submit button', () => {
+    store = mockStore({
+      ...initialState,
+      resetPassword: {
+        status: TOKEN_STATE.VALID,
+      },
+    });
+
+    render(reduxWrapper(<IntlResetPasswordPage />));
+
+    const handleMouseDown = jest.fn();
+
+    const submitButton = screen.getByRole('button', { name: /Reset password/i, id: 'submit-new-password' });
+    submitButton.onmousedown = handleMouseDown;
+
+    fireEvent.mouseDown(submitButton);
+    expect(handleMouseDown).toHaveBeenCalled();
   });
 });

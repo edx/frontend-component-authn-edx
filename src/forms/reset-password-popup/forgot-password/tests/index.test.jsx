@@ -127,20 +127,36 @@ describe('ForgotPasswordPage', () => {
     ]));
   });
 
-  // TODO: skipping because failing due to useRef. will be fixed later
-  it.skip('handles COMPLETE_STATE correctly in useEffect', () => {
-    // Update initial state to COMPLETE_STATE
+  it('sets form errors to an empty string and sets success state when status is COMPLETE_STATE', () => {
+    store = mockStore({
+      ...initialState,
+      forgotPassword: {
+        status: DEFAULT_STATE,
+        forgotPasswordFormData: {
+          email: '',
+          error: 'Some error',
+        },
+      },
+    });
+
+    const { rerender } = render(reduxWrapper(<IntlForgotPasswordPage />));
+
+    // Update the state to COMPLETE_STATE and rerender
     store = mockStore({
       ...initialState,
       forgotPassword: {
         status: COMPLETE_STATE,
+        forgotPasswordFormData: {
+          email: 'test@example.com',
+          error: '',
+        },
       },
     });
 
-    render(reduxWrapper(<IntlForgotPasswordPage />));
+    rerender(reduxWrapper(<IntlForgotPasswordPage />));
 
-    const emailInput = screen.queryByLabelText('Email');
-    expect(emailInput).toBeNull();
+    // Check if isSuccess is true
+    expect(screen.getByText('Email has been sent')).toBeTruthy();
   });
 
   it('dispatches forgotPassword action with valid email on form submission', () => {

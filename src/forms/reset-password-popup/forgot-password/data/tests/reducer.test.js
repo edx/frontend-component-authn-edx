@@ -12,6 +12,8 @@ import forgotPasswordReducer, {
   forgotPasswordForbidden,
   forgotPasswordInitialState,
   forgotPasswordSuccess,
+  forgotPasswordTokenInvalidFailure,
+  setForgotPasswordFormData,
 } from '../reducers';
 
 describe('forgotPasswordSlice reducer', () => {
@@ -42,5 +44,17 @@ describe('forgotPasswordSlice reducer', () => {
   it('should handle forgotPasswordClearStatus action', () => {
     const nextState = forgotPasswordReducer(forgotPasswordInitialState, forgotPasswordClearStatus(PENDING_STATE));
     expect(nextState.status).toEqual(DEFAULT_STATE);
+  });
+
+  it('should handle forgotPasswordTokenInvalidFailure action', () => {
+    const payload = 'INVALID_TOKEN';
+    const nextState = forgotPasswordReducer(forgotPasswordInitialState, forgotPasswordTokenInvalidFailure(payload));
+    expect(nextState.status).toEqual(payload);
+  });
+
+  it('should handle setForgotPasswordFormData action', () => {
+    const payload = { email: 'test@example.com', error: 'Some error' };
+    const nextState = forgotPasswordReducer(forgotPasswordInitialState, setForgotPasswordFormData(payload));
+    expect(nextState.forgotPasswordFormData).toEqual(payload);
   });
 });

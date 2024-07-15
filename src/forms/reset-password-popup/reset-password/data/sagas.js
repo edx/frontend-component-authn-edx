@@ -15,7 +15,7 @@ import {
 } from './reducers';
 import { resetPasswordRequest, validatePasswordRequest, validateTokenRequest } from './service';
 import { setShowPasswordResetBanner } from '../../../login-popup/data/reducers';
-import { forgotPassweordTokenInvalidFailure } from '../../forgot-password/data/reducers';
+import { forgotPasswordTokenInvalidFailure } from '../../forgot-password/data/reducers';
 
 // Services
 export function* handleValidateToken(action) {
@@ -27,16 +27,16 @@ export function* handleValidateToken(action) {
       yield put(validateTokenSuccess(isValid, action.payload));
     } else {
       yield put(validateTokenFailed(PASSWORD_RESET.INVALID_TOKEN));
-      yield put(forgotPassweordTokenInvalidFailure(PASSWORD_RESET.INVALID_TOKEN));
+      yield put(forgotPasswordTokenInvalidFailure(PASSWORD_RESET.INVALID_TOKEN));
     }
   } catch (err) {
     if (err.response && err.response.status === 429) {
       yield put(validateTokenFailed(PASSWORD_RESET.FORBIDDEN_REQUEST));
-      yield put(forgotPassweordTokenInvalidFailure(PASSWORD_RESET.FORBIDDEN_REQUEST));
+      yield put(forgotPasswordTokenInvalidFailure(PASSWORD_RESET.FORBIDDEN_REQUEST));
       logInfo(err);
     } else {
       yield put(validateTokenFailed(PASSWORD_RESET.INTERNAL_SERVER_ERROR));
-      yield put(forgotPassweordTokenInvalidFailure(PASSWORD_RESET.INTERNAL_SERVER_ERROR));
+      yield put(forgotPasswordTokenInvalidFailure(PASSWORD_RESET.INTERNAL_SERVER_ERROR));
       logError(err);
     }
   }
@@ -70,7 +70,7 @@ export function* handleResetPassword(action) {
       yield put(resetPasswordFailure({
         status: PASSWORD_RESET.INVALID_TOKEN,
       }));
-      yield put(forgotPassweordTokenInvalidFailure(PASSWORD_RESET.INVALID_TOKEN));
+      yield put(forgotPasswordTokenInvalidFailure(PASSWORD_RESET.INVALID_TOKEN));
     } else {
       yield put(resetPasswordFailure({
         status: PASSWORD_VALIDATION_ERROR,
