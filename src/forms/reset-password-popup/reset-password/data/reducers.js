@@ -16,7 +16,7 @@ export const REGISTER_SLICE_NAME = 'resetPassword';
 
 export const resetPasswordInitialState = {
   tokenValidationState: DEFAULT_STATE,
-  resetPasswordsubmitState: DEFAULT_STATE,
+  resetPasswordSubmitState: DEFAULT_STATE,
   status: TOKEN_STATE.PENDING,
   token: null,
   errorMsg: null,
@@ -44,15 +44,15 @@ export const resetPasswordSlice = createSlice({
     },
     resetPassword: (state) => {
       state.status = PENDING_STATE;
-      state.resetPasswordsubmitState = PENDING_STATE;
+      state.resetPasswordSubmitState = PENDING_STATE;
     },
     resetPasswordSuccess: (state) => {
       state.status = SUCCESS;
-      state.resetPasswordsubmitState = COMPLETE_STATE;
+      state.resetPasswordSubmitState = COMPLETE_STATE;
     },
     resetPasswordFailure: (state, { payload }) => {
       state.status = payload.status;
-      state.resetPasswordsubmitState = FAILURE_STATE;
+      state.resetPasswordSubmitState = FAILURE_STATE;
       state.errorMsg = payload.errorMsg;
     },
     validatePassword: (state) => {

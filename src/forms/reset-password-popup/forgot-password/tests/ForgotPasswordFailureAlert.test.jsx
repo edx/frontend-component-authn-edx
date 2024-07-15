@@ -5,6 +5,7 @@ import { render } from '@testing-library/react';
 
 import { FORBIDDEN_STATE, INTERNAL_SERVER_ERROR } from '../../../../data/constants';
 import messages from '../../messages';
+import { PASSWORD_RESET } from '../../reset-password/data/constants';
 import ForgotPasswordFailureAlert from '../ForgotPasswordFailureAlert';
 
 const IntlForgotPasswordFailureAlert = injectIntl(ForgotPasswordFailureAlert);
@@ -90,6 +91,23 @@ describe('ForgotPasswordFailureAlert', () => {
     );
 
     const expectedMessage = messages.forgotPasswordExtendFieldErrors.defaultMessage.replace('{emailError}', 'Enter a valid email address');
+
+    expect(container.querySelector('#forgot-password-failure-alert').textContent).toBe(expectedMessage);
+  });
+
+  it('should match invalid token error message', () => {
+    props = {
+      status: PASSWORD_RESET.INVALID_TOKEN,
+      emailError: '',
+    };
+
+    const { container } = render(
+      <IntlProvider locale="en">
+        <IntlForgotPasswordFailureAlert {...props} />
+      </IntlProvider>,
+    );
+
+    const expectedMessage = messages['invalid.token.error.message'].defaultMessage;
 
     expect(container.querySelector('#forgot-password-failure-alert').textContent).toBe(expectedMessage);
   });

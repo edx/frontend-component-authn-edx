@@ -10,7 +10,7 @@ const ResetPasswordSuccess = () => {
 
   return (
     <Alert id="reset-password-success" variant="success" className="mb-5">
-      <p>{formatMessage(messages.resetPassowrdSuccess)}</p>
+      <p>{formatMessage(messages.resetPasswordSuccess)}</p>
     </Alert>
   );
 };

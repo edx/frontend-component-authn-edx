@@ -44,7 +44,7 @@ export const forgotPasswordSlice = createSlice({
     forgotPasswordClearStatus: (state) => {
       state.status = DEFAULT_STATE;
     },
-    forgotPassweordTokenInvalidFailure: (state, { payload }) => {
+    forgotPasswordTokenInvalidFailure: (state, { payload }) => {
       state.status = payload;
     },
     setForgotPasswordFormData: (state, { payload }) => {
@@ -59,7 +59,7 @@ export const {
   forgotPasswordForbidden,
   forgotPasswordFailed,
   forgotPasswordClearStatus,
-  forgotPassweordTokenInvalidFailure,
+  forgotPasswordTokenInvalidFailure,
   setForgotPasswordFormData,
 } = forgotPasswordSlice.actions;
 

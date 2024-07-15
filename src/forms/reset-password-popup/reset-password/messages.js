@@ -7,7 +7,7 @@ const messages = defineMessages({
     defaultMessage: 'Please check your responses and try again.',
     description: 'Error message for reset password page',
   },
-  resetPassowrdSuccess: {
+  resetPasswordSuccess: {
     id: 'reset.password.success',
     defaultMessage: 'Your password has been reset. Sign in to your account.',
     description: 'Reset password success message',
