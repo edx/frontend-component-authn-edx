@@ -23,6 +23,7 @@ initialize({
   handlers: {
     config: () => {
       mergeConfig({
+        AUTHN_MFE_URL: process.env.AUTHN_MFE_URL || '',
         ON_BOARDING_ALGOLIA_APP_ID: process.env.ON_BOARDING_ALGOLIA_APP_ID || '',
         ON_BOARDING_ALGOLIA_SEARCH_API_KEY: process.env.ON_BOARDING_ALGOLIA_SEARCH_API_KEY || '',
         INFO_EMAIL: process.env.INFO_EMAIL || '',
@@ -32,6 +33,7 @@ initialize({
         PRIVACY_POLICY: process.env.PRIVACY_POLICY || '',
         TOS_AND_HONOR_CODE: process.env.TOS_AND_HONOR_CODE || '',
         USER_RETENTION_COOKIE_NAME: process.env.USER_RETENTION_COOKIE_NAME || '',
+        ENABLE_POST_REGISTRATION_RECOMMENDATIONS: process.env.ENABLE_POST_REGISTRATION_RECOMMENDATIONS || false,
       });
     },
   },
