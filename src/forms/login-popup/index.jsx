@@ -61,6 +61,7 @@ const LoginForm = () => {
   const loginFormHeadingRef = useRef(null);
   const isEditingFieldRef = useRef(false);
 
+  const onboardingComponentContext = useSelector(state => state.commonData.onboardingComponentContext);
   const loginResult = useSelector(state => state.login.loginResult);
   const backedUpFormData = useSelector(state => state.login.loginFormData);
   const loginErrorCode = useSelector(state => state.login.loginError?.errorCode);
@@ -216,6 +217,7 @@ const LoginForm = () => {
 
     // add query params to the payload
     const payload = {
+      ...onboardingComponentContext,
       ...snakeCaseObject(formFields),
       ...queryParams,
     };
