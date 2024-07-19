@@ -34,6 +34,10 @@ const initialState = {
   },
 };
 
+jest.mock('@edx/frontend-platform/auth', () => ({
+  getAuthenticatedUser: jest.fn(),
+}));
+
 describe('ForgotPasswordPage', () => {
   let store = {};
 
