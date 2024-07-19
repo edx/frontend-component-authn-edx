@@ -317,4 +317,41 @@ describe('LoginForm Test', () => {
 
     expect(store.dispatch).toHaveBeenCalledWith(setCurrentOpenedForm(FORGOT_PASSWORD_FORM));
   });
+
+  it('should submit form with only onboarding component context in payload', () => {
+    const onboardingComponentContext = {
+      course_id: 'course-v1:edx+CS101+2024',
+      enrollment_action: 'enroll',
+      email_opt_in: true,
+    };
+
+    store = mockStore({
+      ...initialState,
+      commonData: {
+        ...initialState.commonData,
+        onboardingComponentContext,
+      },
+    });
+
+    store.dispatch = jest.fn(store.dispatch);
+
+    const { container } = render(reduxWrapper(<IntlLoginForm />));
+
+    const usernameInput = container.querySelector('#emailOrUsername');
+    const passwordInput = container.querySelector('#password');
+    const loginButton = container.querySelector('#login-user');
+
+    fireEvent.change(usernameInput, { target: { value: 'test', name: 'emailOrUsername' } });
+    fireEvent.change(passwordInput, { target: { value: 'test-password', name: 'password' } });
+    fireEvent.click(loginButton);
+
+    expect(store.dispatch).toHaveBeenCalledWith(loginUser({
+      course_id: 'course-v1:edx+CS101+2024',
+      enrollment_action: 'enroll',
+      email_opt_in: true,
+      email_or_username: 'test',
+      password: 'test-password',
+      next: '/redirect',
+    }));
+  });
 });
