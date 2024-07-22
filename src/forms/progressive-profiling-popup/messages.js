@@ -36,10 +36,9 @@ const messages = defineMessages({
     defaultMessage: 'Select a valid option',
     description: 'Error text appers on the country field when country is not selected and the user submit the form',
   },
-  // TODO update error message copy here when design team will provide it
   progressiveProfilingCountryFieldBlockingErrorMessage: {
     id: 'progressive.profiling.country.field.error.message',
-    defaultMessage: 'To proceed, please save your country of residence',
+    defaultMessage: 'Please click "Submit" to save changes in "Country of residence" field.',
     description: 'Error msg for country field when the user country is not detected on registration step and user want to skip progressive profiling form',
   },
   progressiveProfilingDataCollectionTitle: {
