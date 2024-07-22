@@ -2,7 +2,6 @@ import React from 'react';
 import { Provider } from 'react-redux';
 
 import { getConfig } from '@edx/frontend-platform';
-import { identifyAuthenticatedUser } from '@edx/frontend-platform/analytics';
 import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
 import { getLocale, injectIntl, IntlProvider } from '@edx/frontend-platform/i18n';
 import { fireEvent, render, screen } from '@testing-library/react';
@@ -82,13 +81,6 @@ describe('ProgressiveProfilingForm Test', () => {
 
   afterEach(() => {
     jest.clearAllMocks();
-  });
-
-  it('should make identify call to segment on progressive profiling page', () => {
-    render(reduxWrapper(<IntlProgressiveProfilingForm />));
-
-    expect(identifyAuthenticatedUser).toHaveBeenCalledWith(1);
-    expect(identifyAuthenticatedUser).toHaveBeenCalled();
   });
 
   it('should render progressive profiling form', () => {

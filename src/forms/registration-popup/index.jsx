@@ -3,6 +3,7 @@ import React, {
 } from 'react';
 
 import { getConfig, snakeCaseObject } from '@edx/frontend-platform';
+import { identifyAuthenticatedUser } from '@edx/frontend-platform/analytics';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
   breakpoints, Container, Form, Spinner, StatefulButton, useMediaQuery,
@@ -183,6 +184,8 @@ const RegistrationForm = () => {
 
   useEffect(() => {
     if (registrationResult.success) {
+      identifyAuthenticatedUser(registrationResult?.authenticatedUser?.userId);
+
       removeCookie('ssoPipelineRedirectionDone');
       removeCookie('marketingEmailsOptIn');
 
