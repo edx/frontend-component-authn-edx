@@ -312,4 +312,24 @@ describe('ProgressiveProfilingForm Test', () => {
 
     expect(window.location.href).not.toEqual('http://example.com');
   });
+
+  it('should display blocking error message and not redirect if country field is not set', async () => {
+    const { container, getByText } = render(reduxWrapper(<IntlProgressiveProfilingForm />));
+
+    // Ensure the form is initially rendered
+    expect(screen.getByTestId('progressive-profiling-heading')).toBeTruthy();
+    const countryInput = container.querySelector('#country');
+    fireEvent.click(countryInput);
+    const countryDropdownItem = container.querySelector('.dropdown-item');
+    fireEvent.click(countryDropdownItem);
+
+    const skipButton = container.querySelector('#skip-optional-fields');
+    jest.useFakeTimers();
+    await act(async () => {
+      fireEvent.click(skipButton);
+      jest.runAllTimers();
+    });
+
+    expect(getByText('Please click "Submit" to save changes in "Country of residence" field.')).toBeTruthy();
+  });
 });

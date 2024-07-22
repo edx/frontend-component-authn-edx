@@ -168,7 +168,8 @@ const ForgotPasswordForm = () => {
         <ForgotPasswordSuccess email={formFields.email} />
       )}
       <div className="text-center mt-4.5">
-        {loginErrorCode !== REQUIRE_PASSWORD_CHANGE && (
+        {loginErrorCode !== REQUIRE_PASSWORD_CHANGE
+        && loginErrorCode !== NUDGE_PASSWORD_CHANGE && (
           <Button
             id="reset-password-back-to-login"
             name="reset-password-back-to-login"
