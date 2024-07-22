@@ -3,7 +3,6 @@ import React, {
 } from 'react';
 
 import { getConfig, snakeCaseObject } from '@edx/frontend-platform';
-import { identifyAuthenticatedUser } from '@edx/frontend-platform/analytics';
 import {
   AxiosJwtAuthService,
   configure as configureAuth,
@@ -90,7 +89,6 @@ const ProgressiveProfilingForm = () => {
       dispatch(setCurrentOpenedForm(LOGIN_FORM));
     }
     if (authenticatedUser?.userId) {
-      identifyAuthenticatedUser(authenticatedUser?.userId);
       configureAuth(AxiosJwtAuthService, { loggingService: getLoggingService(), config: getConfig() });
       trackProgressiveProfilingPageViewed();
     }

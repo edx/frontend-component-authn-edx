@@ -2,6 +2,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 
 import { getConfig, mergeConfig } from '@edx/frontend-platform';
+import { identifyAuthenticatedUser } from '@edx/frontend-platform/analytics';
 import { injectIntl, IntlProvider } from '@edx/frontend-platform/i18n';
 import { fireEvent, render, waitFor } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
@@ -456,5 +457,26 @@ describe('RegistrationForm Test', () => {
 
     render(reduxWrapper(<IntlRegistrationForm />));
     expect(document.cookie).toMatch(`${getConfig().USER_RETENTION_COOKIE_NAME}=true`);
+  });
+
+  it('should make identify call to segment on registration success', () => {
+    store = mockStore({
+      ...initialState,
+      register: {
+        ...initialState.register,
+        registrationResult: {
+          success: true,
+          authenticatedUser: {
+            username: 'john_doe',
+            userId: 1,
+          },
+        },
+      },
+    });
+
+    render(reduxWrapper(<IntlRegistrationForm />));
+
+    expect(identifyAuthenticatedUser).toHaveBeenCalledWith(1);
+    expect(identifyAuthenticatedUser).toHaveBeenCalled();
   });
 });
