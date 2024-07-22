@@ -4,8 +4,10 @@ import { ModalDialog } from '@openedx/paragon';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
-import { useDispatch } from '../data/storeHooks';
+import { FORGOT_PASSWORD_FORM } from '../data/constants';
+import { useDispatch, useSelector } from '../data/storeHooks';
 import { deleteQueryParams } from '../data/utils';
+import { NUDGE_PASSWORD_CHANGE } from '../forms/login-popup/data/constants';
 import { loginErrorClear } from '../forms/login-popup/data/reducers';
 import { clearAllRegistrationErrors } from '../forms/registration-popup/data/reducers';
 import { forgotPasswordClearStatus } from '../forms/reset-password-popup/forgot-password/data/reducers';
@@ -28,10 +30,19 @@ const BaseContainer = ({
   hasCloseButton = true,
   isOpen,
   size = 'lg',
+  currentForm,
 }) => {
   const dispatch = useDispatch();
 
+  const loginErrorResult = useSelector(state => state.login.loginError);
+  const loginErrorCode = useSelector(state => state.login.loginError?.errorCode);
+
   const handleOnClose = () => {
+    if (loginErrorCode === NUDGE_PASSWORD_CHANGE
+      && loginErrorResult.redirectUrl
+      && currentForm === FORGOT_PASSWORD_FORM) {
+      window.location.href = loginErrorResult.redirectUrl;
+    }
     deleteQueryParams(['authMode', 'tpa_hint', 'password_reset_token', 'track']);
     dispatch(forgotPasswordClearStatus());
     dispatch(loginErrorClear());
@@ -70,6 +81,7 @@ BaseContainer.propTypes = {
   close: PropTypes.func.isRequired,
   size: PropTypes.string,
   hasCloseButton: PropTypes.bool,
+  currentForm: PropTypes.string.isRequired,
 };
 
 export default BaseContainer;

@@ -53,10 +53,11 @@ export const loginSlice = createSlice({
         errorCode,
         email,
         value,
+        redirectUrl,
       } = payload;
 
       const errorContext = { ...context, email, errorMessage: value };
-      state.loginError = { errorCode, errorContext };
+      state.loginError = { errorCode, errorContext, redirectUrl };
       state.loginResult = {};
       state.submitState = FAILURE_STATE;
     },

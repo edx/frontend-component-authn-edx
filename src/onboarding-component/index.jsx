@@ -141,6 +141,7 @@ export const OnBoardingComponent = ({
       close={close}
       hasCloseButton={hasCloseButton}
       size={screenSize}
+      currentForm={currentForm}
     >
       {pendingState
         ? getSpinner()
