@@ -2,9 +2,10 @@ import React from 'react';
 import { Provider } from 'react-redux';
 
 import { mergeConfig } from '@edx/frontend-platform';
-import { getAuthenticatedUser } from '@edx/frontend-platform/auth';
+import { fetchAuthenticatedUser, getAuthenticatedUser } from '@edx/frontend-platform/auth';
 import { getLocale, injectIntl, IntlProvider } from '@edx/frontend-platform/i18n';
 import { render } from '@testing-library/react';
+import { act } from 'react-dom/test-utils';
 import { MemoryRouter } from 'react-router-dom';
 import configureStore from 'redux-mock-store';
 
@@ -31,6 +32,7 @@ jest.mock('@edx/frontend-platform/react', () => ({
 }));
 jest.mock('@edx/frontend-platform/auth', () => ({
   getAuthenticatedUser: jest.fn(),
+  fetchAuthenticatedUser: jest.fn(),
 }));
 jest.mock('@edx/frontend-platform/analytics', () => ({
   sendTrackEvent: jest.fn(),
@@ -104,6 +106,7 @@ describe('OnBoardingComponent Test', () => {
   beforeEach(() => {
     store = mockStore(initialState);
     window.history.replaceState = jest.fn();
+    fetchAuthenticatedUser.mockReturnValueOnce(Promise.resolve(null));
     mergeConfig({
       TOS_AND_HONOR_CODE: process.env.TOS_AND_HONOR_CODE,
       PRIVACY_POLICY: process.env.PRIVACY_POLICY,
@@ -325,5 +328,32 @@ describe('OnBoardingComponent Test', () => {
     window.location = { href: 'localhost:2999/login', search: '?tpa_hint=oa2-apple-id' };
     const { getByTestId } = render(reduxWrapper(<IntlOnBoardingComponent isOpen close={() => {}} />));
     expect(getByTestId('tpa-spinner')).toBeTruthy();
+  });
+
+  it('should have called with forceRefresh true', async () => {
+    const user = {
+      username: 'gonzo',
+      other: 'data',
+    };
+
+    getAuthenticatedUser.mockReturnValue(user);
+    fetchAuthenticatedUser.mockResolvedValueOnce(user);
+
+    await act(async () => {
+      await render(reduxWrapper(<IntlOnBoardingComponent isOpen close={() => {}} />));
+    });
+
+    expect(fetchAuthenticatedUser).toBeCalledWith({ forceRefresh: true });
+  });
+
+  it('should have called with forceRefresh false', async () => {
+    getAuthenticatedUser.mockReturnValue(null);
+    fetchAuthenticatedUser.mockResolvedValueOnce(null);
+
+    await act(async () => {
+      await render(reduxWrapper(<IntlOnBoardingComponent isOpen close={() => {}} />));
+    });
+
+    expect(fetchAuthenticatedUser).toBeCalledWith({ forceRefresh: false });
   });
 });

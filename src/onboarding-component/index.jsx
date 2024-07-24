@@ -1,10 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
+import { getConfig } from '@edx/frontend-platform';
+import { fetchAuthenticatedUser, getAuthenticatedUser } from '@edx/frontend-platform/auth';
 import { breakpoints, Spinner, useMediaQuery } from '@openedx/paragon';
 import PropTypes from 'prop-types';
 
 import { getThirdPartyAuthContext, setCurrentOpenedForm, setOnboardingComponentContext } from './data/reducers';
-import validateContextData from './data/utils';
+import validateContextData, { objectToQueryString } from './data/utils';
 import BaseContainer from '../base-container';
 import {
   ENTERPRISE_LOGIN,
@@ -44,12 +46,14 @@ export const OnBoardingComponent = ({
   isOpen, close, context = null, formToRender,
 }) => {
   const dispatch = useDispatch();
+
   const queryParams = useMemo(() => getAllPossibleQueryParams(), []);
 
   const isExtraSmall = useMediaQuery({ maxWidth: breakpoints.extraSmall.maxWidth - 1 });
 
   const [screenSize, setScreenSize] = useState('lg');
   const [hasCloseButton, setHasCloseButton] = useState(true);
+  const [isAuthenticatedUser, setIsAuthenticatedUser] = useState(null);
 
   const currentForm = useSelector(state => state.commonData.currentForm);
   const providers = useSelector(state => state.commonData.thirdPartyAuthContext?.providers);
@@ -103,9 +107,20 @@ export const OnBoardingComponent = ({
     if (context) {
       validatedContext = validateContextData(context);
     }
+    if (isAuthenticatedUser) {
+      const queryParamString = objectToQueryString({ ...validatedContext, ...queryParams });
+      const formUrl = formToRender === REGISTRATION_FORM ? 'register' : formToRender;
+      window.location.href = `${getConfig().LMS_BASE_URL}/${formUrl}?${queryParamString}`;
+    }
     dispatch(setOnboardingComponentContext(validatedContext));
     dispatch(getThirdPartyAuthContext({ ...validatedContext, ...queryParams }));
-  }, [context, dispatch, queryParams]);
+  }, [context, dispatch, queryParams, isAuthenticatedUser, formToRender]);
+
+  useEffect(() => {
+    fetchAuthenticatedUser({ forceRefresh: !!getAuthenticatedUser() }).then((authenticatedUser) => {
+      setIsAuthenticatedUser(authenticatedUser);
+    });
+  }, []);
 
   const getForm = () => {
     if (currentForm === ENTERPRISE_LOGIN) {
