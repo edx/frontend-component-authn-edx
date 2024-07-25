@@ -76,6 +76,7 @@ const OnBoardingExampleContainer = () => {
       <SignUpComponent
         close={setSignUpFormClose}
         isOpen={isSignUpFormOpen}
+        context={{}}
       />
       <SignInComponent
         close={setSignInFormClose}
