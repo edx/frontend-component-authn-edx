@@ -26,7 +26,7 @@ import {
 } from '../../data/constants';
 import { getCountryCookieValue } from '../../data/cookies';
 import { useDispatch, useSelector } from '../../data/storeHooks';
-import { moveScrollToTop } from '../../data/utils';
+import getAllPossibleQueryParams, { moveScrollToTop } from '../../data/utils';
 import { setCurrentOpenedForm } from '../../onboarding-component/data/reducers';
 import {
   trackProgressiveProfilingPageViewed,
@@ -52,6 +52,9 @@ const ProgressiveProfilingForm = () => {
 
   const countryCookieValue = getCountryCookieValue();
   const countryList = useMemo(() => getCountryList(getLocale()), []);
+  const queryParams = useMemo(() => getAllPossibleQueryParams(), []);
+  const showRecommendations = getConfig().ENABLE_POST_REGISTRATION_RECOMMENDATIONS
+    && !('enrollment_action' in queryParams || queryParams?.next);
 
   const submitState = useSelector(state => state.progressiveProfiling.submitState);
   const subjectsList = useSelector(state => state.progressiveProfiling.subjectsList);
@@ -196,6 +199,9 @@ const ProgressiveProfilingForm = () => {
         success={submitState === COMPLETE_STATE}
         redirectUrl={redirectUrl}
         finishAuthUrl={finishAuthUrl}
+        redirectToRecommendationsPage={showRecommendations}
+        educationLevel={formData?.levelOfEducation}
+        country={formData?.country}
         isLinkTracked
       />
       <h1

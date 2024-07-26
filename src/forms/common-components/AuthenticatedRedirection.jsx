@@ -1,7 +1,7 @@
 import { getConfig } from '@edx/frontend-platform';
 import PropTypes from 'prop-types';
 
-import { PROGRESSIVE_PROFILING_FORM } from '../../data/constants';
+import { AUTHN_MFE_RECOMMENDATIONS_PATH, PROGRESSIVE_PROFILING_FORM } from '../../data/constants';
 import { setCookie } from '../../data/cookies';
 import { LINK_TIMEOUT } from '../../data/segment/utils';
 import { useDispatch } from '../../data/storeHooks';
@@ -31,6 +31,9 @@ const AuthenticatedRedirection = ({
   redirectToProgressiveProfilingForm = false,
   success = false,
   isLinkTracked = false,
+  redirectToRecommendationsPage = false,
+  educationLevel = '',
+  country = '',
 }) => {
   const dispatch = useDispatch();
 
@@ -56,6 +59,20 @@ const AuthenticatedRedirection = ({
       dispatch(setCurrentOpenedForm(PROGRESSIVE_PROFILING_FORM));
       return null;
     }
+    // Redirect to authn MFE recommendations after submiting the progressive profiling form
+    if (redirectToRecommendationsPage) {
+      const recommendationsUrl = new URL(`${getConfig().AUTHN_MFE_URL}${AUTHN_MFE_RECOMMENDATIONS_PATH}`);
+      const searchParams = new URLSearchParams();
+
+      searchParams.set('country', country);
+      searchParams.set('finalRedirectUrl', finalRedirectUrl);
+      if (educationLevel) {
+        searchParams.set('levelOfEducation', educationLevel);
+      }
+
+      recommendationsUrl.search = searchParams.toString();
+      finalRedirectUrl = recommendationsUrl.toString();
+    }
 
     if (isLinkTracked) {
       setTimeout(() => { window.location.href = finalRedirectUrl; }, LINK_TIMEOUT);
@@ -71,7 +88,10 @@ AuthenticatedRedirection.propTypes = {
   finishAuthUrl: PropTypes.string,
   success: PropTypes.bool,
   redirectUrl: PropTypes.string,
+  educationLevel: PropTypes.string,
+  country: PropTypes.string,
   redirectToProgressiveProfilingForm: PropTypes.bool,
+  redirectToRecommendationsPage: PropTypes.bool,
   isLinkTracked: PropTypes.bool,
 };
 
