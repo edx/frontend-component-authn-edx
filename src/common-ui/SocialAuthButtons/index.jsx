@@ -33,7 +33,7 @@ export const SocialAuthButton = forwardRef(({
 
   const registrationFields = useSelector(state => state.register.registrationFields);
 
-  // tmporary code for testing
+  // temporary code for testing
   const registrationParams = {
     // ...registrationFields,
     totalRegistrationTime: 0,
@@ -48,19 +48,6 @@ export const SocialAuthButton = forwardRef(({
   const prepareFinalUrl = (url, paramKey, paramValue) => {
     const urlObj = new URL(url, getConfig().LMS_BASE_URL);
     urlObj.searchParams.set(paramKey, paramValue);
-    return urlObj.toString();
-  };
-
-  const updateNextQueryParam = (url) => {
-    const urlObj = new URL(url, getConfig().LMS_BASE_URL);
-    const searchParams = new URLSearchParams(urlObj.search);
-
-    // const existingNextValue = decodeURIComponent(searchParams.get('next'));
-    const existingNextValue = encodeURIComponent(searchParams.get('next'));
-    const newNextValue = `http://localhost:2999/welcome?from_tpa_pipeline=true&next=${existingNextValue}`;
-    // searchParams.set('next', encodeURIComponent(newNextValue));
-    searchParams.set('next', newNextValue);
-    urlObj.search = searchParams.toString();
     return urlObj.toString();
   };
 
@@ -79,8 +66,8 @@ export const SocialAuthButton = forwardRef(({
     if (!isLoginForm) {
       setCookie('marketingEmailsOptIn', registrationFields?.marketingEmailsOptIn);
     }
-    debugger;
-    const url = updateNextQueryParam(e.currentTarget.dataset.providerUrl);
+    // const url = updateNextQueryParam(e.currentTarget.dataset.providerUrl);
+    const url = e.currentTarget.dataset.providerUrl;
     // eslint-disable-next-line max-len
     // const finalUrl = prepareFinalUrl(url, 'marketing_emails_opt_in', registrationFields?.marketingEmailsOptIn.toString());
 
