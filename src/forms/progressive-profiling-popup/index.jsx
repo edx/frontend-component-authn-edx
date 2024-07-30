@@ -58,11 +58,12 @@ const ProgressiveProfilingForm = () => {
 
   const submitState = useSelector(state => state.progressiveProfiling.submitState);
   const subjectsList = useSelector(state => state.progressiveProfiling.subjectsList);
-  const redirectUrl = useSelector(state => state.progressiveProfiling.redirectUrl);
+  const redirectURL = useSelector(state => state.progressiveProfiling.redirectUrl);
   const authContextCountryCode = useSelector(state => state.commonData.thirdPartyAuthContext.countryCode);
   const finishAuthUrl = useSelector(state => state.commonData.thirdPartyAuthContext.finishAuthUrl);
   const authUser = useSelector(state => state.register.registrationResult.authenticatedUser);
 
+  const [redirectUrl, setRedirectUrl] = React.useState(redirectURL);
   const [formData, setFormData] = useState({});
   const [formErrors, setFormErrors] = useState({});
   const [autoFilledCountry, setAutoFilledCountry] = useState({ value: '', displayText: '' });
@@ -70,6 +71,7 @@ const ProgressiveProfilingForm = () => {
   const [authConfigured, setAuthConfigured] = useState(false);
   const [authenticatedUser, setAuthenticatedUser] = useState(authUser);
   const [isUserFetchingCompleted, setIsUserFetchingCompleted] = useState(false);
+  const isRedirectedFromSSOPipeline = !!queryParams?.from_tpa_pipeline && !!queryParams?.next;
 
   // const loadAuthenticatedUser = () => {
   //   if (queryParams?.from_tpa_pipeline) {
@@ -78,6 +80,13 @@ const ProgressiveProfilingForm = () => {
   //   return authUser;
   // };
   // const authenticatedUser = loadAuthenticatedUser();
+
+  useEffect(() => {
+    if (isRedirectedFromSSOPipeline) {
+      console.log({ queryParams, url: `${getConfig().LMS_BASE_URL}${queryParams?.next}` });
+      setRedirectUrl(`${getConfig().LMS_BASE_URL}${queryParams?.next}`);
+    }
+  }, [queryParams]);
 
   console.log('authUser = ', authUser);
   console.log('getAuthenticatedUser = ', getAuthenticatedUser());
@@ -231,7 +240,7 @@ const ProgressiveProfilingForm = () => {
       moveScrollToTop(countryFieldRef);
     } else if (hasCountry) {
       let finalRedirectUrl = redirectUrl;
-      if (finishAuthUrl && !redirectUrl.includes(finishAuthUrl)) {
+      if (!isRedirectedFromSSOPipeline && finishAuthUrl && !redirectUrl.includes(finishAuthUrl)) {
         finalRedirectUrl = getConfig().LMS_BASE_URL + finishAuthUrl;
       }
       trackProgressiveProfilingSkipLinkClick(finalRedirectUrl)(e);
@@ -245,6 +254,7 @@ const ProgressiveProfilingForm = () => {
         redirectUrl={redirectUrl}
         finishAuthUrl={finishAuthUrl}
         isLinkTracked
+        shouldUseRedirectUrl={isRedirectedFromSSOPipeline}
       />
       <h1
         className="display-1 font-italic text-center mb-4"

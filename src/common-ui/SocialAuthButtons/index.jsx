@@ -51,6 +51,19 @@ export const SocialAuthButton = forwardRef(({
     return urlObj.toString();
   };
 
+  const updateNextQueryParam = (url) => {
+    const urlObj = new URL(url, getConfig().LMS_BASE_URL);
+    const searchParams = new URLSearchParams(urlObj.search);
+
+    // const existingNextValue = decodeURIComponent(searchParams.get('next'));
+    const existingNextValue = encodeURIComponent(searchParams.get('next'));
+    const newNextValue = `http://localhost:2999/welcome?from_tpa_pipeline=true&next=${existingNextValue}`;
+    // searchParams.set('next', encodeURIComponent(newNextValue));
+    searchParams.set('next', newNextValue);
+    urlObj.search = searchParams.toString();
+    return urlObj.toString();
+  };
+
   const {
     id: providerId,
     name: providerName,
@@ -66,10 +79,11 @@ export const SocialAuthButton = forwardRef(({
     if (!isLoginForm) {
       setCookie('marketingEmailsOptIn', registrationFields?.marketingEmailsOptIn);
     }
-
-    const url = e.currentTarget.dataset.providerUrl;
+    debugger;
+    const url = updateNextQueryParam(e.currentTarget.dataset.providerUrl);
     // eslint-disable-next-line max-len
     // const finalUrl = prepareFinalUrl(url, 'marketing_emails_opt_in', registrationFields?.marketingEmailsOptIn.toString());
+
     const finalUrl = prepareFinalUrl(url, 'registration_params', JSON.stringify(registrationParams));
     console.log('final url = ', finalUrl);
     window.location.href = finalUrl;

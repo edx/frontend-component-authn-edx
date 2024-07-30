@@ -107,7 +107,7 @@ export const OnBoardingComponent = ({
     if (context) {
       validatedContext = validateContextData(context);
     }
-    if (isAuthenticatedUser) {
+    if (isAuthenticatedUser && [REGISTRATION_FORM, LOGIN_FORM].includes(formToRender)) {
       const queryParamString = objectToQueryString({ ...validatedContext, ...queryParams });
       const formUrl = formToRender === REGISTRATION_FORM ? 'register' : formToRender;
       window.location.href = `${getConfig().LMS_BASE_URL}/${formUrl}?${queryParamString}`;
