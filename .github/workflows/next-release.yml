@@ -10,4 +10,4 @@ on:
 
 jobs:
   version-check:
-    uses: huniafatima-arbi/.github/.github/workflows/expected-release-version@huniafatima/release-expected-version-workflow
+    uses: huniafatima-arbi/.github/.github/workflows/expected-release-version.yml@huniafatima/release-expected-version-workflow
