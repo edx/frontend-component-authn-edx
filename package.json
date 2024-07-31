@@ -43,7 +43,6 @@
     "@openedx/paragon": "^22.0.0",
     "@redux-devtools/extension": "3.3.0",
     "@reduxjs/toolkit": "^2.2.3",
-    "@semantic-release/exec": "^6.0.3",
     "@testing-library/react": "^12.1.5",
     "@testing-library/react-hooks": "^8.0.1",
     "algoliasearch": "^4.23.3",

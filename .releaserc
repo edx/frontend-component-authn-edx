@@ -15,14 +15,24 @@
   ],
   "analyzeCommits": "@semantic-release/commit-analyzer",
   "generateNotes": "@semantic-release/release-notes-generator",
-  "plugins": [
-      [
-        "@semantic-release/exec",
-        {
-          "verifyReleaseCmd": "echo ${nextRelease.version} > .VERSION"
-        }
-      ]
-    ],
+  "prepare": [
+    {
+      "path": "@semantic-release/npm",
+      "pkgRoot": "dist"
+    }
+  ],
+  "publish": [
+    {
+      "path": "@semantic-release/npm",
+      "pkgRoot": "dist"
+    },
+    {
+      "path": "@semantic-release/github",
+      "assets": {
+        "path": "dist/*"
+      }
+    }
+  ],
   "success": [],
   "fail": []
 }

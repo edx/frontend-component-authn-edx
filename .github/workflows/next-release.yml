@@ -8,25 +8,19 @@ on:
             - master
   
 jobs:
-    pre-release:
+    get-next-version:
         runs-on: ubuntu-latest
         steps:
-        - name: Checkout code
-          uses: actions/checkout@v3
-          with :
-            fetch-depth: 0
-            ref: ${{ github.head_ref }}
-    
-        - name: Setup Node.js environment
-          uses: actions/setup-node@v3
-        - name: Semantic Release dry run
-          id: semantic      
-          run: |
-            OUTPUT=$(unset GITHUB_ACTIONS && npx semantic-release@22 --dry-run --no-ci --branches "${{ github.head_ref }}")
-            VERSION=$(echo "$OUTPUT" | grep -o "The next release version is [0-9]*\.[0-9]*\.[0-9]*" | awk '{print $6}')
-            echo "::set-output name=version::$VERSION"
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            
-        - name: Use the version
-          run: echo "The version is ${{ steps.semantic.outputs.version }}"
+          - uses: actions/checkout@v3
+          - uses: actions/setup-node@v3
+            with:
+              node-version: 16
+          - run: npm ci
+          - run: npx semantic-release --dry-run
+            id: get-next-version
+            env:
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        outputs:
+          new-release-published: ${{ steps.get-next-version.outputs.new-release-published }}
+          new-release-version: ${{ steps.get-next-version.outputs.new-release-version }}
+          new-release-git-tag: ${{ steps.get-next-version.outputs.new-release-git-tag }}
