@@ -3,11 +3,30 @@
 name: Comment release expected version 
 
 on:
-  push:
-    branches:
-    - master
-  pull_request:
-
+    pull_request:
+        branches:
+            - main
+  
 jobs:
-  version-check:
-    uses: huniafatima-arbi/.github/.github/workflows/expected-release-version.yml@huniafatima/release-expected-version-workflow
+    pre-release:
+        runs-on: ubuntu-latest
+        steps:
+        - name: Checkout code
+          uses: actions/checkout@v3
+          with :
+            fetch-depth: 0
+            ref: ${{ github.head_ref }}
+    
+        - name: Setup Node.js environment
+          uses: actions/setup-node@v3
+        - name: Semantic Release dry run
+          id: semantic      
+          run: |
+            OUTPUT=$(unset GITHUB_ACTIONS && npx semantic-release --dry-run --no-ci --branches "${{ github.head_ref }}")
+            VERSION=$(echo "$OUTPUT" | grep -o "The next release version is [0-9]*\.[0-9]*\.[0-9]*" | awk '{print $6}')
+            echo "::set-output name=version::$VERSION"
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            
+        - name: Use the version
+          run: echo "The version is ${{ steps.semantic.outputs.version }}"
