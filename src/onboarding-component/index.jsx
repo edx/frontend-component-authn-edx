@@ -107,7 +107,7 @@ export const OnBoardingComponent = ({
     if (context) {
       validatedContext = validateContextData(context);
     }
-    if (isAuthenticatedUser) {
+    if (isAuthenticatedUser && [REGISTRATION_FORM, LOGIN_FORM].includes(formToRender)) {
       const queryParamString = objectToQueryString({ ...validatedContext, ...queryParams });
       const formUrl = formToRender === REGISTRATION_FORM ? 'register' : formToRender;
       window.location.href = `${getConfig().LMS_BASE_URL}/${formUrl}?${queryParamString}`;
@@ -133,6 +133,7 @@ export const OnBoardingComponent = ({
       return <LoginForm />;
     }
     if (currentForm === PROGRESSIVE_PROFILING_FORM) {
+      console.log('getForm');
       return <ProgressiveProfilingForm />;
     }
     if (currentForm === REGISTRATION_FORM) {
@@ -231,4 +232,8 @@ export const SignUpComponent = (props) => (
  */
 export const ResetPasswordComponent = (props) => (
   <OnBoardingComponentWithProvider {...props} formToRender={RESET_PASSWORD_FORM} />
+);
+
+export const WelcomePageComponent = (props) => (
+  <OnBoardingComponentWithProvider {...props} formToRender={PROGRESSIVE_PROFILING_FORM} />
 );

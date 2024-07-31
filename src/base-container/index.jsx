@@ -43,7 +43,9 @@ const BaseContainer = ({
       && currentForm === FORGOT_PASSWORD_FORM) {
       window.location.href = loginErrorResult.redirectUrl;
     }
-    deleteQueryParams(['authMode', 'tpa_hint', 'password_reset_token', 'track']);
+    deleteQueryParams(
+      ['authMode', 'tpa_hint', 'password_reset_token', 'track', 'from_tpa_pipeline'],
+    );
     dispatch(forgotPasswordClearStatus());
     dispatch(loginErrorClear());
     dispatch(clearAllRegistrationErrors());
