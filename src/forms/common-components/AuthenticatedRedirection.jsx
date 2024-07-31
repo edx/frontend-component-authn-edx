@@ -37,7 +37,6 @@ const AuthenticatedRedirection = ({
 
   if (success) {
     let finalRedirectUrl = '';
-    debugger;
     // If we're in a third party auth pipeline, we must complete the pipeline
     // once user has successfully logged in. Otherwise, redirect to the specified redirect url.
     // Note: For multiple enterprise use case, we need to make sure that user first visits the
@@ -59,9 +58,12 @@ const AuthenticatedRedirection = ({
     }
 
     if (isLinkTracked) {
+      console.log('oct1 before redirect', { finalRedirectUrl });
       setTimeout(() => { window.location.href = finalRedirectUrl; }, LINK_TIMEOUT);
+    } else {
+      console.log('oct2 before redirect', { finalRedirectUrl });
+      window.location.href = finalRedirectUrl;
     }
-    window.location.href = finalRedirectUrl;
   }
 
   return null;

@@ -38,7 +38,7 @@ export const SocialAuthButton = forwardRef(({
     // ...registrationFields,
     totalRegistrationTime: 0,
     app_name: 'onboarding-component',
-    marketing_emails_opt_in: true,
+    marketing_emails_opt_in: false,
   };
 
   if (!provider) {

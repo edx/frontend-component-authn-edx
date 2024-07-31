@@ -254,7 +254,7 @@ const ProgressiveProfilingForm = () => {
         redirectUrl={redirectUrl}
         finishAuthUrl={finishAuthUrl}
         isLinkTracked
-        shouldUseRedirectUrl={isRedirectedFromSSOPipeline}
+        // shouldUseRedirectUrl={isRedirectedFromSSOPipeline}
       />
       <h1
         className="display-1 font-italic text-center mb-4"
