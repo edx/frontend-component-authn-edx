@@ -1,0 +1,13 @@
+# Comment next release
+
+name: Comment release expected version 
+
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+
+jobs:
+  version-check:
+    uses: openedx/.github/.github/workflows/expected-release-version@huniafatima-arbi:huniafatima/release-expected-version-workflow
