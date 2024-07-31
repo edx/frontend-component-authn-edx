@@ -21,18 +21,6 @@
       "pkgRoot": "dist"
     }
   ],
-  "publish": [
-    {
-      "path": "@semantic-release/npm",
-      "pkgRoot": "dist"
-    },
-    {
-      "path": "@semantic-release/github",
-      "assets": {
-        "path": "dist/*"
-      }
-    }
-  ],
   "success": [],
   "fail": []
 }
