@@ -1,6 +1,6 @@
 # Comment next release
 
-name: Comment release expected version 
+name: Comment release - expected version 
 
 on:
   push:
