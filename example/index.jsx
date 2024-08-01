@@ -10,6 +10,7 @@ import {
 
 import './index.scss';
 import OnBoardingExampleContainer from './onboarding-example';
+import messages from '../src/i18n/index';
 
 subscribe(APP_READY, () => {
   ReactDOM.render(
@@ -19,7 +20,7 @@ subscribe(APP_READY, () => {
 });
 
 initialize({
-  messages: [],
+  messages,
   handlers: {
     config: () => {
       mergeConfig({

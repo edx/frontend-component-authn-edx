@@ -1,13 +1,16 @@
 export TRANSIFEX_RESOURCE = frontend-component-authn-edx
 transifex_resource = frontend-component-authn-edx
-transifex_langs = "ar,fr,es_419,zh_CN,pt,it,de,uk,ru,hi,fr_CA"
+transifex_langs = "es_419"
 
+intl_imports = ./node_modules/.bin/intl-imports.js
 transifex_utils = ./node_modules/.bin/transifex-utils.js
 i18n = ./src/i18n
 transifex_input = $(i18n)/transifex_input.json
 
 # This directory must match .babelrc .
 transifex_temp = ./temp/babel-plugin-formatjs
+
+NPM_TESTS=build i18n_extract lint test
 
 build:
 	rm -rf ./dist
@@ -21,9 +24,6 @@ build:
 
 requirements:
 	npm install
-
-test:
-	npm run test
 
 i18n.extract:
 	# Pulling display strings from .jsx files into .json files...
