@@ -1,7 +1,7 @@
 import { getConfig } from '@edx/frontend-platform';
 import Cookies from 'universal-cookie';
 
-import { setCookie } from '../cookies';
+import { getCookie, setCookie } from '../cookies';
 
 // Mock getConfig function
 jest.mock('@edx/frontend-platform', () => ({
@@ -47,6 +47,18 @@ describe('setCookie function', () => {
   it('should not set a cookie if cookieName is undefined', () => {
     setCookie(undefined, 'testValue');
 
+    expect(Cookies).not.toHaveBeenCalled();
+  });
+});
+
+describe('getCookie function', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('should return null if cookieName is undefined', () => {
+    const result = getCookie(undefined);
+    expect(result).toBeNull();
     expect(Cookies).not.toHaveBeenCalled();
   });
 });
