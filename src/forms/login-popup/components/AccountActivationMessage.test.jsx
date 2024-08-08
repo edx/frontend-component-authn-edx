@@ -2,16 +2,14 @@ import React from 'react';
 
 import { mergeConfig } from '@edx/frontend-platform';
 import { injectIntl, IntlProvider } from '@edx/frontend-platform/i18n';
-import {
-  render, screen,
-} from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 
 import AccountActivationMessage from './AccountActivationMessage';
 import { ACCOUNT_ACTIVATION_MESSAGE } from '../data/constants';
 
 const IntlAccountActivationMessage = injectIntl(AccountActivationMessage);
 
-describe('EmailConfirmationMessage', () => {
+describe('AccountActivationMessage', () => {
   beforeEach(() => {
     mergeConfig({
       MARKETING_EMAILS_OPT_IN: 'true',
@@ -63,5 +61,15 @@ describe('EmailConfirmationMessage', () => {
       '',
       { selector: '#account-activation-message' },
     ).textContent).toBe(expectedMessage);
+  });
+
+  it('should render nothing for unknown messageType', () => {
+    render(
+      <IntlProvider locale="en">
+        <IntlAccountActivationMessage messageType="UNKNOWN_TYPE" />
+      </IntlProvider>,
+    );
+    // Expect nothing to be rendered
+    expect(screen.queryByText('', { selector: '#account-activation-message' })).toBeNull();
   });
 });
