@@ -14,7 +14,6 @@ import {
 } from './data/constants';
 import { resetPassword, validatePassword, validateToken } from './data/reducers';
 import {
-  COMPLETE_STATE,
   DEFAULT_STATE, FORGOT_PASSWORD_FORM, FORM_SUBMISSION_ERROR, LOGIN_FORM, PENDING_STATE,
 } from '../../../data/constants';
 import { useDispatch, useSelector } from '../../../data/storeHooks';
@@ -49,7 +48,6 @@ const ResetPasswordPage = () => {
   const newPasswordRef = useRef(null);
 
   const status = useSelector(state => state.resetPassword.status);
-  const tokenValidationState = useSelector(state => state.resetPassword.status);
   const errorMsg = useSelector(state => state.resetPassword?.errorMsg);
   const backendValidationError = useSelector(state => state.resetPassword?.backendValidationError);
 
@@ -81,10 +79,10 @@ const ResetPasswordPage = () => {
   }, [status]);
 
   useEffect(() => {
-    if (tokenValidationState === COMPLETE_STATE && status === TOKEN_STATE.VALID) {
+    if (status === TOKEN_STATE.VALID) {
       trackResetPasswordPageViewed();
     }
-  }, [status, tokenValidationState]);
+  }, [status]);
 
   const validateInput = (name, value, shouldValidateFromBackend = true) => {
     switch (name) {
