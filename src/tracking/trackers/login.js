@@ -22,7 +22,7 @@ export const trackLoginPageViewed = () => {
   createPageEventTracker(eventNames.loginAndRegistration, 'login')();
 };
 
-// Tracks the progressive profiling page event.
+// Tracks the event when the register link is clicked on the login form.
 export const trackRegisterFormToggled = () => {
   createEventTracker(
     eventNames.registerFormToggled,
@@ -30,7 +30,7 @@ export const trackRegisterFormToggled = () => {
   )();
 };
 
-// Tracks the login sucess event.
+// Tracks the login success event.
 export const trackLoginSuccess = () => createEventTracker(
   eventNames.loginSuccess,
   {},

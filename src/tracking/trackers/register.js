@@ -16,12 +16,12 @@ export const trackRegistrationSuccess = () => createEventTracker(
   {},
 )();
 
-// Tracks the progressive profiling page event.
+// Tracks the register page event.
 export const trackRegistrationPageViewed = () => {
   createPageEventTracker(eventNames.loginAndRegistration, 'register')();
 };
 
-// Tracks the progressive profiling page event.
+// Tracks the event when the login link is clicked on the register form..
 export const trackLoginFormToggled = () => {
   createEventTracker(
     eventNames.loginFormToggled,

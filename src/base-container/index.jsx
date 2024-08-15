@@ -11,6 +11,8 @@ import { NUDGE_PASSWORD_CHANGE } from '../forms/login-popup/data/constants';
 import { loginErrorClear } from '../forms/login-popup/data/reducers';
 import { clearAllRegistrationErrors } from '../forms/registration-popup/data/reducers';
 import { forgotPasswordClearStatus } from '../forms/reset-password-popup/forgot-password/data/reducers';
+import { setCurrentOpenedForm } from '../onboarding-component/data/reducers';
+
 import './index.scss';
 
 /**
@@ -47,6 +49,7 @@ const BaseContainer = ({
     dispatch(forgotPasswordClearStatus());
     dispatch(loginErrorClear());
     dispatch(clearAllRegistrationErrors());
+    dispatch(setCurrentOpenedForm(null));
     close();
   };
 
