@@ -51,6 +51,7 @@ describe('ForgotPasswordPage', () => {
 
   beforeEach(() => {
     store = mockStore(initialState);
+    window.history.replaceState = jest.fn();
   });
 
   afterEach(() => {
