@@ -11,8 +11,11 @@ import getValidationMessage from './data/utils';
 import ForgotPasswordFailureAlert from './ForgotPasswordFailureAlert';
 import ForgotPasswordSuccess from './ForgotPasswordSuccess';
 import { InlineLink } from '../../../common-ui';
-import { COMPLETE_STATE, DEFAULT_STATE, LOGIN_FORM } from '../../../data/constants';
+import {
+  AUTH_MODE_RESET_PASSWORD, COMPLETE_STATE, DEFAULT_STATE, LOGIN_FORM,
+} from '../../../data/constants';
 import { useDispatch, useSelector } from '../../../data/storeHooks';
+import { handleURLUpdationOnLoad } from '../../../data/utils';
 import { setCurrentOpenedForm } from '../../../onboarding-component/data/reducers';
 import { trackForgotPasswordPageEvent, trackForgotPasswordPageViewed } from '../../../tracking/trackers/forgotpassword';
 import EmailField from '../../fields/email-field';
@@ -57,6 +60,10 @@ const ForgotPasswordForm = () => {
       error: formErrors,
     }));
   };
+  useEffect(() => {
+    handleURLUpdationOnLoad(AUTH_MODE_RESET_PASSWORD);
+  }, []);
+
   const backToLogin = (e) => {
     e.preventDefault();
     backupFormDataHandler();

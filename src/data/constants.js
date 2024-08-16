@@ -34,7 +34,8 @@ export const VALID_AUTH_PARAMS = [
 
 export const AUTH_MODE = 'authMode';
 export const AUTH_MODE_LOGIN = 'Login';
-export const AUTH_MODE_REGSITER = 'Register';
+export const AUTH_MODE_REGISTER = 'Register';
+export const AUTH_MODE_RESET_PASSWORD = 'ResetPassword';
 
 // Regular expression for validating email addresses.
 export const VALID_EMAIL_REGEX = '(^[-!#$%&\'*+/=?^_`{}|~0-9A-Z]+(\\.[-!#$%&\'*+/=?^_`{}|~0-9A-Z]+)*'
