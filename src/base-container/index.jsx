@@ -71,7 +71,7 @@ const BaseContainer = ({
       hasCloseButton={hasCloseButton}
     >
       <ModalDialog.Body className="modal-body-container p-0">
-        <div className="d-flex w-100 h-100 justify-content-center overflow-hidden">
+        <div className="d-flex w-100 h-100 justify-content-center">
           {children}
         </div>
       </ModalDialog.Body>
