@@ -1,8 +1,18 @@
 import {
-  COMPLETE_STATE, FAILURE_STATE, PENDING_STATE,
+  COMPLETE_STATE,
+  DEFAULT_STATE,
+  FAILURE_STATE,
+  PENDING_STATE,
 } from '../../../../data/constants';
 import loginReducer, {
-  loginInitialState, loginUser, loginUserFailed, loginUserSuccess,
+  backupLoginForm,
+  loginErrorClear,
+  loginInitialState,
+  loginUser,
+  loginUserFailed,
+  loginUserSuccess,
+  setLoginSSOIntent,
+  setShowPasswordResetBanner,
 } from '../reducers';
 
 describe('loginSlice reducer', () => {
@@ -46,5 +56,47 @@ describe('loginSlice reducer', () => {
       },
     });
     expect(nextState.loginResult).toEqual({});
+  });
+
+  it('should handle setShowPasswordResetBanner action', () => {
+    const nextState = loginReducer(loginInitialState, setShowPasswordResetBanner());
+
+    expect(nextState.showResetPasswordSuccessBanner).toEqual(true);
+  });
+
+  it('should handle loginErrorClear action', () => {
+    const stateWithErrors = {
+      ...loginInitialState,
+      loginError: { errorCode: 'SOME_ERROR_CODE', errorContext: {} },
+      submitState: FAILURE_STATE,
+    };
+
+    const nextState = loginReducer(stateWithErrors, loginErrorClear());
+
+    expect(nextState.loginError).toEqual({});
+    expect(nextState.submitState).toEqual(DEFAULT_STATE);
+  });
+
+  it('should handle setLoginSSOIntent action', () => {
+    const nextState = loginReducer(loginInitialState, setLoginSSOIntent());
+
+    expect(nextState.isLoginSSOIntent).toEqual(true);
+  });
+
+  it('should handle backupLoginForm action', () => {
+    const mockPayload = {
+      formFields: {
+        emailOrUsername: 'john_doe@example.com',
+        password: 'password123',
+      },
+      errors: {
+        emailOrUsername: '',
+        password: '',
+      },
+    };
+
+    const nextState = loginReducer(loginInitialState, backupLoginForm(mockPayload));
+
+    expect(nextState.loginFormData).toEqual(mockPayload);
   });
 });

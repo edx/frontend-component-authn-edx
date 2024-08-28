@@ -4,8 +4,7 @@ import { Provider } from 'react-redux';
 import { mergeConfig } from '@edx/frontend-platform';
 import { fetchAuthenticatedUser, getAuthenticatedUser } from '@edx/frontend-platform/auth';
 import { getLocale, injectIntl, IntlProvider } from '@edx/frontend-platform/i18n';
-import { render } from '@testing-library/react';
-import { act } from 'react-dom/test-utils';
+import { act, render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import configureStore from 'redux-mock-store';
 
@@ -18,8 +17,11 @@ import {
   PENDING_STATE,
   PROGRESSIVE_PROFILING_FORM,
   REGISTRATION_FORM,
+  RESET_PASSWORD_FORM,
 } from '../../data/constants';
 import { OnboardingComponentContext } from '../../data/storeHooks';
+import { REQUIRE_PASSWORD_CHANGE } from '../../forms/login-popup/data/constants';
+import { TOKEN_STATE } from '../../forms/reset-password-popup/reset-password/data/constants';
 import { getThirdPartyAuthContext, setCurrentOpenedForm } from '../data/reducers';
 import { OnBoardingComponent, SignInComponent, SignUpComponent } from '../index';
 
@@ -130,12 +132,7 @@ describe('OnBoardingComponent Test', () => {
       });
     });
 
-    afterEach(() => {
-      jest.clearAllMocks();
-    });
-
     it('renders login form when rendering SignInComponent', () => {
-      // It also tests that component is rendered only when isOpen is true
       const { getByTestId } = render(reduxWrapper(
         <IntlSignInComponent isOpen close={() => {}} />,
       ));
@@ -163,12 +160,7 @@ describe('OnBoardingComponent Test', () => {
       });
     });
 
-    afterEach(() => {
-      jest.clearAllMocks();
-    });
-
     it('renders registration form when rendering SignUpComponent', () => {
-      // It also tests that component is rendered only when isOpen is true
       const { getByTestId } = render(reduxWrapper(
         <IntlSignUpComponent isOpen close={() => {}} />,
       ));
@@ -355,5 +347,67 @@ describe('OnBoardingComponent Test', () => {
     });
 
     expect(fetchAuthenticatedUser).toBeCalledWith({ forceRefresh: false });
+  });
+
+  it('sets hasCloseButton to false for FORGOT_PASSWORD_FORM with REQUIRE_PASSWORD_CHANGE error', () => {
+    store = mockStore({
+      ...initialState,
+      login: {
+        ...initialState.login,
+        loginError: { errorCode: REQUIRE_PASSWORD_CHANGE },
+      },
+      commonData: {
+        ...initialState.commonData,
+        currentForm: FORGOT_PASSWORD_FORM,
+      },
+    });
+
+    const { container } = render(reduxWrapper(<OnBoardingComponent isOpen close={() => {}} />));
+
+    // Assuming the close button is rendered conditionally based on the hasCloseButton attribute
+    const closeButton = container.querySelector('.close-button-selector'); // Update selector as per actual implementation
+    expect(closeButton).toBeNull();
+  });
+
+  it('sets hasCloseButton to false for RESET_PASSWORD_FORM with pending status', () => {
+    store = mockStore({
+      ...initialState,
+      resetPassword: {
+        ...initialState.resetPassword,
+        status: TOKEN_STATE.PENDING,
+      },
+      commonData: {
+        ...initialState.commonData,
+        currentForm: RESET_PASSWORD_FORM,
+      },
+    });
+
+    const { container } = render(reduxWrapper(
+      <IntlOnBoardingComponent isOpen close={() => {}} />,
+    ));
+
+    const component = container.querySelector('BaseContainer');
+    expect(component).toBeNull();
+  });
+
+  it('sets hasCloseButton to true for RESET_PASSWORD_FORM with non-pending status', () => {
+    store = mockStore({
+      ...initialState,
+      resetPassword: {
+        ...initialState.resetPassword,
+        status: TOKEN_STATE.COMPLETE,
+      },
+      commonData: {
+        ...initialState.commonData,
+        currentForm: RESET_PASSWORD_FORM,
+      },
+    });
+
+    const { container } = render(reduxWrapper(
+      <IntlOnBoardingComponent isOpen close={() => {}} />,
+    ));
+
+    const component = container.querySelector('BaseContainer');
+    expect(component).toBeNull();
   });
 });

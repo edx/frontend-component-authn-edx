@@ -1,4 +1,4 @@
-import validateContextData from '../utils';
+import validateContextData, { objectToQueryString } from '../utils';
 
 describe('validateContextData', () => {
   it('should filter context data based on VALID_AUTH_PARAMS', () => {
@@ -35,5 +35,38 @@ describe('validateContextData', () => {
       another_invalid_key_in_context: 'Boom!!!!',
     };
     expect(validateContextData(context)).toEqual({});
+  });
+});
+
+describe('objectToQueryString', () => {
+  it('should convert an object to a query string', () => {
+    const obj = {
+      key1: 'value1',
+      key2: 'value2',
+    };
+    const queryString = objectToQueryString(obj);
+    expect(queryString).toBe('key1=value1&key2=value2');
+  });
+
+  it('should handle special characters in keys and values', () => {
+    const obj = {
+      'key with spaces': 'value with spaces',
+      'key&special': 'value?special',
+    };
+    const queryString = objectToQueryString(obj);
+    expect(queryString).toBe('key%20with%20spaces=value%20with%20spaces&key%26special=value%3Fspecial');
+  });
+
+  it('should return an empty string for an empty object', () => {
+    expect(objectToQueryString({})).toBe('');
+  });
+
+  it('should handle undefined and null values', () => {
+    const obj = {
+      key1: undefined,
+      key2: null,
+    };
+    const queryString = objectToQueryString(obj);
+    expect(queryString).toBe('key1=undefined&key2=null');
   });
 });

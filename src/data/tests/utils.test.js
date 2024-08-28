@@ -2,7 +2,7 @@ import { getConfig, mergeConfig } from '@edx/frontend-platform';
 import Cookies from 'universal-cookie';
 
 import { getCountryCookieValue } from '../cookies';
-import getAllPossibleQueryParams from '../utils';
+import getAllPossibleQueryParams, { moveScrollToTop } from '../utils';
 
 describe('getAllPossibleQueryParams', () => {
   beforeEach(() => {
@@ -48,5 +48,27 @@ describe('getCountryCookieValue', () => {
 
     const countryCode = getCountryCookieValue();
     expect(countryCode).toEqual(undefined);
+  });
+});
+describe('moveScrollToTop', () => {
+  it('should call scrollIntoView on the provided ref', () => {
+    const scrollIntoViewMock = jest.fn();
+    const ref = {
+      current: {
+        scrollIntoView: scrollIntoViewMock,
+      },
+    };
+
+    moveScrollToTop(ref, 'end');
+
+    expect(scrollIntoViewMock).toHaveBeenCalledWith({ behavior: 'smooth', block: 'end' });
+  });
+
+  it('should not throw an error if ref.current is undefined', () => {
+    const ref = {
+      current: null,
+    };
+
+    expect(() => moveScrollToTop(ref, 'end')).not.toThrow();
   });
 });
