@@ -283,8 +283,8 @@ const RegistrationForm = () => {
     payload = {
       ...onboardingComponentContext, ...queryParams, ...payload,
     };
-    payload = snakeCaseObject(payload);
     payload.totalRegistrationTime = totalRegistrationTime;
+    payload = snakeCaseObject(payload);
     dispatch(registerUser(payload));
   };
 
