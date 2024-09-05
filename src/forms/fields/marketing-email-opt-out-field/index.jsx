@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { Form } from '@openedx/paragon';
+import { CheckboxControl, Form } from '@openedx/paragon';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
@@ -23,7 +23,7 @@ const MarketingEmailOptInCheckbox = (props) => {
 
   return (
     <Form.Group controlId="marketingEmailsOptIn" className="mb-4">
-      <Form.Checkbox
+      <CheckboxControl
         name={name}
         className={classNames(
           'text-gray-800',
@@ -33,6 +33,7 @@ const MarketingEmailOptInCheckbox = (props) => {
         )}
         checked={!!value}
         onChange={handleChange}
+        aria-label="Checkbox"
       />
       <Form.Label className="registration-form__marketing_opt-in-label">
         {formatMessage(messages.registrationFormMarketingOptInLabel)}

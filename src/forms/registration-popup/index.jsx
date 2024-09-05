@@ -24,7 +24,7 @@ import isFormValid from './data/utils';
 import messages from './messages';
 import { InlineLink, SocialAuthProviders } from '../../common-ui';
 import {
-  AUTH_MODE_REGSITER,
+  AUTH_MODE_REGISTER,
   COMPLETE_STATE,
   ENTERPRISE_LOGIN_URL,
   FAILURE_STATE,
@@ -148,7 +148,7 @@ const RegistrationForm = () => {
 
   useEffect(() => {
     moveScrollToTop(registerFormHeadingRef, 'end');
-    handleURLUpdationOnLoad(AUTH_MODE_REGSITER);
+    handleURLUpdationOnLoad(AUTH_MODE_REGISTER);
   }, []);
 
   useEffect(() => {
@@ -283,8 +283,8 @@ const RegistrationForm = () => {
     payload = {
       ...onboardingComponentContext, ...queryParams, ...payload,
     };
-    payload = snakeCaseObject(payload);
     payload.totalRegistrationTime = totalRegistrationTime;
+    payload = snakeCaseObject(payload);
     dispatch(registerUser(payload));
   };
 

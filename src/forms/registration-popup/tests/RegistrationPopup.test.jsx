@@ -109,7 +109,7 @@ describe('RegistrationForm Test', () => {
       marketing_emails_opt_in: true,
       honor_code: true,
       terms_of_service: true,
-      totalRegistrationTime: 0,
+      total_registration_time: 0,
       app_name: 'onboarding_component',
     };
     const { container } = render(reduxWrapper(<IntlRegistrationForm />));
@@ -144,7 +144,7 @@ describe('RegistrationForm Test', () => {
       honor_code: true,
       terms_of_service: true,
       country: 'US',
-      totalRegistrationTime: 0,
+      total_registration_time: 0,
       app_name: 'onboarding_component',
     };
     const { container } = render(reduxWrapper(<IntlRegistrationForm />));
@@ -171,7 +171,7 @@ describe('RegistrationForm Test', () => {
       email: 'petro  @example.com',
       password: 'password1',
       honor_code: true,
-      totalRegistrationTime: 0,
+      total_registration_time: 0,
     };
 
     store.dispatch = jest.fn(store.dispatch);

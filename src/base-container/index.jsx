@@ -23,16 +23,17 @@ import './index.scss';
  * @param {React.node} children - Required. The login or registration form.
  * @param {boolean} hasCloseButton - Optional. Denotes whether modal should have close button or not.
  * @param {string} size - Optional. Specifies size of modal.
+ * @param currentForm - Denotes the current opened form
  *
  * @returns {JSX.Element} The rendered login or registration form modal.
  */
 const BaseContainer = ({
-  children,
+  children = null,
   close,
   hasCloseButton = true,
   isOpen,
   size = 'lg',
-  currentForm,
+  currentForm = null,
 }) => {
   const dispatch = useDispatch();
 
@@ -70,7 +71,7 @@ const BaseContainer = ({
       hasCloseButton={hasCloseButton}
     >
       <ModalDialog.Body className="modal-body-container p-0">
-        <div className="d-flex w-100 h-100 justify-content-center overflow-hidden">
+        <div className="d-flex w-100 h-100 justify-content-center">
           {children}
         </div>
       </ModalDialog.Body>
@@ -79,12 +80,12 @@ const BaseContainer = ({
 };
 
 BaseContainer.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
   isOpen: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
   size: PropTypes.string,
   hasCloseButton: PropTypes.bool,
-  currentForm: PropTypes.string.isRequired,
+  currentForm: PropTypes.string,
 };
 
 export default BaseContainer;

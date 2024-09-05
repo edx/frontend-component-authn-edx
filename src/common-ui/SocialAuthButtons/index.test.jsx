@@ -6,6 +6,7 @@ import { fireEvent, render } from '@testing-library/react';
 import configureStore from 'redux-mock-store';
 
 import { COMPLETE_STATE, PENDING_STATE } from '../../data/constants';
+import { setCookie } from '../../data/cookies';
 import { OnboardingComponentContext } from '../../data/storeHooks';
 
 import SocialAuthProviders, { SocialAuthButton } from './index';
@@ -18,6 +19,9 @@ jest.mock('@edx/frontend-platform', () => ({
 }));
 
 const mockStore = configureStore();
+jest.mock('../../data/cookies', () => ({
+  setCookie: jest.fn(),
+}));
 
 describe('SocialAuthButton', () => {
   let store = {};
@@ -83,6 +87,29 @@ describe('SocialAuthButton', () => {
     fireEvent.click(button);
 
     expect(window.location.href).toEqual('http://example.com/login/google');
+  });
+
+  it('sets marketingEmailsOptIn cookie when isLoginForm is false', () => {
+    store = mockStore({
+      register: {
+        registrationFields: {
+          marketingEmailsOptIn: true,
+        },
+      },
+    });
+
+    const { getByText } = render(reduxWrapper(
+      <IntlSocialAuthButton provider={provider} isLoginForm={false} />,
+    ));
+
+    delete window.location;
+    window.location = { href: 'http://base-url.com' };
+
+    const button = getByText('Sign up with Google');
+    fireEvent.click(button);
+
+    expect(setCookie).toHaveBeenCalledWith('marketingEmailsOptIn', true);
+    expect(window.location.href).toEqual('http://example.com/register/google');
   });
 });
 

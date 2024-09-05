@@ -7,6 +7,7 @@ import { MemoryRouter } from 'react-router-dom';
 import configureStore from 'redux-mock-store';
 
 import { PROGRESSIVE_PROFILING_FORM } from '../../../data/constants';
+import { LINK_TIMEOUT } from '../../../data/segment/utils';
 import { OnboardingComponentContext } from '../../../data/storeHooks';
 import { setCurrentOpenedForm } from '../../../onboarding-component/data/reducers';
 import AuthenticatedRedirection from '../AuthenticatedRedirection';
@@ -48,10 +49,12 @@ describe('AuthenticatedRedirection', () => {
     store = mockStore(initialState);
     delete window.location;
     window.location = { href: '' };
+    jest.useFakeTimers();
   });
 
   afterEach(() => {
     jest.clearAllMocks();
+    jest.useRealTimers();
   });
 
   it('should not redirect if success is false', () => {
@@ -102,5 +105,22 @@ describe('AuthenticatedRedirection', () => {
     ));
 
     expect(store.dispatch).toHaveBeenCalledWith(setCurrentOpenedForm(PROGRESSIVE_PROFILING_FORM));
+  });
+
+  it('should redirect after a delay if isLinkTracked is true', () => {
+    render(reduxWrapper(
+      <IntlAuthenticatedRedirection
+        finishAuthUrl={null}
+        redirectUrl={mockRedirectUrl}
+        success={mockSuccess}
+        isLinkTracked
+      />,
+    ));
+
+    expect(window.location.href).toBe(''); // Shouldn't redirect immediately
+
+    jest.advanceTimersByTime(LINK_TIMEOUT); // Fast-forward time by LINK_TIMEOUT
+
+    expect(window.location.href).toBe(mockRedirectUrl); // Should have redirected after timeout
   });
 });

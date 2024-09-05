@@ -88,4 +88,15 @@ describe('EnterpriseSSO', () => {
 
     expect(store.dispatch).toHaveBeenCalledWith(setCurrentOpenedForm(LOGIN_FORM));
   });
+
+  it('should prevent default behavior on mouse down for "Show me other ways to sign in or register" button', () => {
+    const { container } = render(reduxWrapper(<IntlEnterpriseSSO provider={provider} isLoginForm />));
+
+    const button = container.querySelector('#other-ways-to-sign-in');
+
+    const preventDefaultMock = jest.fn();
+    button.onmousedown = preventDefaultMock;
+    fireEvent.mouseDown(button);
+    expect(preventDefaultMock).toHaveBeenCalledTimes(1);
+  });
 });
