@@ -5,9 +5,9 @@ import { fetchAuthenticatedUser, getAuthenticatedUser } from '@edx/frontend-plat
 import { breakpoints, Spinner, useMediaQuery } from '@openedx/paragon';
 import PropTypes from 'prop-types';
 
+import BaseContainer from '../base-container';
 import { getThirdPartyAuthContext, setCurrentOpenedForm, setOnboardingComponentContext } from './data/reducers';
 import validateContextData, { objectToQueryString } from './data/utils';
-import BaseContainer from '../base-container';
 import {
   ENTERPRISE_LOGIN,
   FORGOT_PASSWORD_FORM,
