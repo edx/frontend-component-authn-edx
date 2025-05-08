@@ -1,21 +1,24 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { StrictMode } from 'react';
 
 import {
   APP_READY, initialize, mergeConfig, subscribe,
 } from '@edx/frontend-platform';
+import { createRoot } from 'react-dom/client';
 
 import './index.scss';
 import OnBoardingExampleContainer from './onboarding-example';
 import messages from '../src/i18n/index';
 
+const rootNode = createRoot(document.getElementById('root'));
 subscribe(APP_READY, () => {
-  ReactDOM.render(
-    <OnBoardingExampleContainer />,
-    document.getElementById('root'),
+  rootNode.render(
+    <StrictMode>
+      <OnBoardingExampleContainer />
+    </StrictMode>
+    ,
   );
 });
 
