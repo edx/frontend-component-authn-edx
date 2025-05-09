@@ -72,7 +72,10 @@ export const registerSlice = createSlice({
       state.validations = null;
     },
     setRegistrationFields: (state, { payload }) => {
-      state.registrationFields = payload;
+      state.registrationFields = {
+        ...state.registrationFields,
+        ...payload,
+      };
     },
     backupRegistrationForm: (state, { payload }) => {
       state.registrationFormData = payload;

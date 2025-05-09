@@ -4,7 +4,7 @@ import { Button, Container, useToggle } from '@openedx/paragon';
 
 import getAllPossibleQueryParams from '../../src/data/utils';
 import {
-  ResetPasswordComponent, SignInComponent, SignUpComponent,
+  ResetPasswordComponent, SignInComponent, SignUpComponent, WelcomePageComponent,
 } from '../../src/onboarding-component';
 
 import './index.scss';
@@ -16,6 +16,7 @@ import './index.scss';
 const OnBoardingExampleContainer = () => {
   const [isSignUpFormOpen, setSignUpFormOpen, setSignUpFormClose] = useToggle(false);
   const [isSignInFormOpen, setSignInFormOpen, setSignInFormClose] = useToggle(false);
+  const [isWelcomeFormOpen, setWelcomeFormOpen, setWelcomeFormClose] = useToggle(false);
   const [isResetPasswordFormOpen, setResetPasswordFormOpen, setResetPasswordFormClose] = useToggle(false);
 
   const queryParam = getAllPossibleQueryParams();
@@ -24,13 +25,18 @@ const OnBoardingExampleContainer = () => {
     const url = new URL(window.location.href);
     const path = url.pathname;
 
-    if (path === '/login' || path === '/register' || path.startsWith('/password_reset_confirm')) {
+    if (path === '/login'
+        || path === '/register'
+        || path === '/welcome'
+        || path.startsWith('/password_reset_confirm')) {
       const searchParams = new URLSearchParams(url.search);
 
       if (path === '/login') {
         searchParams.set('authMode', 'Login');
       } else if (path === '/register') {
         searchParams.set('authMode', 'Register');
+      } else if (path === '/welcome') {
+        searchParams.set('authMode', 'Welcome');
       } else if (path.startsWith('/password_reset_confirm')) {
         searchParams.set('authMode', 'PasswordResetConfirm');
 
@@ -50,10 +56,12 @@ const OnBoardingExampleContainer = () => {
       setSignInFormOpen();
     } else if (queryParam?.authMode === 'Register') {
       setSignUpFormOpen();
+    } else if (queryParam?.authMode === 'Welcome') {
+      setWelcomeFormOpen();
     } else if (queryParam?.authMode === 'PasswordResetConfirm') {
       setResetPasswordFormOpen();
     }
-  }, [setSignInFormOpen, setSignUpFormOpen, setResetPasswordFormOpen, queryParam?.authMode]);
+  }, [setSignInFormOpen, setSignUpFormOpen, setResetPasswordFormOpen, queryParam?.authMode, setWelcomeFormOpen]);
 
   return (
     <>
@@ -82,6 +90,10 @@ const OnBoardingExampleContainer = () => {
         close={setSignInFormClose}
         isOpen={isSignInFormOpen}
         context={{}}
+      />
+      <WelcomePageComponent
+        close={setWelcomeFormClose}
+        isOpen={isWelcomeFormOpen}
       />
       <ResetPasswordComponent
         close={setResetPasswordFormClose}
