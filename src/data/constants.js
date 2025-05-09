@@ -24,6 +24,7 @@ export const TPA_SESSION_EXPIRED = 'tpa-session-expired';
 
 // URL Paths
 export const ENTERPRISE_LOGIN_URL = '/enterprise/login';
+export const AUTHN_MFE_RECOMMENDATIONS_PATH = '/recommendations';
 
 // Query string parameters that can be passed to LMS to manage
 // things like auto-enrollment upon login and registration.
