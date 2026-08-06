@@ -1,7 +1,7 @@
 import { getConfig } from '@edx/frontend-platform';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 
-import registerRequest, { getFieldsValidations } from '../service';
+import registerRequest, { getFieldsValidations, validateRegistrationInformation } from '../service';
 
 jest.mock('@edx/frontend-platform/auth');
 jest.mock('@edx/frontend-platform', () => ({
@@ -81,6 +81,26 @@ describe('Service Function Tests', () => {
 
       expect(getConfig).toHaveBeenCalled();
       expect(mockGetAuthenticatedHttpClient).toHaveBeenCalled();
+    });
+
+    it('should reject malformed total_registration_time payload before request', async () => {
+      const malformedPayload = {
+        email: 'test@example.com',
+        password: 'password123',
+        total_registration_time: '0; DROP TABLE auth_user;--',
+      };
+
+      await expect(registerRequest(malformedPayload)).rejects.toThrow('Invalid total_registration_time');
+      expect(mockGetAuthenticatedHttpClient).not.toHaveBeenCalled();
+    });
+
+    it('should allow finite numeric total_registration_time payload', () => {
+      const payload = {
+        email: 'test@example.com',
+        total_registration_time: 3.2,
+      };
+
+      expect(validateRegistrationInformation(payload)).toEqual(payload);
     });
   });
 });
