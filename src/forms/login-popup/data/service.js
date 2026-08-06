@@ -4,6 +4,7 @@ import QueryString from 'query-string';
 
 const LOGIN_IDENTIFIER_MAX_LENGTH = 320;
 const LOGIN_IDENTIFIER_REGEX = /^(?:[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}|[A-Za-z0-9_.@-]+)$/;
+const INVALID_INPUT_PLACEHOLDER = '[invalid input]';
 
 /**
  * Returns a trimmed login identifier value.
@@ -40,7 +41,7 @@ export function isValidLoginIdentifier(value) {
  */
 export function sanitizeReflectedLoginIdentifier(value) {
   const normalizedValue = normalizeLoginIdentifier(value);
-  return isValidLoginIdentifier(normalizedValue) ? normalizedValue : '';
+  return isValidLoginIdentifier(normalizedValue) ? normalizedValue : INVALID_INPUT_PLACEHOLDER;
 }
 
 /**

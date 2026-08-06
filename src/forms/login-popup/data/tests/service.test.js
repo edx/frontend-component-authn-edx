@@ -71,6 +71,6 @@ describe('loginRequest Tests', () => {
   });
 
   it('should sanitize reflected identifier when malformed', () => {
-    expect(sanitizeReflectedLoginIdentifier("trtrtrdfdf' AND '1'='1' -- ")).toBe('');
+    expect(sanitizeReflectedLoginIdentifier("trtrtrdfdf' AND '1'='1' -- ")).toBe('[invalid input]');
   });
 });

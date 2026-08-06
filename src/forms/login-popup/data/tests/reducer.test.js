@@ -72,7 +72,7 @@ describe('loginSlice reducer', () => {
       errorCode: 'SOME_ERROR_CODE',
       errorContext: {
         ...mockPayload.context,
-        email: '',
+        email: '[invalid input]',
         errorMessage: mockPayload.value,
       },
     });
