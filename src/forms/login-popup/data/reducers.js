@@ -6,6 +6,8 @@
 
 import { createSlice } from '@reduxjs/toolkit';
 
+import { sanitizeReflectedLoginIdentifier } from './service';
+
 import {
   COMPLETE_STATE,
   DEFAULT_STATE,
@@ -56,7 +58,11 @@ export const loginSlice = createSlice({
         redirectUrl,
       } = payload;
 
-      const errorContext = { ...context, email, errorMessage: value };
+      const errorContext = {
+        ...context,
+        email: sanitizeReflectedLoginIdentifier(email),
+        errorMessage: value,
+      };
       state.loginError = { errorCode, errorContext, redirectUrl };
       state.loginResult = {};
       state.submitState = FAILURE_STATE;

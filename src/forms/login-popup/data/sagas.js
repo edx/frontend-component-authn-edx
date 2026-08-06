@@ -34,6 +34,9 @@ export function* handleUserLogin(action) {
         yield put(loginUserFailed({ errorCode: INTERNAL_SERVER_ERROR }));
         logError(e);
       }
+    } else {
+      yield put(loginUserFailed({ errorCode: INTERNAL_SERVER_ERROR }));
+      logError(e);
     }
   }
 }

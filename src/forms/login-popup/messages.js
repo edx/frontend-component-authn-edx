@@ -137,6 +137,11 @@ const messages = defineMessages({
     defaultMessage: 'Username or email must have at least 2 characters.',
     description: 'Validation message that appears when username or email address is less than 2 characters',
   },
+  usernameOrEmailInvalidFormatValidationMessage: {
+    id: 'username.or.email.format.validation.invalid.message',
+    defaultMessage: 'Enter a valid username or email.',
+    description: 'Validation message that appears when username or email contains invalid characters',
+  },
   usernameOrEmailValidationMessage: {
     id: 'email.validation.message',
     defaultMessage: 'Enter your username or email',

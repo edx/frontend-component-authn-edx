@@ -11,6 +11,7 @@ import {
 import AccountActivationMessage from './components/AccountActivationMessage';
 import LoginFailureAlert from './components/LoginFailureAlert';
 import { NUDGE_PASSWORD_CHANGE, REQUIRE_PASSWORD_CHANGE } from './data/constants';
+import { isValidLoginIdentifier } from './data/service';
 import useGetActivationMessage from './data/hooks';
 import {
   backupLoginForm, loginErrorClear, loginUser, setLoginSSOIntent,
@@ -165,6 +166,8 @@ const LoginForm = () => {
       fieldErrors.emailOrUsername = formatMessage(messages.usernameOrEmailValidationMessage);
     } else if (emailOrUsername.length < 2) {
       fieldErrors.emailOrUsername = formatMessage(messages.usernameOrEmailLessCharValidationMessage);
+    } else if (!isValidLoginIdentifier(emailOrUsername)) {
+      fieldErrors.emailOrUsername = formatMessage(messages.usernameOrEmailInvalidFormatValidationMessage);
     }
     if (password === '') {
       fieldErrors.password = formatMessage(messages.passwordValidationMessage);

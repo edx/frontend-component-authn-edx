@@ -58,6 +58,26 @@ describe('loginSlice reducer', () => {
     expect(nextState.loginResult).toEqual({});
   });
 
+  it('should sanitize malformed reflected email in loginUserFailed action', () => {
+    const mockPayload = {
+      context: { error: 'test-error' },
+      errorCode: 'SOME_ERROR_CODE',
+      email: "trtrtrdfdf' AND '1'='1' -- ",
+      value: 'Some error message',
+    };
+
+    const nextState = loginReducer(loginInitialState, loginUserFailed(mockPayload));
+
+    expect(nextState.loginError).toEqual({
+      errorCode: 'SOME_ERROR_CODE',
+      errorContext: {
+        ...mockPayload.context,
+        email: '',
+        errorMessage: mockPayload.value,
+      },
+    });
+  });
+
   it('should handle setShowPasswordResetBanner action', () => {
     const nextState = loginReducer(loginInitialState, setShowPasswordResetBanner());
 

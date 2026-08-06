@@ -189,6 +189,25 @@ describe('LoginForm Test', () => {
     expect(screen.getByText('Username or email must have at least 2 characters.')).toBeTruthy();
   });
 
+  it('should block malformed SQL-like username/email input on form submission', () => {
+    store.dispatch = jest.fn(store.dispatch);
+
+    const { container } = render(reduxWrapper(<IntlLoginForm />));
+
+    const usernameInput = container.querySelector('#emailOrUsername');
+    const passwordInput = container.querySelector('#password');
+    const loginButton = container.querySelector('#login-user');
+
+    fireEvent.change(usernameInput, { target: { value: "trtrtrdfdf' AND '1'='1' -- ", name: 'emailOrUsername' } });
+    fireEvent.change(passwordInput, { target: { value: 'test-password', name: 'password' } });
+    fireEvent.click(loginButton);
+
+    expect(screen.getByText('Enter a valid username or email.')).toBeTruthy();
+    expect(store.dispatch).not.toHaveBeenCalledWith(loginUser(expect.objectContaining({
+      email_or_username: expect.any(String),
+    })));
+  });
+
   it('should clear field error on focus', () => {
     const { container } = render(reduxWrapper(<IntlLoginForm />));
 

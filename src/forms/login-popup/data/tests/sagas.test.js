@@ -103,6 +103,14 @@ describe('handleLoginRequest', () => {
       loginUserFailed(loginErrorResponse.response.data),
     ]);
   });
+
+  it('should handle non-http login errors', async () => {
+    const loginErrorResponse = new TypeError('Invalid email_or_username. Expected a valid username or email format.');
+
+    await testErrorResponse(loginErrorResponse, loggingService.logError, [
+      loginUserFailed({ errorCode: INTERNAL_SERVER_ERROR }),
+    ]);
+  });
 });
 
 describe('saga', () => {
